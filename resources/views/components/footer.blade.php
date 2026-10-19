@@ -1,7 +1,7 @@
 {{--
     Footer — "mặt sau của tấm nhãn" (DESIGN.md §9): nền sơn mài, dải sọc nhãn ở mép trên,
-    chữ thương hiệu dựng khối toàn chiều rộng, 4 cột link, liên hệ, bản quyền.
-    Thông tin liên hệ là dữ liệu MẪU — sẽ đọc từ bảng settings ở bước 9.6.
+    chữ thương hiệu dựng khối toàn chiều rộng, 3 cột link, liên hệ, bản quyền.
+    Thông tin liên hệ là dữ liệu MẪU viết thẳng ở đây (màn cài đặt đã cắt khỏi phạm vi rút gọn).
 --}}
 <footer class="site-footer on-dark">
     <div class="label-stripe" aria-hidden="true"></div>
@@ -33,25 +33,16 @@
             <nav class="site-footer__col" aria-labelledby="footer-help">
                 <h2 id="footer-help" class="site-footer__heading">Hỗ trợ</h2>
                 <ul class="site-footer__links">
-                    <li><a href="{{ url('/tra-cuu-don-hang') }}" class="link-nav">Tra cứu đơn hàng</a></li>
                     <li><a href="{{ url('/cau-hoi-thuong-gap') }}" class="link-nav">Câu hỏi thường gặp</a></li>
-                    <li><a href="{{ url('/huong-dan-mua-hang') }}" class="link-nav">Hướng dẫn mua hàng</a></li>
                     <li><a href="{{ url('/lien-he') }}" class="link-nav">Liên hệ</a></li>
+                    <li><a href="{{ url('/tai-khoan/don-hang') }}" class="link-nav">Đơn hàng của tôi</a></li>
                 </ul>
             </nav>
-            <nav class="site-footer__col" aria-labelledby="footer-policy">
-                <h2 id="footer-policy" class="site-footer__heading">Chính sách</h2>
-                <ul class="site-footer__links">
-                    <li><a href="{{ url('/chinh-sach-doi-tra') }}" class="link-nav">Đổi trả trong 7 ngày</a></li>
-                    <li><a href="{{ url('/chinh-sach-van-chuyen') }}" class="link-nav">Vận chuyển</a></li>
-                    <li><a href="{{ url('/chinh-sach-bao-mat') }}" class="link-nav">Bảo mật thông tin</a></li>
-                </ul>
-            </nav>
+            {{-- Chính sách đổi trả / vận chuyển nằm trong FAQ (trang tĩnh đã cắt khỏi phạm vi rút gọn) --}}
             <nav class="site-footer__col" aria-labelledby="footer-about">
                 <h2 id="footer-about" class="site-footer__heading">Về Mộc Lam</h2>
                 <ul class="site-footer__links">
-                    <li><a href="{{ url('/gioi-thieu') }}" class="link-nav">Câu chuyện</a></li>
-                    <li><a href="{{ url('/tin-tuc') }}" class="link-nav">Tin tức</a></li>
+                    <li><a href="{{ route('home') }}#gioi-thieu" class="link-nav">Giới thiệu</a></li>
                     <li><a href="{{ url('/tai-khoan') }}" class="link-nav">Tài khoản</a></li>
                 </ul>
             </nav>

@@ -1,4 +1,4 @@
-{{-- Trang quản trị tạm; layout admin thật làm ở giai đoạn quản trị --}}
+{{-- Trang quản trị tạm; dashboard + layout admin thật làm ở S7 --}}
 @extends('layouts.admin')
 
 @section('title', 'Trang quản trị')

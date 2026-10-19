@@ -2,12 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Enums\CouponType;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Enums\UserRole;
-use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -20,7 +18,8 @@ use LogicException;
 
 /**
  * 15 đơn mẫu đủ các trạng thái: snapshot order_items, nhật ký trạng thái theo luồng hợp lệ,
- * total = subtotal - discount + shipping_fee. Sau đó đếm lại used_count của coupon và sold_count sản phẩm.
+ * total = subtotal + shipping_fee. Mã giảm giá ĐÃ CẮT (phạm vi rút gọn): coupon_id luôn null, discount = 0.
+ * Sau đó đếm lại sold_count sản phẩm.
  */
 class OrderSeeder extends Seeder
 {
@@ -31,21 +30,21 @@ class OrderSeeder extends Seeder
 
     /** khach: thứ tự khách hàng (null = khách vãng lai), ngay: số ngày trước, so_sp: số sản phẩm khác nhau, huy_tu: trạng thái lúc huỷ */
     private const PLAN = [
-        ['status' => OrderStatus::Delivered, 'khach' => 1, 'tt' => 'cod', 'coupon' => 'DEPXINH10', 'ngay' => 50, 'so_sp' => 5],
-        ['status' => OrderStatus::Delivered, 'khach' => 2, 'tt' => 'bank_transfer', 'coupon' => null, 'ngay' => 44, 'so_sp' => 5],
-        ['status' => OrderStatus::Delivered, 'khach' => 3, 'tt' => 'cod', 'coupon' => 'FLASH20', 'ngay' => 38, 'so_sp' => 5],
-        ['status' => OrderStatus::Delivered, 'khach' => 4, 'tt' => 'cod', 'coupon' => null, 'ngay' => 30, 'so_sp' => 5],
-        ['status' => OrderStatus::Delivered, 'khach' => 5, 'tt' => 'bank_transfer', 'coupon' => 'FLASH20', 'ngay' => 24, 'so_sp' => 5],
-        ['status' => OrderStatus::Delivered, 'khach' => 6, 'tt' => 'cod', 'coupon' => 'VIP25', 'ngay' => 18, 'so_sp' => 5],
-        ['status' => OrderStatus::Delivered, 'khach' => 7, 'tt' => 'cod', 'coupon' => null, 'ngay' => 12, 'so_sp' => 5],
-        ['status' => OrderStatus::Shipping, 'khach' => 8, 'tt' => 'cod', 'coupon' => 'GIAM50K', 'ngay' => 3, 'so_sp' => 3],
-        ['status' => OrderStatus::Shipping, 'khach' => null, 'tt' => 'bank_transfer', 'coupon' => null, 'ngay' => 2, 'so_sp' => 2],
-        ['status' => OrderStatus::Confirmed, 'khach' => 9, 'tt' => 'bank_transfer', 'coupon' => null, 'ngay' => 2, 'so_sp' => 2],
-        ['status' => OrderStatus::Confirmed, 'khach' => 10, 'tt' => 'cod', 'coupon' => 'DEPXINH10', 'ngay' => 1, 'so_sp' => 3],
-        ['status' => OrderStatus::Pending, 'khach' => null, 'tt' => 'cod', 'coupon' => null, 'ngay' => 0, 'so_sp' => 1],
-        ['status' => OrderStatus::Pending, 'khach' => 11, 'tt' => 'bank_transfer', 'coupon' => null, 'ngay' => 0, 'so_sp' => 2],
-        ['status' => OrderStatus::Cancelled, 'khach' => 12, 'tt' => 'cod', 'coupon' => 'DEPXINH10', 'ngay' => 9, 'so_sp' => 3, 'huy_tu' => OrderStatus::Pending],
-        ['status' => OrderStatus::Cancelled, 'khach' => null, 'tt' => 'bank_transfer', 'coupon' => null, 'ngay' => 6, 'so_sp' => 2, 'huy_tu' => OrderStatus::Confirmed],
+        ['status' => OrderStatus::Delivered, 'khach' => 1, 'tt' => 'cod', 'ngay' => 50, 'so_sp' => 5],
+        ['status' => OrderStatus::Delivered, 'khach' => 2, 'tt' => 'bank_transfer', 'ngay' => 44, 'so_sp' => 5],
+        ['status' => OrderStatus::Delivered, 'khach' => 3, 'tt' => 'cod', 'ngay' => 38, 'so_sp' => 5],
+        ['status' => OrderStatus::Delivered, 'khach' => 4, 'tt' => 'cod', 'ngay' => 30, 'so_sp' => 5],
+        ['status' => OrderStatus::Delivered, 'khach' => 5, 'tt' => 'bank_transfer', 'ngay' => 24, 'so_sp' => 5],
+        ['status' => OrderStatus::Delivered, 'khach' => 6, 'tt' => 'cod', 'ngay' => 18, 'so_sp' => 5],
+        ['status' => OrderStatus::Delivered, 'khach' => 7, 'tt' => 'cod', 'ngay' => 12, 'so_sp' => 5],
+        ['status' => OrderStatus::Shipping, 'khach' => 8, 'tt' => 'cod', 'ngay' => 3, 'so_sp' => 3],
+        ['status' => OrderStatus::Shipping, 'khach' => null, 'tt' => 'bank_transfer', 'ngay' => 2, 'so_sp' => 2],
+        ['status' => OrderStatus::Confirmed, 'khach' => 9, 'tt' => 'bank_transfer', 'ngay' => 2, 'so_sp' => 2],
+        ['status' => OrderStatus::Confirmed, 'khach' => 10, 'tt' => 'cod', 'ngay' => 1, 'so_sp' => 3],
+        ['status' => OrderStatus::Pending, 'khach' => null, 'tt' => 'cod', 'ngay' => 0, 'so_sp' => 1],
+        ['status' => OrderStatus::Pending, 'khach' => 11, 'tt' => 'bank_transfer', 'ngay' => 0, 'so_sp' => 2],
+        ['status' => OrderStatus::Cancelled, 'khach' => 12, 'tt' => 'cod', 'ngay' => 9, 'so_sp' => 3, 'huy_tu' => OrderStatus::Pending],
+        ['status' => OrderStatus::Cancelled, 'khach' => null, 'tt' => 'bank_transfer', 'ngay' => 6, 'so_sp' => 2, 'huy_tu' => OrderStatus::Confirmed],
     ];
 
     private const NOTES = [null, null, null, 'Giao giờ hành chính giúp mình.', 'Gói quà giúp mình nhé, cảm ơn shop!', 'Gọi trước khi giao 15 phút.'];
@@ -55,16 +54,10 @@ class OrderSeeder extends Seeder
         $customers = User::query()->where('role', UserRole::Customer)->orderBy('id')->with('addresses')->get();
         $staffIds = User::query()->whereIn('role', [UserRole::Admin, UserRole::Staff])->pluck('id')->all();
         $products = Product::query()->get();
-        $coupons = Coupon::query()->get()->keyBy('code');
 
         foreach (self::PLAN as $i => $row) {
             $customer = $row['khach'] === null ? null : $customers[$row['khach'] - 1];
-            $this->createOrder($i + 1, $row, $customer, $products, $coupons, $staffIds);
-        }
-
-        // Lượt dùng coupon = số đơn chưa huỷ (huỷ đơn đã hoàn lượt — quy tắc 3)
-        foreach ($coupons as $coupon) {
-            $coupon->forceFill(['used_count' => $coupon->orders()->where('status', '!=', OrderStatus::Cancelled)->count()])->save();
+            $this->createOrder($i + 1, $row, $customer, $products, $staffIds);
         }
 
         // Đã bán = tổng số lượng trong các đơn đã giao
@@ -79,10 +72,9 @@ class OrderSeeder extends Seeder
     /**
      * @param  array<string, mixed>  $row
      * @param  Collection<int, Product>  $products
-     * @param  Collection<string, Coupon>  $coupons
      * @param  list<int>  $staffIds
      */
-    private function createOrder(int $seq, array $row, ?User $customer, Collection $products, Collection $coupons, array $staffIds): void
+    private function createOrder(int $seq, array $row, ?User $customer, Collection $products, array $staffIds): void
     {
         /** @var OrderStatus $status */
         $status = $row['status'];
@@ -104,11 +96,6 @@ class OrderSeeder extends Seeder
         });
 
         $subtotal = $items->sum('line_total');
-        $coupon = $row['coupon'] === null ? null : $coupons[$row['coupon']];
-        if ($coupon !== null && $subtotal < $coupon->min_order) {
-            $coupon = null;
-        }
-        $discount = $coupon === null ? 0 : $this->discount($coupon, $subtotal);
         $shippingFee = $subtotal >= self::FREE_SHIPPING_FROM ? 0 : self::SHIPPING_FEE;
 
         $cancelledFrom = $row['huy_tu'] ?? null;
@@ -125,15 +112,15 @@ class OrderSeeder extends Seeder
         $order = Order::query()->forceCreate([
             'code' => 'DH'.$placedAt->format('ymd').sprintf('%04d', $seq),
             'user_id' => $customer?->id,
-            'coupon_id' => $coupon?->id,
+            'coupon_id' => null,
             ...$this->recipient($customer),
             'payment_method' => $method,
             'payment_status' => $this->paymentStatus($method, $status, $confirmedAt),
             'status' => $status,
             'subtotal' => $subtotal,
-            'discount' => $discount,
+            'discount' => 0,
             'shipping_fee' => $shippingFee,
-            'total' => $subtotal - $discount + $shippingFee,
+            'total' => $subtotal + $shippingFee,
             'note' => fake()->randomElement(self::NOTES),
             'confirmed_at' => $confirmedAt,
             'shipped_at' => $shippedAt,
@@ -186,14 +173,6 @@ class OrderSeeder extends Seeder
                 'from_status' => $from, 'to_status' => $to, 'changed_by' => $by, 'note' => $note, 'created_at' => $at,
             ]);
         }
-    }
-
-    /** percent: theo % có trần max_discount; fixed: không vượt quá tạm tính */
-    private function discount(Coupon $coupon, int $subtotal): int
-    {
-        return $coupon->type === CouponType::Percent
-            ? min(intdiv($subtotal * $coupon->value, 100), $coupon->max_discount ?? PHP_INT_MAX)
-            : min($coupon->value, $subtotal);
     }
 
     private function paymentStatus(PaymentMethod $method, OrderStatus $status, ?Carbon $confirmedAt): PaymentStatus

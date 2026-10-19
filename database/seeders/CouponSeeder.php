@@ -6,7 +6,8 @@ use App\Models\Coupon;
 use Illuminate\Database\Seeder;
 
 /**
- * 6 coupon đủ tình huống. used_count được OrderSeeder đếm lại theo đơn thực tế.
+ * ĐÃ CẮT (phạm vi rút gọn 19/10): mã giảm giá không dùng ở giao diện, không gắn vào đơn.
+ * Vẫn seed 6 coupon đủ tình huống để bảng coupons có dữ liệu (factory create bỏ qua $fillable).
  */
 class CouponSeeder extends Seeder
 {
@@ -36,9 +37,9 @@ class CouponSeeder extends Seeder
             'starts_at' => now()->subDays(280), 'expires_at' => now()->subDays(230),
         ]);
 
-        // Hết lượt: còn trong thời gian hiệu lực nhưng đã dùng đủ usage_limit (2 đơn trong OrderSeeder)
+        // Hết lượt: còn trong thời gian hiệu lực nhưng đã dùng đủ usage_limit
         Coupon::factory()->percent(20, maxDiscount: 80000)->create([
-            'code' => 'FLASH20', 'min_order' => 0, 'usage_limit' => 2,
+            'code' => 'FLASH20', 'min_order' => 0, 'usage_limit' => 2, 'used_count' => 2,
             'starts_at' => now()->subDays(45), 'expires_at' => now()->addDays(15),
         ]);
 

@@ -10,7 +10,7 @@
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-    {{-- Layout quản trị TẠM ở mức chức năng; layout "Framed sheet" (DESIGN.md §10.6) làm ở bước 9.1 --}}
+    {{-- Layout quản trị TẠM ở mức chức năng; layout admin thật (Bootstrap mặc định, menu bên) làm ở S7 --}}
     <main class="container py-9">
         <div class="row justify-content-center">
             <div class="col-12 col-sm-10 col-md-7 col-lg-5">

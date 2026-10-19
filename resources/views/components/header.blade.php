@@ -84,7 +84,7 @@
         </div>
     </div>
 
-    {{-- Tìm kiếm: chỉ dựng giao diện; gợi ý tự động làm ở bước 4.3 --}}
+    {{-- Tìm kiếm: form GET /san-pham?q= (xử lý ở S1); gợi ý tìm kiếm tự động đã cắt --}}
     <div class="offcanvas offcanvas-top search-panel" id="search-panel" tabindex="-1" aria-labelledby="search-panel-title" data-search-panel>
         <div class="container search-panel__inner">
             <h2 id="search-panel-title" class="visually-hidden">Tìm kiếm sản phẩm</h2>
@@ -147,8 +147,8 @@
                     <li><a href="{{ route('login') }}">Đăng nhập</a></li>
                     <li><a href="{{ route('register') }}">Đăng ký</a></li>
                 @endauth
-                <li><a href="{{ url('/tra-cuu-don-hang') }}">Tra cứu đơn hàng</a></li>
-                <li><a href="{{ url('/tin-tuc') }}">Tin tức</a></li>
+                <li><a href="{{ url('/cau-hoi-thuong-gap') }}">Câu hỏi thường gặp</a></li>
+                <li><a href="{{ url('/lien-he') }}">Liên hệ</a></li>
             </ul>
         </div>
     </div>

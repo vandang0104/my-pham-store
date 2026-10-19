@@ -11,14 +11,14 @@ return [
     ],
 
     'faqs' => [
-        ['group' => 'Đặt hàng', 'question' => 'Tôi có cần tạo tài khoản để đặt hàng không?', 'answer' => 'Không bắt buộc. Bạn có thể đặt hàng với tư cách khách; sau khi đặt, hệ thống cung cấp mã đơn để bạn tra cứu bằng mã đơn và số điện thoại. Tạo tài khoản giúp bạn lưu địa chỉ, xem lại lịch sử đơn và viết đánh giá.'],
+        ['group' => 'Đặt hàng', 'question' => 'Tôi có cần tạo tài khoản để đặt hàng không?', 'answer' => 'Không bắt buộc. Bạn có thể đặt hàng với tư cách khách; sau khi đặt, hệ thống hiển thị mã đơn và gửi email xác nhận. Tạo tài khoản giúp bạn xem lại lịch sử đơn và tự huỷ đơn khi đơn chưa được giao.'],
         ['group' => 'Đặt hàng', 'question' => 'Tôi có thể huỷ đơn sau khi đã đặt không?', 'answer' => 'Bạn có thể huỷ đơn khi đơn đang ở trạng thái "Chờ xác nhận" hoặc "Đã xác nhận". Khi đơn đã chuyển sang "Đang giao hàng", vui lòng liên hệ hotline để được hỗ trợ.'],
         ['group' => 'Thanh toán', 'question' => 'Cửa hàng hỗ trợ những hình thức thanh toán nào?', 'answer' => 'Hiện cửa hàng hỗ trợ thanh toán khi nhận hàng (COD) và chuyển khoản ngân hàng. Với chuyển khoản, đơn được xác nhận sau khi chúng tôi nhận được thanh toán.'],
-        ['group' => 'Thanh toán', 'question' => 'Mã giảm giá được áp dụng như thế nào?', 'answer' => 'Nhập mã ở trang giỏ hàng hoặc thanh toán. Mỗi mã có điều kiện riêng về giá trị đơn tối thiểu, thời gian hiệu lực và số lượt sử dụng. Mỗi đơn chỉ áp dụng một mã.'],
+        ['group' => 'Đặt hàng', 'question' => 'Tôi theo dõi đơn hàng ở đâu?', 'answer' => 'Đăng nhập rồi vào Tài khoản → Đơn hàng của tôi để xem trạng thái từng đơn. Nếu bạn đặt hàng không dùng tài khoản, hãy gọi hotline hoặc chat với chúng tôi kèm mã đơn.'],
         ['group' => 'Vận chuyển', 'question' => 'Phí giao hàng được tính ra sao?', 'answer' => 'Phí giao hàng đồng giá 30.000 ₫ toàn quốc. Đơn từ 500.000 ₫ trở lên được miễn phí giao hàng.'],
         ['group' => 'Vận chuyển', 'question' => 'Bao lâu tôi nhận được hàng?', 'answer' => 'Nội thành TP. Hồ Chí Minh và Hà Nội: 1–2 ngày làm việc. Các tỉnh thành khác: 3–5 ngày làm việc kể từ khi đơn được xác nhận.'],
         ['group' => 'Đổi trả', 'question' => 'Chính sách đổi trả như thế nào?', 'answer' => 'Bạn được đổi trả trong 7 ngày nếu sản phẩm lỗi do nhà sản xuất, giao sai hoặc hư hỏng khi vận chuyển. Sản phẩm cần còn nguyên tem niêm phong và hoá đơn mua hàng.'],
-        ['group' => 'Sản phẩm', 'question' => 'Làm sao để chọn sản phẩm phù hợp với loại da?', 'answer' => 'Mỗi sản phẩm đều ghi rõ loại da phù hợp. Bạn có thể lọc sản phẩm theo loại da, hoặc cập nhật loại da trong hồ sơ tài khoản để nhận gợi ý phù hợp hơn.'],
+        ['group' => 'Sản phẩm', 'question' => 'Làm sao để chọn sản phẩm phù hợp với loại da?', 'answer' => 'Mỗi sản phẩm đều ghi rõ loại da phù hợp ngay trên trang sản phẩm. Nếu chưa chắc, hãy chat với chúng tôi hoặc gửi tin qua trang Liên hệ để được tư vấn.'],
     ],
 
     'posts' => [

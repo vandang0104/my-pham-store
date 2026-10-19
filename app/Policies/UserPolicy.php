@@ -6,22 +6,20 @@ use App\Enums\UserRole;
 use App\Models\User;
 
 /**
- * Quản lý tài khoản trong khu quản trị: khách hàng (staff được xem) và nhân viên (chỉ admin).
- * Luôn còn ít nhất 1 admin đang hoạt động (quy tắc 9).
+ * Quản lý tài khoản trong khu quản trị (khách + nhân viên gộp một màn): CHỈ admin (quy tắc 9, phạm vi rút gọn).
+ * Luôn còn ít nhất 1 admin đang hoạt động.
  */
 class UserPolicy
 {
-    /** Danh sách khách hàng */
+    /** Danh sách tài khoản */
     public function viewAny(User $user): bool
     {
-        return $user->isBackOffice();
+        return $user->isAdmin();
     }
 
-    /** Admin xem mọi tài khoản; staff chỉ xem khách hàng và chính mình */
     public function view(User $user, User $target): bool
     {
-        return $user->isAdmin()
-            || ($user->isBackOffice() && ($target->role === UserRole::Customer || $user->is($target)));
+        return $user->isAdmin();
     }
 
     /** Tạo tài khoản nhân viên */

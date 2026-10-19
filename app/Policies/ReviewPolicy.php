@@ -7,6 +7,9 @@ use App\Models\Product;
 use App\Models\Review;
 use App\Models\User;
 
+/**
+ * ĐÃ CẮT (phạm vi rút gọn 19/10): đánh giá không làm, không hiển thị; giữ policy vì bảng reviews và test còn dùng.
+ */
 class ReviewPolicy
 {
     /** Danh sách đánh giá trong khu quản trị (lọc chờ duyệt…) */

@@ -122,11 +122,11 @@ describe('ReviewPolicy', function () {
 });
 
 describe('UserPolicy', function () {
-    it('cho staff xem khách hàng nhưng không xem/sửa nhân viên khác', function () {
+    it('chỉ admin quản lý tài khoản (khách và nhân viên), staff không xem được', function () {
         $nhanVienKhac = User::factory()->staff()->create();
 
-        expect(quyen('viewAny', User::class))->toBe([true, true, false])
-            ->and(quyen('view', $this->customer))->toBe([true, true, false])
+        expect(quyen('viewAny', User::class))->toBe([true, false, false])
+            ->and(quyen('view', $this->customer))->toBe([true, false, false])
             ->and(quyen('view', $nhanVienKhac))->toBe([true, false, false])
             ->and(quyen('create', User::class))->toBe([true, false, false])
             ->and(quyen('update', $this->customer))->toBe([true, false, false])

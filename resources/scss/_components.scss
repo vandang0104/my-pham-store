@@ -1,4 +1,4 @@
-// Component nhỏ dùng chung (DESIGN.md §7, §9): skip link, icon, wordmark, giá, đánh giá,
+// Component nhỏ dùng chung (DESIGN.md §7, §9): skip link, icon, badge, wordmark, giá,
 // tiêu đề section, trạng thái trống, dải sọc nhãn.
 
 // ---- Skip link: ẩn tới khi nhận focus ----
@@ -160,28 +160,6 @@ main:focus {
 
     &--lg .price__current {
         font-size: var(--fs-lead);
-    }
-}
-
-// ---- Đánh giá ----
-.rating {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--sp-1) var(--sp-2);
-    margin: 0;
-    font-size: var(--fs-small);
-    font-weight: 500;
-
-    &__stars {
-        display: inline-flex;
-        gap: 2px;
-        color: var(--c-ink);
-    }
-
-    &__count,
-    &--empty {
-        color: var(--c-muted);
     }
 }
 

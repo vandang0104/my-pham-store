@@ -1,7 +1,8 @@
 # Kiến trúc dự án — Web bán mỹ phẩm (Laravel)
 
 > Tài liệu định hướng cho các bước triển khai. Nguồn quy tắc: `CLAUDE.md`. Nguồn sự thật về schema: migrations.
-> Trạng thái: **đề xuất** — 3 điểm ở mục 5 đang chờ chốt (đang theo phương án khuyến nghị).
+> Trạng thái: 3 điểm ở mục 5 đã theo phương án khuyến nghị.
+> **Phạm vi rút gọn (19/10/2026, xem CLAUDE.md):** đã cắt mã giảm giá (CouponService), đánh giá, CRUD banner/tin tức/FAQ/thương hiệu, cài đặt, sổ địa chỉ, tra cứu đơn khách vãng lai, VNPay, xuất CSV, mini-cart, gợi ý tìm kiếm. Thêm: chat trực tuyến tự làm (ChatService, polling), form liên hệ, FAQ chỉ hiển thị. Bảng/enum/model/policy của phần đã cắt **giữ nguyên** (schema không đổi), chỉ không có route/giao diện.
 
 ## 1. Cấu trúc thư mục
 
@@ -10,56 +11,54 @@ app/
 ├─ Enums/                     # PHP backed enum, cast thẳng vào Model
 │  ├─ UserRole.php            # admin | staff | customer
 │  ├─ OrderStatus.php         # pending|confirmed|shipping|delivered|cancelled + canTransitionTo()
-│  ├─ CouponType.php          # percent | fixed
-│  ├─ PaymentMethod.php       # cod | bank_transfer | vnpay
+│  ├─ CouponType.php          # (đã cắt) percent | fixed
+│  ├─ PaymentMethod.php       # cod | bank_transfer (vnpay: đã cắt)
 │  ├─ PaymentStatus.php       # unpaid | paid | refunded
-│  ├─ ReviewStatus.php        # pending | approved | rejected
-│  ├─ PostStatus.php          # draft | published
-│  └─ SkinType.php            # oily | dry | combination | sensitive | all
+│  ├─ ReviewStatus.php        # (đã cắt) pending | approved | rejected
+│  ├─ PostStatus.php          # (đã cắt) draft | published
+│  └─ SkinType.php            # oily | dry | combination | sensitive | all (chỉ hiển thị, không lọc)
 ├─ Exceptions/                # lỗi nghiệp vụ, render tập trung ở bootstrap/app.php
 │  ├─ OutOfStockException.php
-│  ├─ InvalidCouponException.php
 │  └─ InvalidOrderTransitionException.php
 ├─ Http/
 │  ├─ Controllers/
 │  │  ├─ Controller.php
 │  │  ├─ HomeController.php, ProductController.php, CategoryController.php,
-│  │  │  BrandController.php, CartController.php, CheckoutController.php,
-│  │  │  OrderTrackingController.php, PostController.php, ReviewController.php
-│  │  ├─ Auth/                # LoginController, RegisterController, PasswordResetController…
+│  │  │  CartController.php, CheckoutController.php, FaqController.php,
+│  │  │  ContactController.php, ChatController.php
+│  │  ├─ Auth/                # LoginController, RegisterController, ForgotPassword/ResetPasswordController
 │  │  ├─ Account/             # DashboardController, OrderController, ProfileController
 │  │  └─ Admin/               # DashboardController, ProductController, CategoryController,
-│  │                          # BrandController, OrderController, CouponController,
-│  │                          # ReviewController, PostController, CustomerController,
-│  │                          # StaffController, SettingController, ReportController
-│  ├─ Middleware/EnsureUserHasRole.php   # alias 'role'
+│  │                          # OrderController, UserController (khách + nhân viên), ReportController,
+│  │                          # ChatController, ContactController
+│  ├─ Middleware/EnsureUserHasRole.php (alias 'role'), EnsureAccountIsActive.php
 │  └─ Requests/               # cùng cấu trúc với Controllers
-│     ├─ Cart/AddToCartRequest.php, Checkout/PlaceOrderRequest.php, StoreReviewRequest.php
+│     ├─ Cart/AddToCartRequest.php, Checkout/PlaceOrderRequest.php
 │     ├─ Auth/…, Account/…
 │     └─ Admin/StoreProductRequest.php, UpdateProductRequest.php, UpdateOrderStatusRequest.php…
 ├─ Listeners/MergeGuestCart.php          # nghe event Login → CartService::mergeGuestCart()
-├─ Models/                    # User, Product, Category, Brand, Order, OrderItem, Coupon, Review, Post, Cart…
-├─ Policies/                  # ProductPolicy, OrderPolicy, ReviewPolicy, UserPolicy, CouponPolicy, SettingPolicy
+├─ Models/                    # User, Product, Category, Brand, Order, OrderItem, Cart… (+ 2 model chat ở S6)
+├─ Policies/                  # ProductPolicy, OrderPolicy, UserPolicy (+ CouponPolicy, ReviewPolicy,
+│                             #   SettingPolicy: đã cắt, giữ vì còn test)
 ├─ Services/
 │  ├─ CartService.php
-│  ├─ CouponService.php
 │  ├─ OrderService.php
-│  └─ ReportService.php
+│  ├─ ReportService.php
+│  └─ ChatService.php
 ├─ Support/Money.php          # format VND (number_format, không phụ thuộc ext-intl)
-└─ View/Components/           # component có logic: ProductCard, Price, Rating, Breadcrumb,
-                              # Admin/StatCard, Admin/StatusBadge
+└─ View/Components/           # component có logic: ProductCard, Price, Breadcrumb, Flash, Icon
 resources/
 ├─ views/
 │  ├─ layouts/        app.blade.php, admin.blade.php, auth.blade.php
-│  ├─ components/     component Blade (anonymous + view của class component), components/admin/…
-│  ├─ pages/          home, products/{index,show}, categories/show, cart, checkout/{index,success},
-│  │                  orders/track, posts/{index,show}, auth/{login,register,forgot,reset}
+│  ├─ components/     component Blade (anonymous + view của class component)
+│  ├─ pages/          home (+ home/*), products/{index,show}, categories/show, cart, checkout/{index,success},
+│  │                  faq, contact, auth/{login,register,forgot,reset}
 │  ├─ account/        dashboard, orders/{index,show}, profile
-│  ├─ admin/          dashboard, products/…, orders/…, coupons/…, reviews/…, reports/…, settings/…
-│  └─ emails/         order-placed (mail xác nhận đơn)
-├─ scss/              app.scss (biến Bootstrap tuỳ biến, chỉ import module cần), admin.scss, _tokens.scss
-└─ js/                app.js (Alpine + fetch giỏ hàng), admin.js (Chart.js)
-lang/vi/              messages.php, order.php, cart.php, coupon.php, validation.php, auth.php, passwords.php, pagination.php
+│  ├─ admin/          dashboard, products/…, categories/…, orders/…, users/…, reports/…, chats/…, contacts/…
+│  └─ emails/         order-placed (mail xác nhận đơn, driver log)
+├─ scss/              app.scss (Bootstrap tuỳ biến; từ 19/10 import đủ component chuẩn cho trang mới), _tokens.scss
+└─ js/                app.js (header, flash; fetch cho giỏ/chat), admin.js (Chart.js)
+lang/vi/              messages.php, order.php, cart.php, validation.php, auth.php, passwords.php, pagination.php
 routes/               web.php (khách + tài khoản + auth), admin.php
 tests/                Feature/{Web,Admin,Auth}, Unit/Services
 docs/                 architecture.md, erd.mmd
@@ -68,7 +67,7 @@ docs/                 architecture.md, erd.mmd
 Ghi chú:
 - **Controller khách nằm ở namespace gốc `App\Http\Controllers`** (đúng CLAUDE.md), không tạo thư mục `Web/`; nhóm tài khoản tách `Account/`, quản trị tách `Admin/`.
 - Không có thư mục Repository — Eloquent đủ dùng, thêm lớp repository chỉ là bọc thêm.
-- Không có logic trong Blade: dữ liệu hiển thị phức tạp (giá, badge trạng thái, sao đánh giá) đi qua View Component.
+- Không có logic trong Blade: dữ liệu hiển thị phức tạp (giá, badge trạng thái) đi qua View Component.
 
 ## 2. Quy ước route
 
@@ -78,36 +77,37 @@ Ghi chú:
 | Method | URL | Route name |
 |---|---|---|
 | GET | `/` | `home` |
-| GET | `/san-pham` (lọc/tìm/sắp xếp bằng query `?q=&danh-muc=&gia=&sap-xep=`) | `products.index` |
+| GET | `/san-pham` (tìm + lọc bằng query `?q=&danh-muc=&thuong-hieu=&gia-tu=&gia-den=&khuyen-mai=1`) | `products.index` |
 | GET | `/san-pham/{product:slug}` | `products.show` |
 | GET | `/danh-muc/{category:slug}` | `categories.show` |
-| GET | `/thuong-hieu/{brand:slug}` | `brands.show` |
-| POST | `/san-pham/{product:slug}/danh-gia` (auth) | `reviews.store` |
 | GET | `/gio-hang` | `cart.index` |
 | POST | `/gio-hang` | `cart.add` |
 | PATCH / DELETE | `/gio-hang/{item}` | `cart.update` / `cart.remove` |
-| POST / DELETE | `/gio-hang/ma-giam-gia` | `cart.coupon.apply` / `cart.coupon.remove` |
 | GET / POST | `/thanh-toan` | `checkout.index` / `checkout.store` |
 | GET | `/thanh-toan/thanh-cong/{order:code}` (signed URL cho khách vãng lai) | `checkout.success` |
-| GET | `/tra-cuu-don-hang` (mã đơn + SĐT) | `orders.track` |
-| GET | `/tin-tuc`, `/tin-tuc/{post:slug}` | `posts.index`, `posts.show` |
+| GET | `/cau-hoi-thuong-gap` | `faq.index` |
+| GET / POST | `/lien-he` | `contact.create` / `contact.store` |
+| GET / POST | `/chat/tin-nhan` (polling, JSON) | `chat.messages` / `chat.send` |
 | GET/POST | `/dang-nhap`, `/dang-ky`, `/dang-xuat`, `/quen-mat-khau`, `/dat-lai-mat-khau/{token}` | `login`, `register`, `logout`, `password.request`, `password.reset` |
 | GET | `/tai-khoan` (auth) | `account.dashboard` |
 | GET | `/tai-khoan/don-hang`, `/tai-khoan/don-hang/{order:code}` | `account.orders.index`, `account.orders.show` |
 | POST | `/tai-khoan/don-hang/{order:code}/huy` | `account.orders.cancel` |
 | GET / PUT | `/tai-khoan/thong-tin`, PUT `/tai-khoan/mat-khau` | `account.profile.edit` / `.update`, `account.password.update` |
 
+Tham số lọc và URL chat ở trên là dự kiến; bước làm tương ứng (S1, S6) chốt tên cuối cùng và cập nhật bảng này. Đã cắt: `/thuong-hieu/{slug}`, đánh giá, mã giảm giá, `/tra-cuu-don-hang`, `/tin-tuc`.
+
 Các endpoint giỏ hàng dùng chung cho form thường và AJAX: controller trả JSON khi `$request->expectsJson()`, ngược lại redirect + flash.
 
 ### routes/admin.php
 Đăng ký trong `bootstrap/app.php` (`withRouting(then: …)`) với `prefix('admin')`, `name('admin.')`, middleware `['web','auth','role:admin,staff']`. **URL admin dùng tiếng Anh** (không công khai, khớp tên route `admin.products.index`).
-- `Route::resource`: `products`, `categories`, `brands`, `coupons`, `posts`.
+- `/admin/login` (khách chưa đăng nhập, ngoài nhóm `auth`) — trang đăng nhập quản trị (S7).
+- `dashboard`: `/admin` (staff chỉ thấy số liệu vận hành).
+- `Route::resource`: `products` (1 ảnh/SP), `categories`.
 - `orders`: index, show, `PATCH orders/{order}/status` → `admin.orders.status`.
-- `reviews`: index, `PATCH reviews/{review}/approve`, destroy.
-- `customers`: index, show. `dashboard`: `/admin` (staff chỉ thấy số liệu vận hành).
-- Nhóm thêm `role:admin`: `staff` (resource), `settings` (edit/update), `reports` (index + export CSV — thống kê doanh thu) — staff không vào được (quy tắc 9). Ma trận chi tiết: `docs/permissions.md`.
+- `chats` (hội thoại + trả lời), `contacts` (tin nhắn liên hệ, đánh dấu đã xử lý).
+- Nhóm thêm `role:admin`: `users` (tài khoản khách + nhân viên gộp một màn: đổi vai trò, khoá/mở khoá), `reports` (doanh thu theo ngày/tháng + top SP bán chạy, không CSV) — staff không vào được (quy tắc 9). Ma trận chi tiết: `docs/permissions.md`.
 
-**Phân quyền 2 tầng:** middleware `role` chặn theo nhóm route; Policy chặn theo đối tượng (vd `UserPolicy::delete` cấm xoá/hạ quyền admin cuối cùng; `OrderPolicy::cancel` khách chỉ huỷ đơn của mình khi pending/confirmed; `ReviewPolicy::create` chỉ khi đã có đơn delivered chứa SP và chưa đánh giá). FormRequest gọi policy trong `authorize()`.
+**Phân quyền 2 tầng:** middleware `role` chặn theo nhóm route; Policy chặn theo đối tượng (vd `UserPolicy::delete` cấm xoá/hạ quyền admin cuối cùng; `OrderPolicy::cancel` khách chỉ huỷ đơn của mình khi pending/confirmed). FormRequest gọi policy trong `authorize()`.
 
 ## 3. Tách lớp
 
@@ -125,11 +125,12 @@ Exception nghiệp vụ được render tập trung trong `bootstrap/app.php`: r
 
 **Trách nhiệm từng Service:**
 - **CartService** — `items()`, `add()`, `update()`, `remove()`, `clear()`, `subtotal()`, `mergeGuestCart(User)`. Khách: lưu session; user: lưu DB; nhánh nằm trong private method. Kiểm tra tồn kho “mềm” (không khoá). Gộp giỏ khi đăng nhập qua listener `MergeGuestCart` (event `Login`), cộng dồn số lượng, cắt theo tồn kho.
-- **CouponService** — `validate(code, subtotal, ?user)` kiểm hiệu lực thời gian, `min_order`, `usage_limit` → ném `InvalidCouponException` kèm key lang; `discountFor(coupon, subtotal)` (percent có trần `max_discount`, fixed không vượt subtotal); `consume()` / `release()` tăng/giảm lượt dùng (gọi bên trong transaction của OrderService, có `lockForUpdate`).
-- **OrderService** — `place(CheckoutData, ?User)`: trong `DB::transaction` → `lockForUpdate` các product **sắp theo id** (tránh deadlock) → kiểm & trừ kho → validate lại + `consume` coupon → tạo `orders` + `order_items` **snapshot** tên/sku/giá → sinh mã đơn → xoá giỏ → gửi mail `afterCommit`. `transition(order, OrderStatus)` dùng bảng chuyển trạng thái trong enum; `cancel(order)` chỉ từ pending/confirmed, hoàn kho + `release` coupon trong cùng transaction.
-- **ReportService** — doanh thu theo ngày/tháng (chỉ đơn delivered), số đơn theo trạng thái, top sản phẩm bán chạy, sản phẩm sắp hết hàng; trả mảng `labels/datasets` sẵn cho Chart.js; cache ngắn (vd 10 phút).
+- **OrderService** — `place(CheckoutData, ?User)`: trong `DB::transaction` → `lockForUpdate` các product **sắp theo id** (tránh deadlock) → kiểm & trừ kho → tạo `orders` (`coupon_id` null, `discount` 0) + `order_items` **snapshot** tên/sku/giá → sinh mã đơn → xoá giỏ → gửi mail `afterCommit` (driver log). `transition(order, OrderStatus)` dùng bảng chuyển trạng thái trong enum; `cancel(order)` chỉ từ pending/confirmed, hoàn kho trong cùng transaction.
+- **ReportService** — doanh thu theo ngày/tháng (chỉ đơn delivered), top sản phẩm bán chạy; số liệu vận hành cho dashboard (đơn mới, đơn chờ xử lý, sắp hết hàng); trả mảng `labels/datasets` sẵn cho Chart.js.
+- **ChatService** — tạo/lấy hội thoại của khách (user hoặc session khách vãng lai), gửi tin, lấy tin mới sau một id (polling); nhân viên trả lời từ admin. Schema 2 bảng mới chốt ở S6.
+- ~~CouponService~~ — đã cắt (mã giảm giá).
 
-Phụ thuộc: `OrderService → CartService, CouponService`; `ReportService` độc lập. Inject qua constructor (container tự resolve, không cần đăng ký binding).
+Phụ thuộc: `OrderService → CartService`; `ReportService`, `ChatService` độc lập. Inject qua constructor (container tự resolve, không cần đăng ký binding).
 
 ## 4. Package tối thiểu
 
@@ -140,7 +141,7 @@ Phụ thuộc: `OrderService → CartService, CouponService`; `ReportService` đ
 | `laravel/pint` (dev, có sẵn skeleton) | định dạng code theo CLAUDE.md |
 | `pestphp/pest`, `pestphp/pest-plugin-laravel` (dev) | kiểm thử; cú pháp gọn hơn PHPUnit, chọn khi tạo project |
 
-Cố ý **không** cài: Breeze/Jetstream/Fortify (tự viết auth, xem quyết định 1), spatie/laravel-permission (chỉ 3 role → cột `role` + Enum + Policy), slug package (`Str::slug` đã chuyển tiếng Việt → ASCII, sẽ có test xác nhận), Excel package (CSV bằng `fputcsv` + streamed response), HTML purifier/WYSIWYG (xem quyết định 3), debugbar (dùng `Model::preventLazyLoading()` ở môi trường dev).
+Cố ý **không** cài: Breeze/Jetstream/Fortify (tự viết auth, xem quyết định 1), spatie/laravel-permission (chỉ 3 role → cột `role` + Enum + Policy), slug package (`Str::slug` đã chuyển tiếng Việt → ASCII, sẽ có test xác nhận), Excel package (xuất CSV đã cắt), HTML purifier/WYSIWYG (xem quyết định 3), debugbar (dùng `Model::preventLazyLoading()` ở môi trường dev).
 
 **npm**
 | Package | Lý do |
@@ -148,8 +149,9 @@ Cố ý **không** cài: Breeze/Jetstream/Fortify (tự viết auth, xem quyết
 | `vite`, `laravel-vite-plugin` | có sẵn skeleton, build asset |
 | `bootstrap`, `@popperjs/core` | UI theo CLAUDE.md; Popper cho dropdown/tooltip |
 | `sass` | biên dịch Sass tuỳ biến Bootstrap |
-| `alpinejs` | tương tác nhẹ (giỏ hàng AJAX, mini-cart, toggle) |
-| `chart.js` | biểu đồ thống kê admin |
+| `chart.js` | biểu đồ thống kê admin — **chưa cài**, thêm ở S10 |
+
+Không dùng `alpinejs` (JS thuần + `fetch` đủ cho giỏ/chat; mini-cart đã cắt).
 
 Gỡ khỏi skeleton: `tailwindcss`, `@tailwindcss/vite` (skeleton mặc định có), `axios` (dùng `fetch` native).
 
@@ -161,7 +163,7 @@ Gỡ khỏi skeleton: `tailwindcss`, `@tailwindcss/vite` (skeleton mặc định
    → **Khuyến nghị: tự viết** (~4 controller + FormRequest) bằng `Auth`, `Password` broker, `RateLimiter` có sẵn. Lý do: 0 package, URL tiếng Việt (`/dang-nhap`) tự nhiên, đúng khuôn controller mỏng, dễ giải thích khi bảo vệ đồ án. Fortify buộc tắt route mặc định và vẫn phải tự làm view → lợi ích ít. Không làm xác minh email (có thể thêm sau).
 
 2. **Phương thức thanh toán**
-   → **Khuyến nghị: COD + chuyển khoản thủ công** (hiển thị STK/QR tĩnh, admin xác nhận đã nhận tiền khi chuyển `pending → confirmed`). Không cần package hay tích hợp ngoài, OrderService đơn giản. VNPay sandbox để làm phần mở rộng nếu còn thời gian (chỉ thêm 1 cổng, không ảnh hưởng kiến trúc vì đã có enum `PaymentMethod`).
+   → **Khuyến nghị: COD + chuyển khoản thủ công** (hiển thị STK/QR tĩnh, admin xác nhận đã nhận tiền khi chuyển `pending → confirmed`). Không cần package hay tích hợp ngoài, OrderService đơn giản. VNPay: đã cắt (phạm vi rút gọn 19/10).
 
 3. **Định dạng nội dung tin tức / mô tả sản phẩm**
    → **Khuyến nghị: Markdown**, render bằng `Str::markdown(..., ['html_input' => 'strip', 'allow_unsafe_links' => false])` (league/commonmark đã có sẵn trong framework) → an toàn XSS, 0 package. Phương án WYSIWYG (TinyMCE/Trix) cần thêm `mews/purifier` để lọc HTML do staff nhập — nhiều phụ thuộc hơn.

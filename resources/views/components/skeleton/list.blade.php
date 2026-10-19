@@ -1,5 +1,5 @@
 {{--
-    Skeleton danh sách dòng khi đang tải (DESIGN.md §9 Skeleton): khung giống dòng mini-cart / gợi ý tìm kiếm
+    Skeleton danh sách dòng khi đang tải (DESIGN.md §9 Skeleton): khung giống dòng giỏ hàng / danh sách đơn
     (ảnh 4:5 rộng 64px + 2 dòng chữ + giá). Mảng phẳng, không gradient/shimmer.
 --}}
 @props(['count' => 3])

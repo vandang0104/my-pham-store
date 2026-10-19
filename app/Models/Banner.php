@@ -6,9 +6,9 @@ use Database\Factories\BannerFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
@@ -23,18 +23,16 @@ class Banner extends Model
     /** Vị trí hero trang chủ (DESIGN.md §10.1) */
     public const POSITION_HOME_HERO = 'home_hero';
 
-    protected static function booted(): void
+    /** URL ảnh desktop trên disk public (đường dẫn tương đối "/storage/…") */
+    protected function desktopUrl(): Attribute
     {
-        // Banner hero trang chủ được cache (TTL ngắn): xoá khi banner thay đổi
-        $forget = fn () => Cache::forget(config('home.cache.banners.key'));
-        static::saved($forget);
-        static::deleted($forget);
+        return Attribute::get(fn (): ?string => $this->image_desktop ? Storage::disk('public')->url($this->image_desktop) : null);
     }
 
-    /** Đường dẫn công khai của ảnh trên disk public */
-    public static function imageUrl(?string $path): ?string
+    /** URL ảnh mobile; thiếu thì dùng ảnh desktop */
+    protected function mobileUrl(): Attribute
     {
-        return $path ? Storage::disk('public')->url($path) : null;
+        return Attribute::get(fn (): ?string => $this->image_mobile ? Storage::disk('public')->url($this->image_mobile) : $this->desktop_url);
     }
 
     protected function casts(): array

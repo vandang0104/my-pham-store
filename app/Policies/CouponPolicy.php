@@ -6,6 +6,7 @@ use App\Models\Coupon;
 use App\Models\User;
 
 /**
+ * ĐÃ CẮT (phạm vi rút gọn 19/10): mã giảm giá không làm; giữ policy vì bảng coupons và test còn dùng.
  * Staff chỉ xem coupon; tạo/sửa/xoá thuộc về admin.
  */
 class CouponPolicy

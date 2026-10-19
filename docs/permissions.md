@@ -1,6 +1,7 @@
 # Ma trận phân quyền
 
-> **Nguồn sự thật về quyền** (chờ duyệt). Code phải khớp tài liệu này; khi đổi quyền, sửa tài liệu trước rồi sửa Policy/route và test.
+> **Nguồn sự thật về quyền.** Code phải khớp tài liệu này; khi đổi quyền, sửa tài liệu trước rồi sửa Policy/route và test.
+> **Phạm vi rút gọn (19/10/2026, xem CLAUDE.md):** đã cắt mã giảm giá, đánh giá, CRUD banner/tin tức/FAQ, cài đặt cửa hàng, CRUD thương hiệu, sổ địa chỉ, tra cứu đơn cho khách vãng lai. Nhân viên và khách hàng gộp vào một màn **Tài khoản**, chỉ admin.
 
 Ký hiệu: ✅ được phép · ❌ không được phép · ⚠️ được phép có điều kiện (xem cột Ghi chú).
 Vai trò: **Admin** (quản trị), **Staff** (nhân viên), **Customer** (khách có tài khoản), **Guest** (khách vãng lai).
@@ -9,60 +10,56 @@ Vai trò: **Admin** (quản trị), **Staff** (nhân viên), **Customer** (khác
 
 | Tầng | Cơ chế | Phạm vi |
 |---|---|---|
-| 1. Route | Middleware `auth` + `role:admin,staff` cho toàn bộ `/admin`; nhóm con `role:admin` cho nhân viên, cài đặt và thống kê doanh thu | Chặn theo khu vực. Guest → chuyển về `/dang-nhap`; Customer → 403; Staff vào nhóm `role:admin` → 403 |
+| 1. Route | Middleware `auth` + `role:admin,staff` cho toàn bộ `/admin`; nhóm con `role:admin` cho tài khoản và thống kê doanh thu | Chặn theo khu vực. Guest → chuyển về trang đăng nhập; Customer → 403; Staff vào nhóm `role:admin` → 403 |
 | 2. Đối tượng | Policy trong `app/Policies` (gọi qua `Gate`/`authorize()` trong FormRequest) | Chặn theo từng bản ghi và điều kiện nghiệp vụ |
 | Toàn cục | Middleware `EnsureAccountIsActive` (nhóm `web`) | Tài khoản bị khoá đang đăng nhập bị đăng xuất ở request kế tiếp; tài khoản bị khoá không đăng nhập được |
 
-Sau khi đăng nhập: Admin/Staff → `/admin`; Customer → trang chủ.
+Sau khi đăng nhập: Admin/Staff → `/admin`; Customer → trang chủ. Trang đăng nhập quản trị riêng `/admin/login` làm ở S7.
 
 ## Khu quản trị (`/admin`)
+
+Route dự kiến: `dashboard`, `products`, `categories`, `orders`, `users`, `reports`, `chats`, `contacts`.
 
 | Tài nguyên | Hành động | Admin | Staff | Customer | Guest | Thực thi | Ghi chú |
 |---|---|:-:|:-:|:-:|:-:|---|---|
 | Dashboard | Xem | ✅ | ✅ | ❌ | ❌ | Route | Dashboard của staff chỉ có số liệu vận hành (đơn mới, đơn chờ xử lý, sản phẩm sắp hết hàng), **không** có doanh thu |
-| Sản phẩm | Xem, tạo, sửa | ✅ | ✅ | ❌ | ❌ | `ProductPolicy` | |
+| Sản phẩm | Xem, tạo, sửa | ✅ | ✅ | ❌ | ❌ | `ProductPolicy` | 1 ảnh/sản phẩm |
 | Sản phẩm | Xoá mềm, khôi phục | ✅ | ❌ | ❌ | ❌ | `ProductPolicy` | Staff không xoá dữ liệu |
 | Sản phẩm | Xoá cứng | ⚠️ | ❌ | ❌ | ❌ | `ProductPolicy::forceDelete` | Chỉ khi sản phẩm chưa có trong đơn nào (quy tắc 10) |
-| Danh mục, Thương hiệu | Xem, tạo, sửa | ✅ | ✅ | ❌ | ❌ | Route (Policy làm ở bước CRUD) | |
-| Danh mục, Thương hiệu | Xoá | ⚠️ | ❌ | ❌ | ❌ | Route + FK restrict | Không xoá khi còn sản phẩm / danh mục con |
+| Danh mục | Xem, tạo, sửa | ✅ | ✅ | ❌ | ❌ | Route (Policy làm ở S7) | Thương hiệu chỉ lấy từ seed, không có CRUD |
+| Danh mục | Xoá | ⚠️ | ❌ | ❌ | ❌ | Route + FK restrict | Không xoá khi còn sản phẩm / danh mục con |
 | Đơn hàng | Xem danh sách, chi tiết | ✅ | ✅ | ❌ | ❌ | `OrderPolicy::viewAny/view` | |
 | Đơn hàng | Đổi trạng thái theo luồng | ✅ | ✅ | ❌ | ❌ | `OrderPolicy::updateStatus` | Luồng hợp lệ do `OrderStatus::canTransitionTo()` + OrderService kiểm tra |
-| Đơn hàng | Đánh dấu đã thanh toán | ✅ | ✅ | ❌ | ❌ | `OrderPolicy::updatePayment` | |
-| Đơn hàng | Huỷ | ⚠️ | ⚠️ | ❌ | ❌ | `OrderPolicy::cancel` | Chỉ khi đơn đang `pending`/`confirmed` |
-| Đơn hàng | Xoá | ❌ | ❌ | ❌ | ❌ | `OrderPolicy::delete` | Không ai xoá được đơn hàng, kể cả đơn đã huỷ (giữ để thống kê doanh thu và tỉ lệ huỷ) |
-| Đánh giá | Xem, duyệt / từ chối | ✅ | ✅ | ❌ | ❌ | `ReviewPolicy::viewAny/moderate` | |
-| Đánh giá | Xoá | ✅ | ❌ | ❌ | ❌ | `ReviewPolicy::delete` | |
-| Banner, Tin tức, FAQ | Xem, tạo, sửa | ✅ | ✅ | ❌ | ❌ | Route (Policy làm ở bước CRUD) | |
-| Banner, Tin tức, FAQ | Xoá | ✅ | ❌ | ❌ | ❌ | Route (Policy làm ở bước CRUD) | |
-| Tin nhắn liên hệ | Xem, đánh dấu đã xử lý | ✅ | ✅ | ❌ | ❌ | Route (Policy làm ở bước CRUD) | |
-| Tin nhắn liên hệ | Xoá | ✅ | ❌ | ❌ | ❌ | Route (Policy làm ở bước CRUD) | |
-| Khách hàng | Xem danh sách, chi tiết | ✅ | ✅ | ❌ | ❌ | `UserPolicy::viewAny/view` | Staff chỉ xem tài khoản khách hàng (và chính mình) |
-| Khách hàng | Sửa, khoá / mở khoá | ✅ | ❌ | ❌ | ❌ | `UserPolicy::update/toggleActive` | Không tự khoá mình |
-| Khách hàng | Xoá | ✅ | ❌ | ❌ | ❌ | `UserPolicy::delete` | Đơn hàng được giữ lại (user_id → NULL) |
-| Nhân viên | Xem, tạo, sửa, khoá, xoá, đổi vai trò | ⚠️ | ❌ | ❌ | ❌ | Route `role:admin` + `UserPolicy` | Không tự xoá mình; không xoá / khoá / hạ quyền **admin đang hoạt động cuối cùng** (quy tắc 9) |
-| Coupon | Xem | ✅ | ✅ | ❌ | ❌ | `CouponPolicy::viewAny/view` | |
-| Coupon | Tạo, sửa | ✅ | ❌ | ❌ | ❌ | `CouponPolicy::create/update` | |
-| Coupon | Xoá | ⚠️ | ❌ | ❌ | ❌ | `CouponPolicy::delete` | Chỉ khi chưa dùng trong đơn nào; nếu đã dùng thì tắt `is_active` |
-| Cài đặt cửa hàng | Xem, sửa | ✅ | ❌ | ❌ | ❌ | Route `role:admin` + `SettingPolicy` | |
-| Thống kê doanh thu | Xem, xuất CSV | ✅ | ❌ | ❌ | ❌ | Route `role:admin` (`/admin/reports`) | Staff không xem doanh thu |
+| Đơn hàng | Đánh dấu đã thanh toán | ✅ | ✅ | ❌ | ❌ | `OrderPolicy::updatePayment` | Chuyển khoản |
+| Đơn hàng | Huỷ | ⚠️ | ⚠️ | ❌ | ❌ | `OrderPolicy::cancel` | Chỉ khi đơn đang `pending`/`confirmed`; hoàn kho |
+| Đơn hàng | Xoá | ❌ | ❌ | ❌ | ❌ | `OrderPolicy::delete` | Không ai xoá được đơn hàng, kể cả đơn đã huỷ (quy tắc 11) |
+| Chat trực tuyến | Xem hội thoại, trả lời | ✅ | ✅ | ❌ | ❌ | Route (Policy làm ở S6) | |
+| Tin nhắn liên hệ | Xem, đánh dấu đã xử lý | ✅ | ✅ | ❌ | ❌ | Route (làm ở S5/S7) | |
+| Tài khoản (khách + nhân viên) | Xem danh sách, chi tiết | ✅ | ❌ | ❌ | ❌ | Route `role:admin` + `UserPolicy::viewAny/view` | Một màn chung cho mọi vai trò |
+| Tài khoản | Đổi vai trò | ⚠️ | ❌ | ❌ | ❌ | `UserPolicy::changeRole` | Không hạ quyền **admin đang hoạt động cuối cùng** (quy tắc 9) |
+| Tài khoản | Khoá / mở khoá | ⚠️ | ❌ | ❌ | ❌ | `UserPolicy::toggleActive` | Không tự khoá mình; không khoá admin hoạt động cuối cùng |
+| Tài khoản | Xoá | ⚠️ | ❌ | ❌ | ❌ | `UserPolicy::delete` | Không tự xoá mình; đơn hàng được giữ lại (user_id → NULL) |
+| Thống kê doanh thu | Xem (theo ngày/tháng + top SP bán chạy) | ✅ | ❌ | ❌ | ❌ | Route `role:admin` (`/admin/reports`) | Staff không xem doanh thu; không xuất CSV |
+
+**Đã cắt nhưng còn Policy + test (không dùng trong giao diện):** `CouponPolicy`, `ReviewPolicy`, `SettingPolicy` — giữ vì bảng và test còn tồn tại; không có route.
 
 ## Khu khách hàng
 
 | Chức năng | Admin | Staff | Customer | Guest | Thực thi | Ghi chú |
 |---|:-:|:-:|:-:|:-:|---|---|
-| Xem sản phẩm, tin tức, FAQ | ✅ | ✅ | ✅ | ✅ | Công khai | Chỉ hiện dữ liệu đang bật / đã duyệt / đã xuất bản |
+| Xem sản phẩm, tìm kiếm, FAQ | ✅ | ✅ | ✅ | ✅ | Công khai | Chỉ hiện dữ liệu đang bật |
 | Giỏ hàng, đặt hàng | ✅ | ✅ | ✅ | ✅ | Công khai | Khách vãng lai được đặt hàng (quy tắc 7) |
-| Tra cứu đơn bằng mã + SĐT | ✅ | ✅ | ✅ | ✅ | Công khai | |
+| Gửi liên hệ, chat với cửa hàng | ✅ | ✅ | ✅ | ✅ | Công khai | |
 | Xem đơn của mình | ✅ | ✅ | ⚠️ | ❌ | `OrderPolicy::view` | Customer chỉ xem đơn của chính mình |
 | Huỷ đơn của mình | ⚠️ | ⚠️ | ⚠️ | ❌ | `OrderPolicy::cancel` | Chỉ đơn của mình, khi đang `pending`/`confirmed` |
-| Viết đánh giá | ⚠️ | ⚠️ | ⚠️ | ❌ | `ReviewPolicy::create` | Đã có đơn **đã giao** chứa sản phẩm và chưa đánh giá sản phẩm đó (quy tắc 6) |
-| Hồ sơ, đổi mật khẩu, sổ địa chỉ | ✅ | ✅ | ✅ | ❌ | Middleware `auth` | Chỉ tài khoản của chính mình |
+| Hồ sơ, đổi mật khẩu | ✅ | ✅ | ✅ | ❌ | Middleware `auth` | Chỉ tài khoản của chính mình |
 
 ## Quyết định đã chốt
 
-1. **Không ai xoá được đơn hàng** (kể cả admin, kể cả đơn đã huỷ) — đơn huỷ được giữ để thống kê tỉ lệ huỷ.
+1. **Không ai xoá được đơn hàng** (kể cả admin, kể cả đơn đã huỷ) — đơn huỷ được giữ để thống kê.
 2. **Thống kê doanh thu chỉ dành cho admin** (nhóm route `role:admin`); dashboard của staff chỉ hiển thị số liệu vận hành.
+3. **Tài khoản khách và nhân viên gộp một màn, chỉ admin** (19/10/2026) — staff không xem/quản lý tài khoản.
 
 ## Còn để ngỏ
 
-- **Danh mục, thương hiệu, banner, tin tức, FAQ, liên hệ** chưa có Policy riêng (không nằm trong danh sách Policy của architecture.md); quyền đang ghi ở đây sẽ được thực thi bằng Policy khi làm các bước CRUD tương ứng.
+- **Danh mục, chat, liên hệ** chưa có Policy riêng; quyền ghi ở đây được thực thi bằng route (và Policy nếu cần) khi làm các bước S5–S7.

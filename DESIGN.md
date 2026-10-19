@@ -1,6 +1,11 @@
 # DESIGN.md — Định hướng thiết kế
 
-> **Nguồn sự thật về giao diện.** Mọi màn hình (khách và quản trị) theo tài liệu này. Muốn làm khác: sửa tài liệu trước, ghi lý do.
+> **⚠️ Từ 19/10/2026 (phạm vi rút gọn, hạn nộp 25/10 — xem CLAUDE.md "Phạm vi rút gọn" và "Giao diện"):**
+> trang MỚI (khách và quản trị) dùng thẳng class Bootstrap 5 mặc định (card, table, form-control, btn, alert, badge, nav…) trên Sass đã tuỳ biến.
+> Tài liệu này chỉ áp cho phần đã làm (layouts/app, header, footer, trang chủ, component dùng chung) và là tham khảo, không ràng buộc trang mới.
+> Đã gỡ khỏi phần đã làm: crossfade hero, tab "Đĩa vuông", danh mục chữ khổng lồ, thư răng cưa, lời mời CTA, reveal khi cuộn, đánh giá sao.
+
+> **Nguồn sự thật về giao diện (cho phần đã làm).** Muốn làm khác: sửa tài liệu trước, ghi lý do.
 > Lập bằng taste skill (`.claude/skills/design-taste-frontend`, tasteskill v2) ngày 19/10/2026. Sheet hướng thiết kế lưu ở `.taste-skill/direction.json` (trang) và `.taste-skill/app/direction.json` (quản trị) — in lại bằng `node .claude/skills/design-taste-frontend/scripts/draw.mjs --show`.
 > Khách hàng mục tiêu: nữ 20–40 tuổi tại Việt Nam, mua chủ yếu trên điện thoại. Thiết kế **mobile-first**: mọi quy tắc viết cho 390px trước, rồi mở rộng.
 

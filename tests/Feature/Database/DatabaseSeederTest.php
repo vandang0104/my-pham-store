@@ -79,11 +79,12 @@ it('tạo đơn hàng đủ trạng thái với tổng tiền và snapshot nhấ
     }
 });
 
-it('đếm lượt dùng coupon theo đơn chưa huỷ và có đủ tình huống coupon', function () {
-    foreach (Coupon::all() as $coupon) {
-        expect($coupon->used_count)->toBe($coupon->orders()->where('status', '!=', OrderStatus::Cancelled)->count());
-    }
+it('đơn mẫu không dùng mã giảm giá (đã cắt): coupon_id null, discount 0', function () {
+    expect(Order::query()->whereNotNull('coupon_id')->exists())->toBeFalse()
+        ->and(Order::query()->where('discount', '!=', 0)->exists())->toBeFalse();
+});
 
+it('bảng coupons (đã cắt, giữ dữ liệu) vẫn có đủ tình huống', function () {
     expect(Coupon::query()->where('expires_at', '<', now())->exists())->toBeTrue()
         ->and(Coupon::query()->where('starts_at', '>', now())->exists())->toBeTrue()
         ->and(Coupon::query()->whereNotNull('usage_limit')->whereColumn('used_count', '>=', 'usage_limit')->exists())->toBeTrue();

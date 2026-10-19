@@ -107,15 +107,7 @@ describe('product card', function () {
     });
 });
 
-describe('rating và breadcrumb', function () {
-    it('hiển thị điểm kiểu Việt Nam và sao đầy/nửa', function () {
-        $html = (string) $this->blade('<x-rating :value="4.7" :count="23" />');
-
-        expect($html)->toContain('Đánh giá 4,7 trên 5', '(23 đánh giá)')
-            ->and(substr_count($html, 'fill="currentColor"'))->toBe(5); // 4 sao đầy + 1 nửa sao
-        $this->blade('<x-rating :value="0" :count="0" />')->assertSee('Chưa có đánh giá');
-    });
-
+describe('breadcrumb', function () {
     it('breadcrumb có Trang chủ, mục cuối không phải link và JSON-LD BreadcrumbList', function () {
         $html = (string) $this->blade('<x-breadcrumb :items="$items" />', ['items' => [
             ['label' => 'Chăm sóc da mặt', 'url' => url('/danh-muc/cham-soc-da-mat')],

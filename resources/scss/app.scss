@@ -1,5 +1,6 @@
-// Entry Sass phía khách — theo DESIGN.md. Chỉ import các module Bootstrap cần dùng;
-// KHÔNG import card, navbar, alert, badge, carousel, toast và floating label (tự viết component theo §9).
+// Entry Sass phía khách. Phần đã làm (layout, header, footer, trang chủ, component) theo DESIGN.md;
+// từ 19/10/2026 trang mới dùng class Bootstrap mặc định (card, alert, badge, nav, list-group, modal…) — xem CLAUDE.md.
+// Vẫn không import carousel, toast, floating label, placeholder (không dùng).
 
 // 1. Cấu hình
 @import 'bootstrap/scss/functions';
@@ -29,10 +30,20 @@
 @import 'bootstrap/scss/buttons';
 @import 'bootstrap/scss/transitions';
 @import 'bootstrap/scss/dropdown';       // mega menu, menu tài khoản
-@import 'bootstrap/scss/offcanvas';      // mini-cart, menu điện thoại, bộ lọc
+@import 'bootstrap/scss/offcanvas';      // menu điện thoại, tìm kiếm
 @import 'bootstrap/scss/close';
 @import 'bootstrap/scss/pagination';
 @import 'bootstrap/scss/breadcrumb';
+// Trang mới (từ 19/10): component Bootstrap chuẩn
+@import 'bootstrap/scss/nav';
+@import 'bootstrap/scss/navbar';
+@import 'bootstrap/scss/card';
+@import 'bootstrap/scss/accordion';     // FAQ
+@import 'bootstrap/scss/alert';
+@import 'bootstrap/scss/badge';
+@import 'bootstrap/scss/list-group';
+@import 'bootstrap/scss/modal';
+@import 'bootstrap/scss/spinners';
 @import 'bootstrap/scss/helpers';
 
 // 3. Lớp riêng của dự án

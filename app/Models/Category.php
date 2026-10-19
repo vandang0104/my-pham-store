@@ -22,11 +22,8 @@ class Category extends Model
 
     protected static function booted(): void
     {
-        // Menu chính và khối danh mục trang chủ được cache: xoá khi danh mục thay đổi
-        $forget = function () {
-            Cache::forget(config('navigation.cache_key'));
-            Cache::forget(config('home.cache.categories.key'));
-        };
+        // Menu chính được cache: xoá khi danh mục thay đổi
+        $forget = fn () => Cache::forget(config('navigation.cache_key'));
         static::saved($forget);
         static::deleted($forget);
     }

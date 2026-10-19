@@ -52,11 +52,12 @@ Mọi tài khoản dưới đây có chung mật khẩu **`Demo@123`**.
 | Nhân viên (staff) | `nhanvien1@mypham.test`, `nhanvien2@mypham.test` |
 | Khách hàng | `khachhang01@mypham.test` … `khachhang20@mypham.test` |
 
-Khách hàng 01–07 có đơn đã giao và đánh giá; mọi tài khoản đều có địa chỉ mẫu.
+Khách hàng 01–07 có đơn đã giao.
 
 ## Dữ liệu mẫu & ảnh
 
-`php artisan migrate:fresh --seed` tạo: 23 tài khoản, 8 danh mục cha + 26 danh mục con, 10 thương hiệu **hư cấu**, 48 sản phẩm (168 ảnh), 4 banner, 6 coupon, 8 FAQ, 6 bài tin tức, 15 đơn hàng đủ trạng thái, 30 đánh giá. Nội dung soạn sẵn nằm trong `database/seeders/data/`.
+`php artisan migrate:fresh --seed` tạo: 23 tài khoản, 8 danh mục cha + 26 danh mục con, 10 thương hiệu **hư cấu**, 48 sản phẩm (168 ảnh), 4 banner, 8 FAQ, 15 đơn hàng đủ trạng thái (không dùng mã giảm giá). Nội dung soạn sẵn nằm trong `database/seeders/data/`.
+Phạm vi rút gọn (19/10, xem CLAUDE.md): seeder vẫn tạo dữ liệu cho các bảng của phần đã cắt (6 coupon, 6 bài tin tức, 30 đánh giá, địa chỉ mẫu) nhưng giao diện không dùng.
 
 **Ảnh:** mặc định seeder tự sinh ảnh placeholder SVG vào `storage/app/public/placeholders/` (không tải ảnh từ Internet). Để dùng ảnh thật cho sản phẩm:
 

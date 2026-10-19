@@ -164,15 +164,10 @@
                 <x-empty-state title="Chưa có sản phẩm" text="Chạy php artisan migrate:fresh --seed để có dữ liệu mẫu." :action-url="url('/')" action-label="Về trang chủ" />
             @endif
 
-            <h3 class="mt-8 mb-4">Giá và đánh giá</h3>
-            <div class="sg-demo-row">
-                @if ($cards->isNotEmpty())
-                    <x-price :product="$cards->first()" size="lg" />
-                @endif
-                <x-rating :value="4.7" :count="23" />
-                <x-rating :value="3.4" :count="5" />
-                <x-rating :value="0" :count="0" />
-            </div>
+            @if ($cards->isNotEmpty())
+                <h3 class="mt-8 mb-4">Giá</h3>
+                <x-price :product="$cards->first()" size="lg" />
+            @endif
         </div>
     </section>
 

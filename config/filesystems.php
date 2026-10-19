@@ -41,7 +41,9 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            // Đường dẫn TƯƠNG ĐỐI: ảnh đi theo host của request (localhost / Cloudflare Tunnel), không dính APP_URL.
+            // Email (bước S3) cần URL tuyệt đối → bọc url(Storage::disk('public')->url($path)).
+            'url' => '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

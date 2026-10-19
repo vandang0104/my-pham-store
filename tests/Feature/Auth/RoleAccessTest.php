@@ -14,6 +14,13 @@ describe('middleware khu quản trị', function () {
         $this->actingAs(User::factory()->customer()->create())->get('/admin')->assertForbidden();
     });
 
+    it('không còn route cài đặt và quản lý nhân viên riêng (đã cắt / gộp vào tài khoản)', function () {
+        $this->actingAs(User::factory()->admin()->create());
+
+        $this->get('/admin/settings')->assertNotFound();
+        $this->get('/admin/staff')->assertNotFound();
+    });
+
     it('cho admin và staff vào dashboard, hiện tên và vai trò', function (string $role, string $label) {
         $user = User::factory()->{$role}()->create(['name' => 'Lê Thu Hà']);
 
@@ -39,8 +46,7 @@ describe('middleware khu quản trị', function () {
         // Kết quả theo thứ tự: guest, customer, staff, admin
         $matrix = [
             '/admin' => ['đăng nhập', '403', '200', '200'],
-            '/admin/staff' => ['đăng nhập', '403', '403', '200'],
-            '/admin/settings' => ['đăng nhập', '403', '403', '200'],
+            '/admin/users' => ['đăng nhập', '403', '403', '200'],
             '/admin/reports' => ['đăng nhập', '403', '403', '200'],
         ];
         $roles = ['khách vãng lai' => null, 'customer' => 'customer', 'staff' => 'staff', 'admin' => 'admin'];

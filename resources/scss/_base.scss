@@ -55,18 +55,6 @@ body {
     box-shadow: var(--shadow-float); // taste-skill-ignore: chỉ thứ nổi thật (menu thả, ngăn kéo)
 }
 
-// Reveal khi cuộn (§8): chỉ ẩn khi JS đã gắn class .js-reveal lên <html>, nên nội dung vẫn hiện nếu JS lỗi
-.js-reveal [data-reveal] {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity var(--t-reveal) var(--ease-expo), transform var(--t-reveal) var(--ease-expo);
-}
-
-.js-reveal [data-reveal].is-revealed {
-    opacity: 1;
-    transform: none;
-}
-
 // Giảm chuyển động: giữ nội dung, bỏ di chuyển (§8)
 @media (prefers-reduced-motion: reduce) {
     *,
@@ -76,10 +64,5 @@ body {
         animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;
         scroll-behavior: auto !important;
-    }
-
-    .js-reveal [data-reveal] {
-        opacity: 1;
-        transform: none;
     }
 }

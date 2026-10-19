@@ -6,7 +6,7 @@ use Illuminate\View\View;
 
 /**
  * Số sản phẩm trong giỏ cho badge ở header.
- * TẠM trả 0 cho tới bước 5.1 (CartService) — khi đó đọc từ CartService::count().
+ * TẠM trả 0 cho tới bước S2 (CartService) — khi đó đọc từ CartService::count().
  */
 class CartComposer
 {
