@@ -23,7 +23,8 @@ carts chỉ cho user đăng nhập (user_id bắt buộc, unique; đã bỏ sess
 Tài liệu: docs/erd.mmd (ERD), docs/data-dictionary.md (cột, kiểu, ràng buộc, hành vi khi xoá).
 
 ## Giao diện
-Phong cách sang trọng, tối giản cho thương hiệu mỹ phẩm cao cấp. Mọi quyết định thiết kế theo DESIGN.md (tạo ở bước 3.1). Dùng taste skill cho các bước giao diện. Không dùng giao diện Bootstrap mặc định. Responsive mobile-first. Ảnh lazy-load, có alt.
+**DESIGN.md là nguồn sự thật về giao diện** — đọc trước mọi bước giao diện; muốn làm khác thì sửa DESIGN.md trước và ghi lý do. Dùng taste skill (`.claude/skills/design-taste-frontend`) cho các bước giao diện; hướng đã chia lưu ở `.taste-skill/` (in lại: `node .claude/skills/design-taste-frontend/scripts/draw.mjs --show`).
+Tóm tắt: hướng "trang là tấm nhãn in" (Tĩnh · Mộc · Tinh); màu Lụa #F5F2EC / Sơn mài #1E1B18 / Men ngọc #2E5A4C (nhấn duy nhất trên nền sáng) / Champagne #C2A878 (chỉ làm mảng, nút trên nền tối — cấm làm màu chữ trên nền sáng); chữ Cormorant Garamond 600 (tiêu đề ≥ 28px, line-height ≥ 1.1 vì dấu tiếng Việt) + Be Vietnam Pro (nội dung, ≥ 13px); góc vuông; không gradient, không bóng khi nghỉ, không emoji, không giao diện Bootstrap mặc định; icon SVG inline. Responsive mobile-first. Ảnh cục bộ, lazy-load, có alt. Mọi cặp chữ/nền ≥ 4.5:1 (bảng trong DESIGN.md §3).
 
 ## Quy trình làm việc với AI
 Mỗi lần chỉ làm ĐÚNG 1 bước trong kế hoạch, không làm trước phần sau. Bước phức tạp: lập kế hoạch (plan) và hỏi lại nếu mơ hồ trước khi code. Sau mỗi bước: chạy php artisan test và ./vendor/bin/pint, tóm tắt file đã tạo/sửa, đề xuất commit message (Conventional Commits). Không tự ý đổi schema/kiến trúc ngoài phạm vi bước; nếu cần thì dừng và hỏi. Khi gặp lỗi: đọc log, tìm nguyên nhân gốc, không che lỗi bằng try/catch rỗng.
