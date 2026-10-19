@@ -63,13 +63,22 @@ describe('product card', function () {
             ->assertSeeInOrder(['product-card__add', 'disabled'], false);
     });
 
-    it('dùng stretched link: một link tới trang chi tiết, nút tim và nút giỏ không lồng trong thẻ a', function () {
+    it('dùng stretched link: một link tới trang chi tiết, nút giỏ không lồng trong thẻ a', function () {
         $product = sanPhamThe(['sale_price' => 279000]);
         $html = (string) $this->blade('<x-product-card :product="$product" />', ['product' => $product]);
 
         expect(substr_count($html, '<a '))->toBe(1)
-            ->and($html)->toContain('href="'.url('/san-pham/'.$product->slug).'"', 'class="product-card__link"', 'product-card__wish', 'product-card__add')
+            ->and(substr_count($html, '<button '))->toBe(1)
+            ->and($html)->toContain('href="'.url('/san-pham/'.$product->slug).'"', 'class="product-card__link"', 'product-card__add')
             ->and(khongLongNutTrongLink($html))->toBeTrue();
+    });
+
+    it('không có nút yêu thích (không thuộc đề cương, không có bảng dữ liệu)', function () {
+        $product = sanPhamThe();
+
+        $this->blade('<x-product-card :product="$product" />', ['product' => $product])
+            ->assertDontSee('product-card__wish', false)
+            ->assertDontSee('yêu thích');
     });
 
     it('hiện thương hiệu, dung tích, loại da và ảnh có alt là tên sản phẩm', function () {

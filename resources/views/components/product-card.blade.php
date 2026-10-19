@@ -1,6 +1,6 @@
 {{--
     Link nằm ở tên sản phẩm và phủ cả thẻ bằng ::after (stretched link).
-    Nút tim và form thêm giỏ là phần tử anh em của link (không lồng trong <a>), nằm trên lớp phủ bằng z-index.
+    Form thêm giỏ là phần tử anh em của link (không lồng trong <a>), nằm trên lớp phủ bằng z-index.
 --}}
 <article {{ $attributes->merge(['class' => 'product-card product-card--tone-'.$tone.($outOfStock ? ' is-out-of-stock' : '')]) }}>
     <div class="product-card__media">
@@ -17,12 +17,8 @@
         @endif
 
         @if ($product->is_on_sale)
-            <span class="product-card__discount" aria-hidden="true">−{{ $product->discount_percent }}%</span>
+            <x-discount-badge :percent="$product->discount_percent" class="product-card__discount" />
         @endif
-
-        <button type="button" class="product-card__wish" aria-pressed="false" aria-label="Thêm {{ $product->name }} vào danh sách yêu thích">
-            <x-icon name="heart" :size="20" />
-        </button>
 
         <form method="POST" action="{{ url('/gio-hang') }}" class="product-card__cart">
             @csrf

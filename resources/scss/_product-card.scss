@@ -1,5 +1,5 @@
 // Thẻ sản phẩm "ảnh + nhãn treo" (DESIGN.md §9). Không viền, không bóng; góc vuông.
-// Link ở tên phủ cả thẻ (::after, z-index 1); nút tim và nút thêm giỏ nằm trên (z-index 2).
+// Link ở tên phủ cả thẻ (::after, z-index 1); nút thêm giỏ nằm trên (z-index 2).
 
 .product-card {
     position: relative;
@@ -53,9 +53,10 @@
         left: var(--sp-4);
         right: calc(44px + var(--sp-3));
         bottom: var(--sp-4);
+        // Cố định 28px (bậc tiêu đề nhỏ nhất, §4): cỡ co giãn tới 40px làm 2 dòng tràn lên hình sản phẩm
         font-family: var(--font-display);
         font-weight: 600;
-        font-size: var(--fs-title);
+        font-size: 1.75rem;
         line-height: var(--lh-title);
         color: var(--c-ink);
         -webkit-line-clamp: 2;
@@ -74,39 +75,12 @@
         }
     }
 
+    // Vị trí nhãn "−20%" trên ảnh; kiểu chữ/màu ở .discount-badge (_components.scss)
     &__discount {
         position: absolute;
         top: var(--sp-3);
         left: var(--sp-3);
         z-index: 2;
-        padding: 2px var(--sp-2);
-        background: var(--c-sale);
-        color: var(--c-ground);
-        font-size: var(--fs-small);
-        font-weight: 500;
-        font-variant-numeric: tabular-nums;
-    }
-
-    &__wish {
-        position: absolute;
-        top: var(--sp-1);
-        right: var(--sp-1);
-        z-index: 2;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 44px;
-        height: 44px;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        color: var(--c-ink);
-        transition: color var(--t-hover) ease;
-
-        &:hover,
-        &[aria-pressed='true'] {
-            color: var(--c-sale);
-        }
     }
 
     // Điện thoại: nút túi 44px góc dưới phải ảnh, luôn hiện

@@ -62,7 +62,12 @@ textarea.form-control {
     }
 }
 
-// Nhóm trường: khoảng cách đều giữa các cặp nhãn–ô
-.form-field + .form-field {
-    margin-top: var(--sp-5);
+// Nhóm trường: khoảng cách đều giữa các cặp nhãn–ô. Dùng margin dưới (không phải "+ margin-top")
+// để form chia 2 cột vẫn thẳng hàng: ô đầu của cột phải không bị đẩy xuống.
+.form-field {
+    margin-bottom: var(--sp-5);
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 }

@@ -1,9 +1,9 @@
 // Breadcrumb (DESIGN.md §9): một dòng 13px mực nhạt, phân cách "/", mục cuối sơn mài không phải link.
 // Điện thoại: chỉ hiện mục cha gần nhất kèm "‹".
 
+// Không đặt overflow: hidden trên cả dải (cắt mất vòng focus của link); chỉ mục cuối co lại với dấu "…"
 .breadcrumb {
     flex-wrap: nowrap;
-    overflow: hidden;
     font-weight: 500;
     line-height: var(--lh-small);
 }
@@ -24,6 +24,7 @@
     }
 
     &.active {
+        min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -34,8 +35,10 @@
         display: none;
     }
 
+    // Link duy nhất trên điện thoại: vùng bấm cao 44px (chữ 13px chỉ cao ~18px)
     .breadcrumb-item:nth-last-child(2) {
-        display: block;
+        display: flex;
+        align-items: center;
         padding-left: 0;
 
         &::before {
@@ -43,6 +46,12 @@
             float: none;
             padding-right: var(--sp-2);
             color: var(--c-muted);
+        }
+
+        a {
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
         }
     }
 }

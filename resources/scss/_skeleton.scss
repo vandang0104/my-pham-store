@@ -1,0 +1,114 @@
+// Skeleton đang tải (DESIGN.md §9): mảng màu phẳng, góc vuông; KHÔNG gradient, KHÔNG shimmer chạy ngang.
+// Chỉ nhịp opacity chậm; prefers-reduced-motion thì đứng yên.
+
+@keyframes skeleton-pulse {
+    50% {
+        opacity: .6;
+    }
+}
+
+.skeleton {
+    animation: skeleton-pulse 1.6s var(--ease-in-out) infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+
+    // Thanh chữ: cao bằng cỡ chữ thật, khoảng trên/dưới bù line-height
+    &__bar {
+        display: block;
+        height: var(--fs-body);
+        margin-block: .3em;
+        background: var(--c-skeleton);
+
+        &--small {
+            height: var(--fs-small);
+        }
+    }
+}
+
+// ---- Thẻ sản phẩm: cùng khung với .product-card (ảnh 4:5 + dải nhãn) ----
+.skeleton-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--c-surface);
+
+    &__media {
+        aspect-ratio: 4 / 5;
+        background: var(--c-surface);
+    }
+
+    // Đệm như .product-card__tag; ảnh và dải nhãn tách bằng một khe lụa như ranh giới ảnh–nhãn
+    &__tag {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: var(--sp-1);
+        padding: var(--sp-3) var(--sp-3) var(--sp-4);
+        border-top: var(--sp-1) solid var(--c-ground); // taste-skill-ignore — khe nền lụa, không phải đường kẻ
+    }
+
+    &__brand {
+        width: 45%;
+    }
+
+    &__name {
+        width: 90%;
+
+        &--short {
+            width: 60%;
+        }
+    }
+
+    &__row {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--sp-2);
+        margin-top: auto;
+        padding-top: var(--sp-2);
+    }
+
+    &__meta {
+        width: 35%;
+    }
+
+    &__price {
+        width: 28%;
+    }
+}
+
+// ---- Dòng danh sách (mini-cart, gợi ý tìm kiếm) ----
+.skeleton-list {
+    display: grid;
+    gap: var(--sp-4);
+}
+
+.skeleton-row {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    gap: var(--sp-4);
+    align-items: center;
+
+    &__thumb {
+        display: block;
+        aspect-ratio: 4 / 5;
+        background: var(--c-surface);
+    }
+
+    &__name {
+        width: 75%;
+    }
+
+    &__meta {
+        width: 40%;
+    }
+
+    &__price {
+        width: 72px;
+    }
+
+    &:nth-child(3n + 1) &__name {
+        width: 62%;
+    }
+}

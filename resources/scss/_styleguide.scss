@@ -1,12 +1,25 @@
 // Bố cục riêng của trang /styleguide (chỉ môi trường local) — không dùng ở trang thật.
+// Chỉ sắp chỗ cho các mẫu; kiểu của component nằm ở file dùng chung của nó.
+
+.sg-intro {
+    display: grid;
+    gap: var(--sp-7);
+
+    @include media-breakpoint-up(lg) {
+        grid-template-columns: minmax(0, 1fr) 320px;
+        align-items: end;
+    }
+}
+
+// Mục lục 2 cột ở khối mở đầu
+.sg-toc ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-2) var(--sp-5);
+}
 
 .sg-section {
     padding-block: var(--sp-8);
-
-    & + & {
-        border-top: 0;
-        background-image: none;
-    }
 
     &:nth-of-type(even) {
         background-color: var(--c-surface);
@@ -42,9 +55,21 @@
     padding-block: var(--sp-5);
 
     @include media-breakpoint-up(md) {
-        grid-template-columns: 220px minmax(0, 1fr);
+        grid-template-columns: 240px minmax(0, 1fr);
         gap: var(--sp-6);
         align-items: baseline;
+    }
+
+    // Điện thoại: thông số nằm DƯỚI mẫu chữ (đặt trên thì thành nhãn "eyebrow" mà §11 cấm); desktop: cột trái
+    &__spec {
+        order: 2;
+        color: var(--c-muted);
+        font-size: var(--fs-small);
+        line-height: var(--lh-small);
+
+        @include media-breakpoint-up(md) {
+            order: 0;
+        }
     }
 
     .t-body,
@@ -53,9 +78,67 @@
     }
 }
 
+// Hai cột: mẫu trên nền sáng | cùng mẫu trên nền tối
+.sg-pair {
+    display: grid;
+    gap: var(--sp-6);
+
+    @include media-breakpoint-up(lg) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+    }
+}
+
+.sg-form {
+    display: grid;
+    gap: 0 var(--sp-6);
+
+    @include media-breakpoint-up(md) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    &__wide {
+        grid-column: 1 / -1;
+    }
+}
+
 .sg-demo-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--sp-4);
+
+    &--wide {
+        gap: var(--sp-6);
+    }
+}
+
+// Mẫu kèm chú thích (badge, icon)
+.sg-specimen {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-2);
+    margin: 0;
+
+    &__caption {
+        color: var(--c-muted);
+        font-size: var(--fs-small);
+        line-height: var(--lh-small);
+    }
+}
+
+.sg-icons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: var(--sp-5) var(--sp-4);
+}
+
+.sg-flash-stack {
+    display: grid;
+    gap: var(--sp-2);
+}
+
+.sg-skeleton-list {
+    max-width: 480px;
 }

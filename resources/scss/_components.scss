@@ -57,6 +57,45 @@ main:focus {
     }
 }
 
+// ---- Badge (§9): chỉ số đếm và phần trăm giảm ----
+// Badge giỏ: tròn 20px men ngọc, số 13px chữ lụa; từ 10 giãn ngang. Hình tròn là quy định riêng của §9.
+// Neo mép trái badge ở giữa icon (nút 44px, icon 24px) để badge giãn sang phải, không che thân túi.
+.cart-badge {
+    position: absolute;
+    top: 4px;
+    left: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0;
+    border-radius: 10px; // taste-skill-ignore — DESIGN.md §9: badge số là hình tròn
+    background: var(--c-accent);
+    color: var(--c-ground);
+    font-size: .8125rem;
+    font-weight: 500;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+
+    &--wide {
+        padding-inline: 6px;
+    }
+}
+
+// Nhãn "−20%": nền đỏ son chữ lụa (7.28:1), góc vuông, 13px
+.discount-badge {
+    display: inline-block;
+    padding: 2px var(--sp-2);
+    background: var(--c-sale);
+    color: var(--c-ground);
+    font-size: .8125rem;
+    font-weight: 500;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+}
+
 // ---- Wordmark "mộc lam": chấm men ngọc thay dấu nặng dưới "ộ" ----
 .wordmark {
     display: inline-block;

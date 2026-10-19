@@ -6,14 +6,14 @@ use Illuminate\View\Component;
 use Illuminate\View\View;
 
 /**
- * Thông báo flash dưới header (DESIGN.md §9). Đọc session: 'error' → lỗi (role="alert", không tự ẩn);
- * 'status' / 'success' → thành công; 'info' → thông tin (role="status", tự ẩn sau 6 giây).
+ * Thông báo flash dưới header (DESIGN.md §9). Đọc session: 'error' → lỗi; 'status' / 'success' → thành công;
+ * 'info' → thông tin. Mỗi dải vẽ bằng <x-flash-message> (role và tự ẩn quyết định theo loại).
  */
 class Flash extends Component
 {
     private const KEYS = ['error' => 'error', 'status' => 'success', 'success' => 'success', 'info' => 'info'];
 
-    /** @var list<array{type: string, message: string, role: string, autohide: bool}> */
+    /** @var list<array{type: string, message: string}> */
     public array $messages = [];
 
     public function __construct()
@@ -21,12 +21,7 @@ class Flash extends Component
         foreach (self::KEYS as $key => $type) {
             $message = session($key);
             if (is_string($message) && $message !== '') {
-                $this->messages[] = [
-                    'type' => $type,
-                    'message' => $message,
-                    'role' => $type === 'error' ? 'alert' : 'status',
-                    'autohide' => $type !== 'error',
-                ];
+                $this->messages[] = ['type' => $type, 'message' => $message];
             }
         }
     }

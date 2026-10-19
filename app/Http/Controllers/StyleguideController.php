@@ -13,9 +13,31 @@ use Illuminate\View\View;
  */
 class StyleguideController extends Controller
 {
+    /** Các mục của trang (id neo => tiêu đề), theo thứ tự hiển thị */
+    public const SECTIONS = [
+        'sg-mau' => 'Bảng màu',
+        'sg-chu' => 'Thang chữ',
+        'sg-link' => 'Link',
+        'sg-nut' => 'Nút',
+        'sg-form' => 'Form',
+        'sg-the' => 'Thẻ sản phẩm',
+        'sg-badge' => 'Badge',
+        'sg-flash' => 'Thông báo (flash)',
+        'sg-breadcrumb' => 'Breadcrumb',
+        'sg-phan-trang' => 'Phân trang',
+        'sg-skeleton' => 'Skeleton đang tải',
+        'sg-trong' => 'Trạng thái trống',
+        'sg-icon' => 'Icon',
+    ];
+
+    /** Các mức của badge giỏ hàng: 0 (ẩn), một chữ số, hai chữ số, trên 99 */
+    public const BADGE_COUNTS = [0, 3, 12, 120];
+
     public function __invoke(): View
     {
         return view('pages.styleguide', [
+            'sections' => self::SECTIONS,
+            'badgeCounts' => self::BADGE_COUNTS,
             'colors' => self::colors(),
             'typeSteps' => self::typeSteps(),
             'skinTypes' => SkinType::cases(),

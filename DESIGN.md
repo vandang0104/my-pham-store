@@ -87,6 +87,7 @@ Nguyên tắc của hướng: **in hai–ba màu** như một lệnh in giấy. 
 | `--c-error-bg` | Đỏ son nhạt | `#F1DEDA` | Nền flash/khung báo lỗi (chữ đỏ son hoặc sơn mài) | <1% |
 | `--c-warning` | Hổ phách | `#7A5410` | "Sắp hết hàng", cảnh báo | <1% |
 | `--c-line` | Viền ô nhập | `#8A8174` | **Chỉ** viền ô nhập, checkbox, radio, đường kẻ bảng | — |
+| `--c-skeleton` | Giấy dó đậm | `#DCD4C6` | **Chỉ** thanh chữ của skeleton đang tải (trang trí, `aria-hidden`; 1.17:1 trên giấy dó, 1.32:1 trên lụa — không phải chữ nên không áp 4.5:1) | — |
 
 **Quy tắc dùng màu**
 - Chữ đọc dài luôn là `--c-ink` trên nền sáng (hoặc `--c-ground` trên nền tối). Xám chỉ cho ghi chú.
@@ -198,7 +199,7 @@ Thẻ sản phẩm, nút, panel ở trạng thái nghỉ: **không bóng**.
 | Ảnh bài viết | 16:9 | |
 
 - Mọi `<img>` có `width`, `height`, `alt` mô tả thật ("Serum Niacinamide 10% Sáng Da, chai 30ml"), `loading="lazy"` (trừ ảnh hero), `decoding="async"`. Ảnh lưu trong dự án — **không hotlink**.
-- **Khi chỉ có placeholder** (hiện tại): placeholder là **mảng màu phẳng** theo palette (giấy dó/ngọc nhạt) với tên sản phẩm bằng Cormorant, cùng tỉ lệ ảnh thật — **không gradient**. ⚠️ `database/seeders/Support/PlaceholderImage.php` hiện sinh SVG có `linearGradient` → sửa thành mảng phẳng ở bước 3.2/3.3.
+- **Khi chỉ có placeholder** (hiện tại): placeholder là **mảng màu phẳng** theo palette (giấy dó/ngọc nhạt) với tên sản phẩm bằng Cormorant, cùng tỉ lệ ảnh thật — **không gradient** (`database/seeders/Support/PlaceholderImage.php`).
 - Hình minh hoạ sản phẩm (khi chưa có ảnh chụp) được **vẽ bằng SVG phẳng** theo màu thật của sản phẩm (dáng chai, hũ, tuýp), không làm giả ảnh chụp.
 - Ảnh "thế giới của sản phẩm": tranh thực vật cổ (botanical plate) về rau má, trà, bưởi, hoa sứ, cà phê; bưu ảnh cũ Đà Lạt/Hội An — tìm bằng `node .claude/skills/design-taste-frontend/scripts/assets.mjs "<từ khoá>"` (chỉ giấy phép cho phép dùng thương mại), tải về bằng `--get`, ghi nguồn ở footer. Không bao giờ trình bày như ảnh sản phẩm.
 - **Thay ảnh thật:** chép ảnh vào `storage/app/public/seed/` rồi chạy lại seed (README đã ghi). Cần chụp: 48 sản phẩm × 3–4 ảnh theo tỉ lệ 4:5.
@@ -207,7 +208,7 @@ Thẻ sản phẩm, nút, panel ở trạng thái nghỉ: **không bóng**.
 
 - **SVG inline**, không cài package icon (muốn thêm phải hỏi trước). Đặt trong Blade component `<x-icon name="..."/>` (một file Blade chứa các `<symbol>` hoặc mỗi icon một partial).
 - Lưới 24×24, nét **1.5px**, đầu nét tròn (`stroke-linecap="round"`), không tô, `stroke="currentColor"` để ăn theo màu chữ. Cỡ hiển thị 20px (trong menu, nút) hoặc 24px (header).
-- Bộ cần có: tìm kiếm, túi mua sắm, tài khoản, trái tim, sao (rỗng/đầy/nửa), mũi tên trái/phải/xuống, đóng (×), menu (≡), cộng, trừ, kiểm tra (✓), chấm thông tin.
+- Bộ cần có: tìm kiếm, túi mua sắm, tài khoản, sao (rỗng/đầy/nửa), mũi tên trái/phải/xuống, đóng (×), menu (≡), cộng, trừ, kiểm tra (✓), chấm thông tin.
 - Icon đứng riêng (không có chữ) phải có `aria-label` hoặc chữ ẩn `visually-hidden`; icon trang trí có `aria-hidden="true"`.
 - **Cấm:** emoji làm icon, icon đặt trong ô tròn/vuông tô màu, icon trên đầu các thẻ tính năng.
 
@@ -249,7 +250,7 @@ Mỗi component là một Blade component trong `resources/views/components/`. Q
 | **Tìm kiếm** | Mở thành ô nhập lớn dưới header (desktop) / toàn màn hình (mobile); gợi ý tự động (debounce 250ms) hiện tên + ảnh nhỏ + giá; Enter đi tới `/san-pham?q=`. |
 | **Badge giỏ hàng** | Hình tròn 20px nền men ngọc, số Be Vietnam Pro 500 13px chữ lụa (7.01:1), `tabular-nums`; từ 10 trở lên badge giãn ngang (min-width 20px, đệm 6px); trên 99 hiện "99+"; ẩn khi 0. Có chữ ẩn "3 sản phẩm trong giỏ" cho trình đọc màn hình. |
 | **Footer** | Mặt sau của tấm nhãn: nền sơn mài, chữ lụa. Chữ thương hiệu dựng lớn toàn chiều rộng (mỗi chữ cắt khỏi một khối màu, cao 60–100%, khe 4px). Bên dưới 56px: 4 cột link 15px (Mua sắm, Hỗ trợ, Chính sách, Về chúng tôi) + địa chỉ/hotline; hàng cuối: bản quyền + nguồn ảnh (credit). Không phải sơ đồ trang dày đặc. |
-| **Product card** (nhãn treo) | Ảnh 4:5 nền giấy dó, góc vuông, **gắn liền bên dưới là dải nhãn** (như nhãn treo): dòng 1 thương hiệu (13px mực nhạt); dòng 2 tên SP (16px, tối đa 2 dòng); dòng 3 dung tích · loại da trái, giá phải. Màu dải nhãn xoay vòng giữa 2–3 cặp (giấy dó/sơn mài, ngọc nhạt/sơn mài, sơn mài/lụa) để lưới không đơn điệu. Nhãn "−20%" đỏ son ở góc trên trái ảnh. Nút tim ở góc trên phải. **Cấu trúc truy cập được:** thẻ là `<article>` (`position: relative`), link nằm ở tên sản phẩm và phủ cả thẻ bằng **stretched link** (`a::after { content: ""; position: absolute; inset: 0; }`); nút tim và nút "Thêm vào giỏ" là `<button>` **anh em** của link (KHÔNG lồng nút trong `<a>`), đặt `position: relative; z-index: 2` để nằm trên lớp phủ. Nút "Thêm vào giỏ" hiện khi hover/focus-within (desktop), luôn hiện dạng icon túi (mobile). Ảnh trong thẻ có `alt` là tên sản phẩm (link chỉ đọc tên một lần). Không viền, không bóng. |
+| **Product card** (nhãn treo) | Ảnh 4:5 nền giấy dó, góc vuông, **gắn liền bên dưới là dải nhãn** (như nhãn treo): dòng 1 thương hiệu (13px mực nhạt); dòng 2 tên SP (16px, tối đa 2 dòng); dòng 3 dung tích · loại da trái, giá phải. Màu dải nhãn xoay vòng giữa 2–3 cặp (giấy dó/sơn mài, ngọc nhạt/sơn mài, sơn mài/lụa) để lưới không đơn điệu. Nhãn "−20%" đỏ son ở góc trên trái ảnh. Không có nút yêu thích (xem §14). **Cấu trúc truy cập được:** thẻ là `<article>` (`position: relative`), link nằm ở tên sản phẩm và phủ cả thẻ bằng **stretched link** (`a::after { content: ""; position: absolute; inset: 0; }`); nút "Thêm vào giỏ" là `<button>` **anh em** của link (KHÔNG lồng nút trong `<a>`), đặt `position: relative; z-index: 2` để nằm trên lớp phủ. Nút "Thêm vào giỏ" hiện khi hover/focus-within (desktop), luôn hiện dạng icon túi (mobile). Ảnh trong thẻ có `alt` là tên sản phẩm (link chỉ đọc tên một lần). Không viền, không bóng. |
 | **Price** | Giá hiện hành Be Vietnam Pro 500, `tabular-nums`. Có KM: giá KM đỏ son + giá gốc gạch ngang mực nhạt nhỏ hơn một bậc + "−20%". Dùng accessor `formatted_price`/`formatted_original_price`/`discount_percent` của `Product`. Đọc cho trình đọc màn hình: "Giá khuyến mãi 279.000 ₫, giá gốc 345.000 ₫". |
 | **Rating** | 5 sao SVG (đầy/nửa/rỗng) màu sơn mài, cỡ 16px + điểm "4,7" + "(23 đánh giá)" 13px. Dữ liệu từ `rating_avg`/`rating_count` (chỉ đánh giá đã duyệt). Không hiện sao khi chưa có đánh giá — ghi "Chưa có đánh giá". |
 | **Breadcrumb** | Một dòng 13px mực nhạt, phân cách bằng "/" ; mục cuối là sơn mài, không phải link. Mobile: chỉ hiện mục cha gần nhất với mũi tên "‹". Có `aria-label="Breadcrumb"` + schema `BreadcrumbList`. |
@@ -259,6 +260,7 @@ Mỗi component là một Blade component trong `resources/views/components/`. Q
 | **Button** | Phẳng, **góc vuông**, cao 48px (mobile 52px), chữ Be Vietnam Pro 500 16px, đệm ngang 24px. **Chính:** nền men ngọc, chữ lụa (trên nền tối: nền champagne, chữ sơn mài). **Phụ:** chữ sơn mài có gạch chân, không khung. **Phá huỷ:** chữ đỏ son. Disabled: opacity .45 + `cursor: not-allowed`. Một nút chính mỗi màn hình. |
 | **Form** | Nhãn ở trên ô (14px 500), ô cao 48px nền trắng, viền 1px `--c-line`, bo 2px; focus: viền men ngọc + vòng focus. Lỗi: viền đỏ son + câu lỗi 13px dưới ô (từ `lang/vi/validation.php`). Bắt buộc ghi "(bắt buộc)" bằng chữ, không chỉ dấu *. Checkbox/radio 20px tự vẽ. Gợi ý (help text) 13px mực nhạt. |
 | **Badge** | Chỉ hai loại: **số đếm** (giỏ hàng, số đơn chờ trong admin) và **phần trăm giảm** ("−20%", nền đỏ son chữ lụa, góc vuông, 13px). Trạng thái đơn trong tài khoản/admin là chữ có chấm màu nhỏ (●), không phải viên thuốc màu. **Cấm** badge chữ "Mới", "Hot", "Best seller". |
+| **Skeleton** (đang tải) | Giữ đúng khung của thứ sắp hiện để trang không nhảy: thẻ sản phẩm (ảnh 4:5 + dải nhãn 3 dòng) và dòng danh sách (ảnh 4:5 64px + 2 dòng chữ, như dòng mini-cart/gợi ý tìm kiếm). **Mảng màu phẳng**: khối ảnh giấy dó (`--c-surface`), thanh chữ `--c-skeleton` `#DCD4C6` (giấy dó đậm một bậc, chỉ dùng cho skeleton), góc vuông, thanh chữ cao bằng cỡ chữ thật. **Không** gradient, **không** shimmer chạy ngang; chỉ nhịp opacity 1 → .6 → 1 chậm (1.6s); `prefers-reduced-motion` thì đứng yên. Khung có `aria-hidden="true"`; vùng chứa đặt `aria-busy="true"` + chữ ẩn "Đang tải…". |
 | **Mini-cart** | Ngăn kéo từ phải, rộng 420px (mobile: toàn màn hình), nền lụa, `--shadow-float`. Đầu: "Giỏ hàng (3)" + ×. Danh sách: ảnh 4:5 64px, tên, dung tích, bộ +/− , giá; xoá bằng chữ "Xoá". Cuối dính: tạm tính, dòng "Còn 120.000 ₫ để được miễn phí giao hàng" (ngưỡng từ settings), nút chính "Thanh toán", link "Xem giỏ hàng". Khoá cuộn trang nền, focus trap, Esc để đóng. |
 | **Đơn chăm sóc** (live thing — TUỲ CHỌN, làm sau; ánh xạ 5 bước ở §2) | Thẻ "đơn" nền lụa có mép răng cưa trên và dưới (`clip-path`), 5 dòng bước, mỗi dòng: tên bước, sản phẩm thật (ảnh nhỏ, tên, giá), nút thêm. Chọn loại da bằng 5 nút chữ (radio dạng nút, đang chọn gạch chân men ngọc). |
 
@@ -332,6 +334,7 @@ Mobile: danh sách mục dạng các dòng lớn 56px; desktop: menu trái 240px
 - **Hướng chính thức: A — Lụa · Sơn mài · Men ngọc** (toàn bộ §1–§13 của tài liệu này).
 - **Tên thương hiệu: Mộc Lam** — `APP_NAME="Mộc Lam"`; wordmark theo ý tưởng ở bảng dưới (Cormorant Garamond 600, chữ thường "mộc lam", chấm men ngọc thay dấu nặng dưới "ộ"; favicon "m" + chấm).
 - Hướng B, C và hai tên còn lại **giữ làm tham khảo**, không dùng.
+- **Bỏ nút tim (yêu thích) khỏi thẻ sản phẩm và bộ icon (bước 3.4):** đề cương không có chức năng danh sách yêu thích và schema không có bảng dữ liệu cho nó; một nút không làm gì là lời hứa sai với khách. Muốn thêm thì phải có migration + bước riêng trong kế hoạch, rồi mới sửa lại §7 và §9.
 
 **Hướng thay thế — tham khảo** (đã so sánh với hướng chính *Lụa · Sơn mài · Men ngọc*):
 

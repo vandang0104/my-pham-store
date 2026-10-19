@@ -17,6 +17,7 @@ $c-do-son-toi: #E39A8C;     // giá khuyến mãi trên nền tối
 $c-do-son-nhat: #F1DEDA;    // nền khung báo lỗi
 $c-ho-phach: #7A5410;       // cảnh báo, sắp hết hàng
 $c-vien: #8A8174;           // chỉ viền ô nhập, bảng
+$c-giay-do-dam: #DCD4C6;    // chỉ thanh chữ của skeleton (trang trí)
 $c-trang: #FFFFFF;
 
 // ---- Chữ (§4) ----
@@ -47,6 +48,7 @@ $shadow-float: 0 12px 32px rgba($c-son-mai, .14), 0 2px 6px rgba($c-son-mai, .08
     --c-error-bg: #{$c-do-son-nhat};
     --c-warning: #{$c-ho-phach};
     --c-line: #{$c-vien};
+    --c-skeleton: #{$c-giay-do-dam};
     --c-white: #{$c-trang};
 
     --font-display: #{$font-display};

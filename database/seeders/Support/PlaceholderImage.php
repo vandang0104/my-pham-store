@@ -47,20 +47,21 @@ final class PlaceholderImage
         [$bg, $shape] = $colors;
         $cap = $shape === self::INK ? self::CHAMPAGNE : self::INK;
 
+        // Dáng sản phẩm nằm trong dải 12–50% chiều cao: nửa dưới để trống cho tên sản phẩm (HTML) — chữ không đè lên hình
         $object = match ($variant % 4) {
             // Chai serum có nắp nhỏ giọt
-            0 => '<rect x="350" y="250" width="100" height="60" fill="'.$cap.'"/>'
-                .'<rect x="318" y="310" width="164" height="300" fill="'.$shape.'"/>',
+            0 => '<rect x="350" y="120" width="100" height="60" fill="'.$cap.'"/>'
+                .'<rect x="318" y="180" width="164" height="300" fill="'.$shape.'"/>',
             // Hũ kem
-            1 => '<rect x="262" y="330" width="276" height="56" fill="'.$cap.'"/>'
-                .'<rect x="248" y="386" width="304" height="196" fill="'.$shape.'"/>',
+            1 => '<rect x="262" y="220" width="276" height="56" fill="'.$cap.'"/>'
+                .'<rect x="248" y="276" width="304" height="196" fill="'.$shape.'"/>',
             // Tuýp
-            2 => '<path d="M318 250 h164 l-24 330 h-116 z" fill="'.$shape.'"/>'
-                .'<rect x="364" y="580" width="72" height="40" fill="'.$cap.'"/>',
+            2 => '<path d="M318 120 h164 l-24 330 h-116 z" fill="'.$shape.'"/>'
+                .'<rect x="364" y="450" width="72" height="40" fill="'.$cap.'"/>',
             // Chai xịt
-            default => '<rect x="380" y="232" width="40" height="40" fill="'.$cap.'"/>'
-                .'<rect x="360" y="272" width="80" height="40" fill="'.$cap.'"/>'
-                .'<rect x="298" y="312" width="204" height="300" fill="'.$shape.'"/>',
+            default => '<rect x="380" y="102" width="40" height="40" fill="'.$cap.'"/>'
+                .'<rect x="360" y="142" width="80" height="40" fill="'.$cap.'"/>'
+                .'<rect x="298" y="182" width="204" height="300" fill="'.$shape.'"/>',
         };
 
         $svg = self::open(800, 1000, $bg).$object.'</svg>';
