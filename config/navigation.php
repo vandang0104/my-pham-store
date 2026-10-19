@@ -13,7 +13,8 @@
 
 return [
 
-    'cache_key' => 'navigation.menu',
+    // v2: cache giữ đường dẫn tương đối thay vì URL tuyệt đối — đổi khoá để bỏ bản cũ khác định dạng
+    'cache_key' => 'navigation.menu.v2',
 
     'cache_ttl' => 60 * 60 * 24,
 

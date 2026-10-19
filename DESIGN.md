@@ -305,7 +305,7 @@ Mobile: danh sách mục dạng các dòng lớn 56px; desktop: menu trái 240px
 - Emoji (kể cả làm icon), icon đặt trong ô màu, icon trên đầu thẻ tính năng.
 - Bố cục khuôn mẫu "AI": hero căn giữa + 3 thẻ tính năng có icon + hàng logo + testimonial + bảng giá; nhãn nhỏ in hoa phía trên tiêu đề ("eyebrow"); đánh số 01/02/03; đường kẻ mảnh trang trí; glass/blur; thanh điều hướng dạng viên thuốc nổi.
 - Bóng cho thứ đang nghỉ; viền 1px quanh thẻ/section.
-- Chữ in hoa giãn khoảng, monospace, một từ tô màu/nghiêng trong tiêu đề, hơn 2 họ chữ, hơn 5 cỡ chữ trên một trang.
+- Chữ in hoa giãn khoảng, monospace, một từ tô màu/nghiêng trong tiêu đề, hơn 2 họ chữ, hơn 5 cỡ chữ cho nội dung trên một trang (5 bậc §4; các cỡ hiển thị đặc biệt do §10.1/§9 quy định là ngoại lệ — xem §12).
 - Màu tím/chàm; nền kem ngả vàng đi với nâu đất/gạch ("bảng màu trợ lý").
 - Chữ đè lên ảnh; ảnh hotlink; ảnh không có `alt`.
 - Số liệu, đánh giá, báo chí, logo đối tác bịa.
@@ -320,6 +320,7 @@ Mobile: danh sách mục dạng các dòng lớn 56px; desktop: menu trái 240px
 | Không badge | Badge số đếm và "−20%" | Thông tin mua hàng cần thiết; cấm badge trang trí ("Mới", "Hot") |
 | Mega menu | Có mega menu ở header | Catalog 34 danh mục; menu là thứ nổi nên được có bóng |
 | Một accent | Men ngọc trên nền sáng, champagne trên nền tối | Một vai trò "hành động" với hai nền; men ngọc trên sơn mài không đạt 3:1 |
+| Không quá 5 cỡ chữ trên một trang | Nội dung thường vẫn đúng 5 bậc của §4 (display, title, lead, body, small); **ngoại lệ** là các cỡ hiển thị đặc biệt mà tài liệu này quy định: `h1` hero `clamp(40px, 3.6vw, 56px)` (§10.1), chữ "Danh mục" khổng lồ (§10.1), wordmark lớn ở hero và chữ ký thư, chữ thương hiệu dựng khối ở footer (§9) | Đây là chữ-làm-hình (logo, khối chữ), mỗi cỡ xuất hiện đúng một lần ở chỗ đã định, không dùng cho đoạn văn hay tiêu đề khác. Inspector của skill đếm cả chúng (≈ 13 cỡ ở trang chủ) — không coi là lỗi; thêm cỡ mới ngoài danh sách này thì phải ghi vào đây trước |
 | Ảnh dealt từ picsum.photos | Chỉ dùng nếu tải về dự án | Dự án cấm hotlink |
 
 ## 13. Gợi ý ánh xạ sang Bootstrap 5 (cho bước 3.2)

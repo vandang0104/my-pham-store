@@ -11,6 +11,8 @@ use Illuminate\View\View;
 /**
  * Cấp menu chính (mega menu + ngăn kéo điện thoại) cho header.
  * Dựng một lần thành mảng thuần rồi cache — mỗi request chỉ đọc cache, không truy vấn danh mục.
+ * Cache chỉ giữ dữ liệu thô (tên, đường dẫn tương đối); URL tuyệt đối dựng theo request lúc render
+ * để không dính host của request đầu tiên (localhost / tên miền tunnel).
  */
 class NavigationComposer
 {
@@ -24,7 +26,18 @@ class NavigationComposer
      */
     public static function menu(): array
     {
-        return Cache::remember(config('navigation.cache_key'), config('navigation.cache_ttl'), fn () => self::build());
+        $groups = Cache::remember(config('navigation.cache_key'), config('navigation.cache_ttl'), fn () => self::build());
+
+        return array_map(fn (array $group) => [
+            'label' => $group['label'],
+            'url' => $group['path'] !== null ? url($group['path']) : null,
+            'image' => $group['image'] !== null ? Storage::disk('public')->url($group['image']) : null,
+            'columns' => array_map(fn (array $column) => [
+                'title' => $column['title'],
+                'url' => url($column['path']),
+                'links' => array_map(fn (array $link) => ['label' => $link['label'], 'url' => url($link['path'])], $column['links']),
+            ], $group['columns']),
+        ], $groups);
     }
 
     public static function forget(): void
@@ -34,6 +47,9 @@ class NavigationComposer
 
     /**
      * 3 truy vấn cố định: danh mục cha (kèm con, nạp sẵn) và thương hiệu — không N+1.
+     * Trả mảng thô để cache: 'path' là đường dẫn tương đối, 'image' là đường dẫn trên disk public.
+     *
+     * @return list<array{label: string, path: string|null, image: string|null, columns: list<array{title: string, path: string, links: list<array{label: string, path: string}>}>}>
      */
     private static function build(): array
     {
@@ -56,12 +72,12 @@ class NavigationComposer
             if ($group['brands'] ?? false) {
                 return [
                     'label' => $group['label'],
-                    'url' => null,
+                    'path' => null,
                     'image' => null,
                     'columns' => [[
                         'title' => $group['label'],
-                        'url' => url('/san-pham'),
-                        'links' => $brands->map(fn (Brand $b) => ['label' => $b->name, 'url' => url('/thuong-hieu/'.$b->slug)])->all(),
+                        'path' => '/san-pham',
+                        'links' => $brands->map(fn (Brand $b) => ['label' => $b->name, 'path' => '/thuong-hieu/'.$b->slug])->all(),
                     ]],
                 ];
             }
@@ -73,12 +89,12 @@ class NavigationComposer
 
             return [
                 'label' => $group['label'],
-                'url' => $columns->isNotEmpty() ? url('/danh-muc/'.$columns->first()->slug) : null,
-                'image' => $columns->first()?->image ? Storage::disk('public')->url($columns->first()->image) : null,
+                'path' => $columns->isNotEmpty() ? '/danh-muc/'.$columns->first()->slug : null,
+                'image' => $columns->first()?->image ?: null,
                 'columns' => $columns->map(fn (Category $root) => [
                     'title' => $root->name,
-                    'url' => url('/danh-muc/'.$root->slug),
-                    'links' => $root->children->map(fn (Category $c) => ['label' => $c->name, 'url' => url('/danh-muc/'.$c->slug)])->all(),
+                    'path' => '/danh-muc/'.$root->slug,
+                    'links' => $root->children->map(fn (Category $c) => ['label' => $c->name, 'path' => '/danh-muc/'.$c->slug])->all(),
                 ])->all(),
             ];
         })->filter(fn (array $group) => $group['columns'] !== [])->values()->all();

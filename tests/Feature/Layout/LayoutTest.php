@@ -108,6 +108,21 @@ describe('menu được cache', function () {
             ->and($count())->toBe(0);
     });
 
+    it('cache không dính host: dựng menu dưới host A, request host B → link menu mang host B', function () {
+        Cache::flush();
+        $this->get('http://localhost/dang-nhap')->assertOk();
+        expect(json_encode(Cache::get(config('navigation.cache_key'))))->not->toContain('http');
+
+        $html = $this->get('https://demo.trycloudflare.com/dang-nhap')->assertOk()->getContent();
+        $header = str($html)->after('<header class="site-header"')->before('</header>')->toString();
+        preg_match_all('/href="([^"]+)"/', $header, $matches);
+        $links = collect($matches[1])->reject(fn (string $href) => str_starts_with($href, '#'));
+
+        expect($links->filter(fn (string $href) => str_contains($href, '/danh-muc/') || str_contains($href, '/thuong-hieu/')))->not->toBeEmpty()
+            ->and($links->filter(fn (string $href) => str_starts_with($href, 'http://localhost'))->all())->toBe([])
+            ->and($links->every(fn (string $href) => str_starts_with($href, 'https://demo.trycloudflare.com') || str_starts_with($href, '/')))->toBeTrue();
+    });
+
     it('xoá cache khi sửa danh mục', function () {
         $this->get('/');
         expect(Cache::has(config('navigation.cache_key')))->toBeTrue();
