@@ -31,3 +31,6 @@ Thumbs.db
 
 # File kế hoạch đồ án (bản cá nhân, không đưa lên repo)
 /Ke_hoach_Prompt_Web_My_Pham*.xlsx
+
+# File khoá tạm của Office khi đang mở tài liệu
+~$*
