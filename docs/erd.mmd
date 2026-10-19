@@ -1,0 +1,97 @@
+%% ERD theo migrations hiện tại (bước 1.1). Hoàn thiện toàn bộ ở bước 1.5.
+erDiagram
+    users ||--o{ addresses : "có"
+    categories |o--o{ categories : "cha - con"
+    categories ||--o{ products : "chứa"
+    brands ||--o{ products : "sản xuất"
+    products ||--o{ product_images : "có"
+
+    users {
+        bigint id PK
+        varchar name
+        varchar email UK
+        varchar phone "nullable"
+        timestamp email_verified_at "nullable"
+        varchar password
+        enum role "admin|staff|customer, mặc định customer, index"
+        varchar avatar "nullable"
+        date birthday "nullable"
+        varchar skin_type "nullable"
+        boolean is_active "mặc định 1"
+        varchar remember_token "nullable"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    addresses {
+        bigint id PK
+        bigint user_id FK "cascade"
+        varchar receiver_name
+        varchar phone
+        varchar province
+        varchar district "nullable"
+        varchar ward
+        varchar detail
+        boolean is_default "mặc định 0"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    categories {
+        bigint id PK
+        bigint parent_id FK "nullable, restrict"
+        varchar name
+        varchar slug UK
+        varchar image "nullable"
+        int sort_order "mặc định 0"
+        boolean is_active "index"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    brands {
+        bigint id PK
+        varchar name
+        varchar slug UK
+        varchar logo "nullable"
+        text description "nullable"
+        boolean is_active "index"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    products {
+        bigint id PK
+        bigint category_id FK "restrict"
+        bigint brand_id FK "restrict"
+        varchar name
+        varchar slug UK
+        varchar sku UK
+        varchar short_description "nullable"
+        text description "nullable"
+        text ingredients "nullable"
+        text usage_guide "nullable"
+        int price "VND, index"
+        int sale_price "VND, nullable"
+        int stock "mặc định 0"
+        varchar volume "nullable"
+        varchar skin_type "nullable"
+        boolean is_featured "mặc định 0"
+        boolean is_active "index"
+        decimal rating_avg "3,2"
+        int rating_count
+        int sold_count
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at "xoá mềm"
+    }
+
+    product_images {
+        bigint id PK
+        bigint product_id FK "cascade"
+        varchar path
+        boolean is_primary "mặc định 0"
+        int sort_order "mặc định 0"
+        timestamp created_at
+        timestamp updated_at
+    }
