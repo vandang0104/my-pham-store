@@ -1,8 +1,9 @@
-%% ERD theo migrations hiện tại (bước 1.2). Rà soát & hoàn thiện ở bước 1.5.
-%% Không vẽ các bảng hạ tầng của Laravel: cache, cache_locks, jobs, job_batches, failed_jobs, sessions, password_reset_tokens, migrations.
+%% ERD theo schema hiện tại (sau migrations đến 2026_10_19_120300). Chi tiết cột: docs/data-dictionary.md
+%% Cardinality phía cha: || khi FK NOT NULL, |o khi FK cho phép NULL. Nhãn quan hệ ghi hành vi khi xoá bản ghi cha.
+%% Không vẽ bảng hạ tầng Laravel: cache, cache_locks, jobs, job_batches, failed_jobs, sessions, password_reset_tokens, migrations.
 erDiagram
     users ||--o{ addresses : "có (cascade)"
-    users |o--o| carts : "có (cascade)"
+    users ||--o| carts : "có tối đa 1 giỏ (cascade)"
     users |o--o{ orders : "đặt (set null)"
     users ||--o{ reviews : "viết (cascade)"
     users |o--o{ posts : "là tác giả (set null)"
@@ -27,7 +28,7 @@ erDiagram
         varchar phone "nullable"
         timestamp email_verified_at "nullable"
         varchar password
-        enum role "admin|staff|customer, mặc định customer, index"
+        enum role "admin, staff, customer; mặc định customer; index"
         varchar avatar "nullable"
         date birthday "nullable"
         varchar skin_type "nullable"
@@ -82,20 +83,20 @@ erDiagram
         varchar slug UK
         varchar sku UK
         varchar short_description "nullable"
-        text description "nullable"
+        text description "nullable, Markdown"
         text ingredients "nullable"
         text usage_guide "nullable"
         int price "VND, index"
         int sale_price "VND, nullable"
-        int stock "mặc định 0"
+        int stock "mặc định 0, index"
         varchar volume "nullable"
-        varchar skin_type "nullable"
-        boolean is_featured "mặc định 0"
+        varchar skin_type "nullable, index"
+        boolean is_featured "mặc định 0, index"
         boolean is_active "index"
-        decimal rating_avg "3,2"
+        decimal rating_avg "3,2; index"
         int rating_count
-        int sold_count
-        timestamp created_at
+        int sold_count "index"
+        timestamp created_at "index"
         timestamp updated_at
         timestamp deleted_at "xoá mềm"
     }
@@ -112,8 +113,7 @@ erDiagram
 
     carts {
         bigint id PK
-        bigint user_id FK "nullable, unique"
-        varchar session_id "nullable, index"
+        bigint user_id FK "unique, chỉ user đăng nhập"
         timestamp created_at
         timestamp updated_at
     }
@@ -130,7 +130,7 @@ erDiagram
     coupons {
         bigint id PK
         varchar code UK
-        enum type "percent|fixed"
+        enum type "percent, fixed"
         int value "phần trăm hoặc VND"
         int min_order "mặc định 0"
         int max_discount "nullable"
@@ -155,9 +155,9 @@ erDiagram
         varchar district "nullable"
         varchar ward
         varchar detail
-        enum payment_method "cod|bank_transfer|vnpay, mặc định cod"
-        enum payment_status "unpaid|paid|refunded, mặc định unpaid, index"
-        enum status "pending|confirmed|shipping|delivered|cancelled, mặc định pending, index"
+        enum payment_method "cod, bank_transfer, vnpay; mặc định cod"
+        enum payment_status "unpaid, paid, refunded; mặc định unpaid; index"
+        enum status "pending, confirmed, shipping, delivered, cancelled; mặc định pending; index cùng created_at"
         int subtotal "VND"
         int discount "VND, mặc định 0"
         int shipping_fee "VND, mặc định 0"
@@ -196,13 +196,13 @@ erDiagram
 
     reviews {
         bigint id PK
-        bigint product_id FK "index cùng status"
+        bigint product_id FK "index cùng status, created_at"
         bigint user_id FK "unique cùng product_id"
         bigint order_id FK "nullable"
         tinyint rating "1-5"
         text comment
         json images "nullable"
-        enum status "pending|approved|rejected, mặc định pending, index"
+        enum status "pending, approved, rejected; mặc định pending; index cùng created_at"
         timestamp created_at
         timestamp updated_at
     }
@@ -229,7 +229,7 @@ erDiagram
         varchar excerpt "nullable"
         longtext content "Markdown"
         varchar thumbnail "nullable"
-        enum status "draft|published, mặc định draft, index cùng published_at"
+        enum status "draft, published; mặc định draft; index cùng published_at"
         timestamp published_at "nullable"
         bigint author_id FK "nullable"
         timestamp created_at
