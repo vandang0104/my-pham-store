@@ -2,16 +2,18 @@
 
 namespace App\View\Composers;
 
+use App\Services\CartService;
 use Illuminate\View\View;
 
 /**
- * Số sản phẩm trong giỏ cho badge ở header.
- * TẠM trả 0 cho tới bước S2 (CartService) — khi đó đọc từ CartService::count().
+ * Số sản phẩm trong giỏ (tổng số lượng) cho badge ở header — 1 truy vấn với user, 0 với khách vãng lai.
  */
 class CartComposer
 {
+    public function __construct(private readonly CartService $cart) {}
+
     public function compose(View $view): void
     {
-        $view->with('cartCount', 0);
+        $view->with('cartCount', $this->cart->count());
     }
 }

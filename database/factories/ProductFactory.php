@@ -26,8 +26,9 @@ class ProductFactory extends Factory
             'name' => $name,
             'slug' => Str::slug($name).'-'.Str::lower(Str::random(6)),
             'sku' => 'SP-'.Str::upper(Str::random(8)),
-            'short_description' => "{$name} phù hợp dùng hằng ngày.",
-            'description' => "{$name} giúp chăm sóc da nhẹ nhàng.\n\n## Công dụng\n\n- Làm dịu da\n- Cấp ẩm",
+            // Dựng từ tên CUỐI CÙNG (kể cả khi test ghi đè 'name'), để tìm kiếm theo mô tả không khớp nhầm tên ngẫu nhiên
+            'short_description' => fn (array $attributes) => "{$attributes['name']} phù hợp dùng hằng ngày.",
+            'description' => fn (array $attributes) => "{$attributes['name']} giúp chăm sóc da nhẹ nhàng.\n\n## Công dụng\n\n- Làm dịu da\n- Cấp ẩm",
             'ingredients' => 'Nước tinh khiết, Glycerin, Panthenol.',
             'usage_guide' => "1. Làm sạch da.\n2. Thoa một lượng vừa đủ.",
             // Giá VND, bội số 1.000

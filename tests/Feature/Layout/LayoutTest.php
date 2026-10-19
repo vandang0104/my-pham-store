@@ -134,7 +134,7 @@ describe('menu được cache', function () {
 });
 
 describe('badge giỏ hàng', function () {
-    it('ẩn khi giỏ có 0 sản phẩm (View Composer tạm trả 0)', function () {
+    it('ẩn khi giỏ có 0 sản phẩm', function () {
         $this->get('/')->assertDontSee('class="cart-badge"', false);
     });
 

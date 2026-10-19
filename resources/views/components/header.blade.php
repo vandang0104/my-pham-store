@@ -77,7 +77,7 @@
                 </a>
             @endauth
 
-            <a href="{{ url('/gio-hang') }}" class="icon-btn icon-btn--cart" aria-label="Giỏ hàng">
+            <a href="{{ route('cart.index') }}" class="icon-btn icon-btn--cart" aria-label="Giỏ hàng">
                 <x-icon name="bag" />
                 <x-cart-badge :count="$cartCount" />
             </a>

@@ -20,7 +20,7 @@
             <x-discount-badge :percent="$product->discount_percent" class="product-card__discount" />
         @endif
 
-        <form method="POST" action="{{ url('/gio-hang') }}" class="product-card__cart">
+        <form method="POST" action="{{ route('cart.store') }}" class="product-card__cart">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
             <input type="hidden" name="quantity" value="1">

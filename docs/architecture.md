@@ -82,8 +82,8 @@ Ghi chú:
 | GET | `/danh-muc/{category:slug}` (cùng view danh sách, danh mục cha gồm cả con) | `categories.show` |
 | GET | `/thuong-hieu/{brand:slug}` (cùng view danh sách; thương hiệu chỉ từ seed, không CRUD) | `brands.show` |
 | GET | `/gio-hang` | `cart.index` |
-| POST | `/gio-hang` | `cart.add` |
-| PATCH / DELETE | `/gio-hang/{item}` | `cart.update` / `cart.remove` |
+| POST | `/gio-hang` (`product_id`, `quantity`) | `cart.store` |
+| PATCH / DELETE | `/gio-hang/{product:id}` (`withTrashed`) | `cart.update` / `cart.destroy` |
 | GET / POST | `/thanh-toan` | `checkout.index` / `checkout.store` |
 | GET | `/thanh-toan/thanh-cong/{order:code}` (signed URL cho khách vãng lai) | `checkout.success` |
 | GET | `/cau-hoi-thuong-gap` | `faq.index` |
@@ -126,7 +126,7 @@ Các endpoint giỏ hàng dùng chung cho form thường và AJAX: controller tr
 Exception nghiệp vụ được render tập trung trong `bootstrap/app.php`: request JSON → 422 + message; request thường → `back()->withErrors()`. Không try/catch trong controller.
 
 **Trách nhiệm từng Service:**
-- **CartService** — `items()`, `add()`, `update()`, `remove()`, `clear()`, `subtotal()`, `mergeGuestCart(User)`. Khách: lưu session; user: lưu DB; nhánh nằm trong private method. Kiểm tra tồn kho “mềm” (không khoá). Gộp giỏ khi đăng nhập qua listener `MergeGuestCart` (event `Login`), cộng dồn số lượng, cắt theo tồn kho.
+- **CartService** (đã làm ở S2) — `add()`, `updateQuantity()`, `remove()`, `clear()`, `items()` (trả `CartLine`: sản phẩm + số lượng + giá hiện hành + thành tiền; tự bỏ dòng SP ẩn/xoá/hết hàng, hạ số lượng vượt kho và ghi `notices()`), `count()`, `subtotal()`, `mergeGuestCart(User)`. Khách: session `cart` = `[product_id => số lượng]`; user: `carts`/`cart_items`; nhánh nằm trong private method. Kiểm tra tồn kho “mềm” (không khoá — khoá dòng ở OrderService khi đặt). Lỗi nghiệp vụ ném `CartException` (tự render: flash lỗi + quay lại). Gộp giỏ qua listener `MergeGuestCart` nghe event `Login` — event này bắn cả khi đăng ký (`Auth::login`), cộng dồn số lượng, cắt theo tồn kho, bỏ SP ngừng bán.
 - **OrderService** — `place(CheckoutData, ?User)`: trong `DB::transaction` → `lockForUpdate` các product **sắp theo id** (tránh deadlock) → kiểm & trừ kho → tạo `orders` (`coupon_id` null, `discount` 0) + `order_items` **snapshot** tên/sku/giá → sinh mã đơn → xoá giỏ → gửi mail `afterCommit` (driver log). `transition(order, OrderStatus)` dùng bảng chuyển trạng thái trong enum; `cancel(order)` chỉ từ pending/confirmed, hoàn kho trong cùng transaction.
 - **ReportService** — doanh thu theo ngày/tháng (chỉ đơn delivered), top sản phẩm bán chạy; số liệu vận hành cho dashboard (đơn mới, đơn chờ xử lý, sắp hết hàng); trả mảng `labels/datasets` sẵn cho Chart.js.
 - **ChatService** — tạo/lấy hội thoại của khách (user hoặc session khách vãng lai), gửi tin, lấy tin mới sau một id (polling); nhân viên trả lời từ admin. Schema 2 bảng mới chốt ở S6.

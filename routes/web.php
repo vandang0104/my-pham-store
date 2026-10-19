@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StyleguideController;
@@ -16,6 +17,12 @@ Route::get('/san-pham', [ProductController::class, 'index'])->name('products.ind
 Route::get('/san-pham/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/danh-muc/{category:slug}', [ProductController::class, 'category'])->name('categories.show');
 Route::get('/thuong-hieu/{brand:slug}', [ProductController::class, 'brand'])->name('brands.show');
+
+// Giỏ hàng (khách vãng lai: session; đã đăng nhập: DB). {product:id} kèm withTrashed để xoá được dòng của SP đã xoá mềm
+Route::get('/gio-hang', [CartController::class, 'index'])->name('cart.index');
+Route::post('/gio-hang', [CartController::class, 'store'])->name('cart.store');
+Route::patch('/gio-hang/{product:id}', [CartController::class, 'update'])->name('cart.update')->withTrashed();
+Route::delete('/gio-hang/{product:id}', [CartController::class, 'destroy'])->name('cart.destroy')->withTrashed();
 
 // Xác thực — URL tiếng Việt, giữ tên route chuẩn của Laravel
 Route::middleware('guest')->group(function () {

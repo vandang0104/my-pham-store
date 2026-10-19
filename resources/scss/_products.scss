@@ -1,4 +1,17 @@
-// Trang sản phẩm (từ 19/10: Bootstrap mặc định) — chỉ vài lớp bổ sung mà Bootstrap không có sẵn.
+// Trang sản phẩm và giỏ hàng (từ 19/10: Bootstrap mặc định) — chỉ vài lớp bổ sung mà Bootstrap không có sẵn.
+
+.cart-table {
+    min-width: 640px; // bảng cuộn ngang trên điện thoại (table-responsive)
+
+    &__thumb {
+        width: 64px;
+        height: 80px;
+    }
+
+    &__qty {
+        width: 5rem;
+    }
+}
 
 .product-detail {
     // Ảnh chính 4:5 như ảnh sản phẩm

@@ -60,8 +60,7 @@
                     <p class="mb-5">{{ $product->short_description }}</p>
                 @endif
 
-                {{-- Giỏ hàng làm ở S2: form đã đúng route POST /gio-hang, nút tạm khoá tới khi có CartController --}}
-                <form method="POST" action="{{ url('/gio-hang') }}" class="row g-3 align-items-end">
+                <form method="POST" action="{{ route('cart.store') }}" class="row g-3 align-items-end">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     <div class="col-auto">
@@ -69,7 +68,7 @@
                         <input id="so-luong" type="number" name="quantity" value="1" min="1" max="{{ max(1, $product->stock) }}" class="form-control product-detail__qty" @disabled($product->stock <= 0)>
                     </div>
                     <div class="col-auto">
-                        <button type="submit" class="btn btn-primary" disabled>{{ $product->stock > 0 ? 'Thêm vào giỏ' : 'Hết hàng' }}</button>
+                        <button type="submit" class="btn btn-primary" @disabled($product->stock <= 0)>{{ $product->stock > 0 ? 'Thêm vào giỏ' : 'Hết hàng' }}</button>
                     </div>
                 </form>
             </div>
