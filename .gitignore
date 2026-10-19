@@ -28,3 +28,6 @@ Thumbs.db
 
 # Ảnh chụp/kết quả kiểm tra của taste skill
 /.taste-skill
+
+# File kế hoạch đồ án (bản cá nhân, không đưa lên repo)
+/Ke_hoach_Prompt_Web_My_Pham*.xlsx
