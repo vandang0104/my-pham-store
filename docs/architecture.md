@@ -14,7 +14,8 @@ app/
 │  ├─ PaymentMethod.php       # cod | bank_transfer | vnpay
 │  ├─ PaymentStatus.php       # unpaid | paid | refunded
 │  ├─ ReviewStatus.php        # pending | approved | rejected
-│  └─ PostStatus.php          # draft | published
+│  ├─ PostStatus.php          # draft | published
+│  └─ SkinType.php            # oily | dry | combination | sensitive | all
 ├─ Exceptions/                # lỗi nghiệp vụ, render tập trung ở bootstrap/app.php
 │  ├─ OutOfStockException.php
 │  ├─ InvalidCouponException.php
