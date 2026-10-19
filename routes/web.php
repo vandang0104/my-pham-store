@@ -4,11 +4,11 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StyleguideController;
 use Illuminate\Support\Facades\Route;
 
-// Trang chủ tạm; HomeController và nội dung thật ở bước 4.1
-Route::view('/', 'pages.home')->name('home');
+Route::get('/', HomeController::class)->name('home');
 
 // Xác thực — URL tiếng Việt, giữ tên route chuẩn của Laravel
 Route::middleware('guest')->group(function () {

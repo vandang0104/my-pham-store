@@ -1,0 +1,505 @@
+// Trang chủ (DESIGN.md §10.1). Chỉ token §3–§8; không gradient, không bóng, góc vuông.
+
+// ---- 1. Hero "Thẻ nhãn có sọc cạnh ảnh" ----
+// Nền sơn mài, lề 12px hai bên, khe 12px; desktop 50/50 (thẻ trái, ảnh phải); mobile ảnh trước (48svh),
+// thẻ chồng lên mép dưới ảnh 24px.
+.home-hero {
+    padding: var(--sp-3);
+    background: var(--c-ink);
+
+    &__inner {
+        display: grid;
+
+        @include media-breakpoint-up(lg) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: var(--sp-3);
+            min-height: calc(100svh - 64px - var(--sp-3) * 2);
+        }
+    }
+
+    &__media {
+        position: relative;
+        order: -1;
+        height: 48svh;
+        min-height: 280px;
+        overflow: hidden;
+        background: var(--c-field);
+
+        @include media-breakpoint-up(lg) {
+            // Ảnh dính toàn chiều cao khi thẻ dài hơn màn hình
+            position: sticky;
+            top: var(--sp-3);
+            order: 0;
+            height: calc(100svh - 64px - var(--sp-3) * 2);
+        }
+    }
+
+    &__slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 1.6s var(--ease-in-out);
+
+        &.is-active {
+            opacity: 1;
+        }
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            // Khối hình của banner desktop nằm bên phải ảnh 8:3
+            object-position: 72% center;
+        }
+    }
+
+    &__card {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        // Điện thoại: thẻ rộng bằng ảnh (h1 40px cần đủ bề ngang để tiêu đề banner ~36 ký tự nằm trong 2 dòng)
+        margin: calc(var(--sp-5) * -1) 0 0;
+        background: var(--c-ground);
+        color: var(--c-ink);
+
+        @include media-breakpoint-up(lg) {
+            margin: 0;
+        }
+    }
+
+    // Dải sọc nhãn: các thanh 28px xen kẽ sơn mài / lụa, cao 56px (sọc của nhãn chai)
+    &__stripe {
+        height: 56px;
+        background-color: var(--c-ink);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Crect width='28' height='56' fill='%23F5F2EC'/%3E%3C/svg%3E");
+        background-repeat: repeat-x;
+    }
+
+    &__body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--sp-6) var(--sp-4) var(--sp-5);
+
+        @include media-breakpoint-up(md) {
+            padding: var(--sp-7) var(--sp-6) var(--sp-6);
+        }
+
+        @include media-breakpoint-up(xl) {
+            padding: var(--sp-8) var(--sp-7) var(--sp-6);
+        }
+    }
+
+    // Wordmark ~300px rộng trên desktop
+    &__wordmark {
+        font-size: clamp(3.5rem, 2.6rem + 3vw, 5.5rem);
+        margin-bottom: var(--sp-7);
+    }
+
+    // h1 hai dòng, Cormorant clamp(40px, 3.6vw, 56px) theo §10.1
+    &__title {
+        max-width: 18ch;
+        margin: 0 0 var(--sp-4);
+        font-size: clamp(2.5rem, 3.6vw, 3.5rem);
+        line-height: var(--lh-display);
+        color: var(--c-ink);
+    }
+
+    &__lead {
+        max-width: 36ch;
+        margin: 0 0 var(--sp-6);
+        font-size: var(--fs-body);
+        line-height: var(--lh-body);
+    }
+
+    &__foot {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-3) var(--sp-5);
+        width: 100%;
+        margin-top: auto;
+        padding-top: var(--sp-7);
+    }
+
+    &__links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--sp-2) var(--sp-5);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-weight: 500;
+
+        a {
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
+        }
+    }
+
+    &__pause {
+        padding-inline: 0;
+        color: var(--c-muted);
+        font-size: var(--fs-small);
+    }
+}
+
+// ---- 2. Sản phẩm nổi bật "Đĩa vuông, chữ thưa" ----
+// Cùng nền lụa với section danh mục ngay sau → bỏ đệm dưới để khoảng cách giữa hai section chỉ là một --section-gap
+.home-featured {
+    padding-bottom: 0;
+}
+
+.featured {
+    display: grid;
+    background: var(--c-surface);
+
+    @include media-breakpoint-up(lg) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    &__image {
+        aspect-ratio: 1;
+        overflow: hidden;
+        background: var(--c-surface);
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        padding: var(--sp-5) var(--sp-4) var(--sp-4);
+
+        @include media-breakpoint-up(md) {
+            padding: var(--sp-7) var(--sp-6) var(--sp-6);
+        }
+    }
+
+    // Hàng tab chữ: đang chọn gạch chân men ngọc 2px
+    &__tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 var(--sp-5);
+        margin-bottom: var(--sp-6);
+    }
+
+    &__tab {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        border-bottom: 2px solid transparent; // taste-skill-ignore — gạch chân tab đang chọn (§9), không phải đường kẻ
+        color: var(--c-muted);
+        font-weight: 500;
+        text-decoration: none;
+        transition: color var(--t-hover) ease, border-color var(--t-hover) ease;
+
+        &:hover {
+            color: var(--c-ink);
+        }
+
+        &[aria-selected='true'],
+        &[aria-current='true'] {
+            border-bottom-color: var(--c-accent);
+            color: var(--c-ink);
+        }
+    }
+
+    &__panel {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    &__name {
+        max-width: 22ch;
+        margin: 0 0 var(--sp-2);
+    }
+
+    // Thương hiệu · dung tích nằm DƯỚI tên (đặt trên thành nhãn eyebrow mà §11 cấm)
+    &__brand {
+        margin: 0 0 var(--sp-4);
+        color: var(--c-muted);
+        font-size: var(--fs-small);
+        font-weight: 500;
+    }
+
+    &__text {
+        max-width: 34ch;
+        margin: 0 0 var(--sp-5);
+    }
+
+    &__meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: var(--sp-2) var(--sp-5);
+
+        .price {
+            margin: 0;
+        }
+    }
+
+    // Hai ô hành động ở chân: Thêm vào giỏ · Xem chi tiết
+    &__actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--sp-3);
+        width: 100%;
+        margin-top: auto;
+        padding-top: var(--sp-7);
+
+        form {
+            margin: 0;
+        }
+    }
+
+    &__detail {
+        justify-content: center;
+    }
+}
+
+// ---- 3. Danh mục "Chữ khổng lồ, các thanh màu" ----
+.home-categories {
+    &__head {
+        display: grid;
+        gap: var(--sp-4);
+        margin-bottom: var(--sp-6);
+
+        @include media-breakpoint-up(lg) {
+            grid-template-columns: minmax(0, 640px) minmax(0, 1fr);
+            gap: var(--sp-7);
+            align-items: end;
+        }
+    }
+
+    // Một từ rất lớn lấp cột 560–640px; line-height 1.1 (dấu tiếng Việt, §12)
+    // "Danh mục" luôn một dòng: 10vw ≈ 620px rộng ở 1280px, 56px ở điện thoại
+    &__word {
+        margin: 0;
+        white-space: nowrap;
+        font-size: clamp(3.5rem, 10vw, 8rem);
+        line-height: var(--lh-display);
+        letter-spacing: -.02em;
+    }
+
+    &__lead {
+        max-width: 36ch;
+        margin: 0;
+        padding-bottom: var(--sp-4);
+        font-size: var(--fs-lead);
+        line-height: var(--lh-lead);
+    }
+}
+
+.cat-bars {
+    display: grid;
+    gap: var(--sp-1);
+}
+
+.cat-bar {
+    --cat-text: var(--c-ink);
+    --cat-muted: var(--c-muted);
+    background: var(--c-field);
+    color: var(--cat-text);
+
+    &--tone-1 {
+        // Mực nhạt trên champagne chỉ 3,24:1 → chữ phụ cũng dùng sơn mài
+        --cat-muted: var(--c-ink);
+        background: var(--c-champagne);
+    }
+
+    &--tone-2 {
+        --cat-text: var(--c-ground);
+        --cat-muted: var(--c-muted-dark);
+        --focus-ring: var(--c-champagne);
+        background: var(--c-ink);
+    }
+
+    &--tone-3 {
+        background: var(--c-surface);
+    }
+
+    &__summary {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-4);
+        min-height: 56px;
+        padding-inline: var(--sp-4);
+        cursor: pointer;
+        list-style: none;
+
+        @include media-breakpoint-up(md) {
+            padding-inline: var(--sp-5);
+        }
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &:hover .cat-bar__name {
+            text-decoration: underline;
+            text-underline-offset: .18em;
+        }
+    }
+
+    &__name {
+        flex: 1;
+        font-size: var(--fs-body);
+        font-weight: 500;
+    }
+
+    &__count,
+    &__child-count {
+        color: var(--cat-muted);
+        font-size: var(--fs-small);
+        font-weight: 500;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__chevron {
+        flex: none;
+        transition: transform var(--t-ui) var(--ease-out);
+    }
+
+    &[open] &__chevron {
+        transform: rotate(180deg);
+    }
+
+    &__body {
+        padding: var(--sp-2) var(--sp-4) var(--sp-5);
+
+        @include media-breakpoint-up(md) {
+            padding-inline: var(--sp-5);
+        }
+    }
+
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 0 var(--sp-6);
+        margin: 0 0 var(--sp-4);
+        padding: 0;
+        list-style: none;
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--sp-3);
+            min-height: 44px;
+        }
+    }
+
+    &__link {
+        color: inherit;
+        text-decoration: none;
+
+        &:hover {
+            color: inherit;
+            text-decoration: underline;
+        }
+    }
+
+    &__all {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--sp-2);
+        min-height: 44px;
+        font-weight: 500;
+    }
+}
+
+// ---- 4. Đang ưu đãi: mảng giấy dó tách khỏi danh mục phía trên ----
+.home-sale {
+    background: var(--c-surface);
+}
+
+// ---- 5. Câu chuyện "Thư": tờ thư lụa 640px trên mảng ngọc nhạt, mép dưới răng cưa ----
+.home-story {
+    background: var(--c-field);
+}
+
+.letter {
+    position: relative;
+    max-width: 640px;
+    margin-inline: auto;
+    padding: var(--sp-6) var(--sp-5) var(--sp-7);
+    background: var(--c-ground);
+
+    @include media-breakpoint-up(md) {
+        padding: var(--sp-8) var(--sp-8) var(--sp-7);
+    }
+
+    // Răng cưa 12px cùng màu tờ thư, nằm ngay dưới mép
+    &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        height: 12px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12'%3E%3Cpath d='M0 0h24L12 12z' fill='%23F5F2EC'/%3E%3C/svg%3E");
+        background-repeat: repeat-x;
+    }
+
+    &__title {
+        margin-bottom: var(--sp-5);
+    }
+
+    p {
+        margin-bottom: var(--sp-4);
+    }
+
+    // Lời chào và chữ ký cùng một hàng như cuối thư tay
+    &__sign {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: var(--sp-2) var(--sp-4);
+        margin: var(--sp-6) 0 0;
+    }
+
+    &__wordmark {
+        font-size: 2.5rem;
+    }
+}
+
+// ---- 6. Lời mời đảo màu: mảng sơn mài full-bleed ≥ 90svh ----
+.home-invite {
+    &__inner {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: var(--sp-8);
+        min-height: 90svh;
+        padding-block: var(--section-gap);
+    }
+
+    &__title {
+        margin: 0;
+    }
+
+    &__foot {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-5);
+    }
+
+    &__text {
+        margin: 0;
+    }
+}

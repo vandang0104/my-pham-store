@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'title', 'image_desktop', 'image_mobile', 'link', 'position',
@@ -17,6 +19,23 @@ class Banner extends Model
 {
     /** @use HasFactory<BannerFactory> */
     use HasFactory;
+
+    /** Vị trí hero trang chủ (DESIGN.md §10.1) */
+    public const POSITION_HOME_HERO = 'home_hero';
+
+    protected static function booted(): void
+    {
+        // Banner hero trang chủ được cache (TTL ngắn): xoá khi banner thay đổi
+        $forget = fn () => Cache::forget(config('home.cache.banners.key'));
+        static::saved($forget);
+        static::deleted($forget);
+    }
+
+    /** Đường dẫn công khai của ảnh trên disk public */
+    public static function imageUrl(?string $path): ?string
+    {
+        return $path ? Storage::disk('public')->url($path) : null;
+    }
 
     protected function casts(): array
     {

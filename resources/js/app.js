@@ -2,8 +2,12 @@
 import 'bootstrap';
 import { initHeader } from './header';
 import { initFlash } from './flash';
+import { initHome } from './home';
+import { initReveal } from './reveal';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHeader();
     initFlash();
+    initHome();
+    initReveal();
 });

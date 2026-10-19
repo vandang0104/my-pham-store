@@ -93,10 +93,11 @@ describe('flash message', function () {
 describe('menu được cache', function () {
     it('lần đầu dựng menu bằng số truy vấn cố định, các lần sau không truy vấn danh mục', function () {
         Cache::flush();
+        // Trang đăng nhập: cùng layout/header nhưng không có khối danh mục riêng như trang chủ
         $count = function () {
             DB::flushQueryLog();
             DB::enableQueryLog();
-            $this->get('/')->assertOk();
+            $this->get(route('login'))->assertOk();
 
             return collect(DB::getQueryLog())
                 ->filter(fn (array $q) => preg_match('/from "(categories|brands)"/', $q['query']))

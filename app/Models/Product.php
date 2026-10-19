@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 #[Fillable([
     'category_id', 'brand_id', 'name', 'slug', 'sku', 'short_description', 'description',
@@ -29,6 +30,15 @@ class Product extends Model
 
     /** Biểu thức SQL giá hiện hành, khớp accessor current_price (quy tắc 1) */
     private const CURRENT_PRICE_SQL = 'CASE WHEN sale_price IS NOT NULL AND sale_price < price THEN sale_price ELSE price END';
+
+    protected static function booted(): void
+    {
+        // Khối danh mục trang chủ cache số sản phẩm: xoá khi sản phẩm đổi (bật/tắt, đổi danh mục, xoá mềm, khôi phục)
+        $forget = fn () => Cache::forget(config('home.cache.categories.key'));
+        static::saved($forget);
+        static::deleted($forget);
+        static::restored($forget);
+    }
 
     protected function casts(): array
     {
@@ -99,6 +109,14 @@ class Product extends Model
     protected function onSale(Builder $query): void
     {
         $query->whereNotNull('sale_price')->whereColumn('sale_price', '<', 'price');
+    }
+
+    /** Sắp theo phần trăm giảm giảm dần (cùng công thức với discount_percent), hoà thì sản phẩm mới trước */
+    #[Scope]
+    protected function orderByDiscount(Builder $query): void
+    {
+        // * 1.0: SQLite (test) chia số nguyên ra 0; MySQL vốn trả số thập phân
+        $query->orderByRaw('(price - COALESCE(sale_price, price)) * 1.0 / price DESC')->orderByDesc('id');
     }
 
     /** Lọc theo giá hiện hành (đã tính giá khuyến mãi); bỏ trống đầu nào thì không giới hạn đầu đó */

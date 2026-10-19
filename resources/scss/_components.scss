@@ -242,19 +242,3 @@ main:focus {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='8'%3E%3Crect width='28' height='8' fill='%23F5F2EC'/%3E%3C/svg%3E");
     background-repeat: repeat-x;
 }
-
-// ---- Trang chủ tạm ----
-.home-intro {
-    padding-block: var(--section-gap);
-
-    &__title {
-        max-width: 14ch;
-        margin-bottom: var(--sp-5);
-    }
-
-    // Chữ dẫn cỡ lớn: 65ch của .measure ra ~89 ký tự/dòng → thu lại cho dễ đọc
-    &__lead {
-        max-width: 40ch;
-        margin-bottom: var(--sp-6);
-    }
-}

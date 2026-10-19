@@ -267,17 +267,17 @@ Mỗi component là một Blade component trong `resources/views/components/`. Q
 ## 10. Bố cục theo trang
 
 ### 10.1 Trang chủ (theo sheet, đã điều chỉnh cho dự án)
-Bắt buộc: 1, 2, 3, 4 (Đang ưu đãi), 7 và footer. **TUỲ CHỌN, làm sau** (khi các chức năng chính đã xong): 5 (Câu chuyện — Thư của người pha chế) và *Đơn chăm sóc* mà 6 dẫn tới.
+Bắt buộc: 1, 2, 3, 4 (Đang ưu đãi), 5 (Câu chuyện — bản gọn), 6, 7 và footer. **TUỲ CHỌN, làm sau** (khi các chức năng chính đã xong): *Đơn chăm sóc* mà 6 dẫn tới, và ô đăng ký nhận tin của mục 5.
 
 1. **Hero — "Thẻ nhãn có sọc cạnh ảnh"**: desktop chia 50/50 (khe 12px, lề 12px hai bên). Phải: **ảnh lấy từ bảng `banners`** (`Banner::visible()->where('position', 'home_hero')->orderBy('sort_order')`, `image_desktop` / `image_mobile` qua `<picture>`) dính (`position: sticky`) toàn chiều cao; có từ 2 banner trở lên thì crossfade chậm giữa chúng (chữ ký chuyển động §8), tiêu đề/link của banner đang hiện dùng cho `h1` và nút. Không có banner nào → mảng ngọc nhạt phẳng. Trái: tấm nhãn nền lụa; trên cùng **dải sọc nhãn** cao 56px (các thanh 28px xen kẽ sơn mài/lụa — sọc của nhãn chai, xuất hiện lại 8px trên footer và trong nút khi hover); dưới đó wordmark ~300px, `h1` 2 dòng (Cormorant, `clamp(40px, 3.6vw, 56px)`), một câu dẫn 17px tối đa 36ch, một nút chính, ba link chữ ở chân thẻ. Nền phía sau là sơn mài. Mobile: ảnh trước (48svh), thẻ nhãn chồng lên mép dưới ảnh 24px.
 2. **Sản phẩm nổi bật — "Đĩa vuông, chữ thưa"**: một mảng chia đôi; trái một ảnh vuông lớn; phải: hàng tab chữ (dung tích/biến thể), tên SP 2–4 từ ở `--fs-title`, mô tả 34ch, hai ô hành động dưới cùng (Thêm vào giỏ · Xem chi tiết).
 3. **Danh mục — "Chữ khổng lồ, các thanh màu"**: một từ rất lớn ("Danh mục") lấp đầy cột 560–640px, bên dưới 8 thanh màu đặc cao 56px (danh mục cha) mở tại chỗ bằng `details` liệt kê danh mục con + số sản phẩm. Line-height chữ khổng lồ **1.1** (không 0.8 như sheet — dấu tiếng Việt).
 4. **Đang ưu đãi — "Ảnh và nhãn treo"** (bắt buộc): lưới 4 cột (mobile 2) các sản phẩm `Product::active()->onSale()` (nạp sẵn `images`, `brand`), sắp theo `discount_percent` giảm dần, tối đa 8; product card như §9 với nhãn "−x%" và giá khuyến mãi đỏ son; tiêu đề "Đang ưu đãi" ở `--fs-title` + link chữ "Xem tất cả" tới `/san-pham?khuyen-mai=1`. Mảng nền giấy dó để tách khỏi section danh mục phía trên. Không có sản phẩm giảm giá → ẩn cả section (không để khung trống).
-5. **Câu chuyện — "Thư của người pha chế"** (TUỲ CHỌN): một tờ thư nền lụa 640px trên mảng ngọc nhạt, mép dưới răng cưa, 4–5 đoạn ngôi thứ nhất về nguồn nguyên liệu; **cuống xé** bên dưới (hàng chấm tròn 5px) chứa ô đăng ký nhận tin. *(Nội dung mẫu — cần chủ cửa hàng duyệt; không bịa danh tính người thật.)*
+5. **Câu chuyện — "Thư của người pha chế"** (BẮT BUỘC, bản gọn): giới thiệu tổng quan cửa hàng. Một tờ thư nền lụa 640px trên mảng ngọc nhạt, mép dưới răng cưa, tiêu đề `h2` ở đầu thư, 4–5 đoạn ngôi thứ nhất ("chúng tôi", ký tên "Mộc Lam") về cửa hàng bán gì, nguồn nguyên liệu, cách ghi nhãn, cách mua và đổi trả. **Không** có cuống xé / ô đăng ký nhận tin (chưa có chức năng và bảng dữ liệu — xem §14). *(Nội dung mẫu — cần chủ cửa hàng duyệt; không bịa danh tính người thật, không số liệu kinh doanh.)*
 6. **Lời mời đảo màu (CTA)**: mảng sơn mài full-bleed ≥ 90svh, câu ý tưởng quay lại ở `--fs-display` 2 dòng, chân mảng: một câu 20px + nút champagne. Khi *Đơn chăm sóc* (TUỲ CHỌN) chưa làm: câu "Chọn đúng cho làn da của bạn" + nút "Xem sản phẩm theo loại da" → `/san-pham` (lọc loại da); khi đã làm: "Đơn chăm sóc / cho làn da của bạn" → mở *Đơn chăm sóc*.
 7. **Footer — "Thương hiệu dựng khối"** (§9), chữ "Mộc Lam".
 
-Thứ tự trên trang: 1 → 2 → 3 → 4 → (5) → 6 → 7. Tuân thủ: mỗi section có tiêu đề (trừ thư), hai section liền nhau không cùng bố cục, không khoảng trống > nửa màn hình, `h1` duy nhất ở hero.
+Thứ tự trên trang: 1 → 2 → 3 → 4 → 5 → 6 → 7. Tuân thủ: mỗi section có tiêu đề, hai section liền nhau không cùng bố cục, không khoảng trống > nửa màn hình, `h1` duy nhất ở hero.
 
 ### 10.2 Danh sách sản phẩm `/san-pham`, `/danh-muc/{slug}`
 Màn thao tác. Đầu trang: breadcrumb, `h1` tên danh mục (Cormorant 40px) + số sản phẩm + mô tả 1 câu. Desktop: bộ lọc cột trái 280px (nền giấy dó, các nhóm `details`: khoảng giá, thương hiệu, loại da, đang giảm giá, còn hàng), lưới 3 cột bên phải; mobile: nút "Lọc (2)" mở ngăn kéo dưới, sắp xếp là `select`. Lọc đang áp dụng hiện thành các chữ có × phía trên lưới.
@@ -334,6 +334,7 @@ Mobile: danh sách mục dạng các dòng lớn 56px; desktop: menu trái 240px
 - **Hướng chính thức: A — Lụa · Sơn mài · Men ngọc** (toàn bộ §1–§13 của tài liệu này).
 - **Tên thương hiệu: Mộc Lam** — `APP_NAME="Mộc Lam"`; wordmark theo ý tưởng ở bảng dưới (Cormorant Garamond 600, chữ thường "mộc lam", chấm men ngọc thay dấu nặng dưới "ộ"; favicon "m" + chấm).
 - Hướng B, C và hai tên còn lại **giữ làm tham khảo**, không dùng.
+- **Trang chủ mục 5 "Câu chuyện" chuyển từ tuỳ chọn sang bắt buộc, bản gọn (bước 4.1):** đề cương yêu cầu trang chủ có phần giới thiệu tổng quan cửa hàng; tờ thư là chỗ đúng cho nội dung đó. Bỏ cuống xé có ô đăng ký nhận tin vì schema không có bảng người đăng ký và kế hoạch không có bước xử lý — một ô nhập không gửi đi đâu là lời hứa sai. Mục 5 có `h2` ở đầu thư (thay cho ngoại lệ "trừ thư") để trang có dàn ý đầy đủ.
 - **Bỏ nút tim (yêu thích) khỏi thẻ sản phẩm và bộ icon (bước 3.4):** đề cương không có chức năng danh sách yêu thích và schema không có bảng dữ liệu cho nó; một nút không làm gì là lời hứa sai với khách. Muốn thêm thì phải có migration + bước riêng trong kế hoạch, rồi mới sửa lại §7 và §9.
 
 **Hướng thay thế — tham khảo** (đã so sánh với hướng chính *Lụa · Sơn mài · Men ngọc*):
