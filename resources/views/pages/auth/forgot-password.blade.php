@@ -2,7 +2,7 @@
 
 @section('title', 'Quên mật khẩu')
 
-@section('content')
+@section('form')
     <p class="text-secondary">Nhập email đã đăng ký, chúng tôi sẽ gửi liên kết để bạn đặt lại mật khẩu.</p>
 
     <form method="POST" action="{{ route('password.email') }}" novalidate>
@@ -18,7 +18,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-dark w-100">Gửi liên kết đặt lại mật khẩu</button>
+        <button type="submit" class="btn btn-primary w-100">Gửi liên kết đặt lại mật khẩu</button>
     </form>
 
     <p class="text-center mt-4 mb-0">

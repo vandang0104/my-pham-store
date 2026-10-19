@@ -1,5 +1,10 @@
 <?php
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+// Layout đọc menu danh mục từ DB
+uses(RefreshDatabase::class);
+
 it('hiển thị trang chủ thành công', function () {
     $this->get('/')->assertOk();
 });

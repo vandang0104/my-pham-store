@@ -2,11 +2,12 @@
 
 return [
     // position: home_hero (slider trang chủ), category_top (đầu trang danh mục)
+    // 'mau': [nền, màu khối] của ảnh placeholder — bảng màu DESIGN.md §3 (lụa, giấy dó, ngọc nhạt, champagne, sơn mài, men ngọc)
     'banners' => [
-        ['title' => 'Dưỡng da mùa thu – êm dịu từ thảo mộc', 'subtitle' => 'Bộ sưu tập làm sạch và cấp ẩm cho làn da chuyển mùa', 'link' => '/danh-muc/cham-soc-da-mat', 'position' => 'home_hero', 'mau' => ['#F6E7E1', '#C98F7A']],
-        ['title' => 'Chống nắng mỗi ngày – ưu đãi đến 15%', 'subtitle' => 'Màng lọc phổ rộng, mỏng nhẹ cho khí hậu nhiệt đới', 'link' => '/danh-muc/chong-nang', 'position' => 'home_hero', 'mau' => ['#FBF0DC', '#D8A54A']],
-        ['title' => 'Quà tặng tinh tế cho người thương', 'subtitle' => 'Hộp quà đóng sẵn, kèm thiệp viết tay', 'link' => '/danh-muc/bo-qua-tang', 'position' => 'home_hero', 'mau' => ['#F4E6DA', '#B88760']],
-        ['title' => 'Trang điểm nhẹ nhàng cho ngày dài', 'subtitle' => 'Lớp nền mỏng như lụa và sắc son trung tính', 'link' => '/danh-muc/trang-diem', 'position' => 'category_top', 'mau' => ['#F3E3E6', '#B9798A']],
+        ['title' => 'Dưỡng da mùa thu – êm dịu từ thảo mộc', 'subtitle' => 'Bộ sưu tập làm sạch và cấp ẩm cho làn da chuyển mùa', 'link' => '/danh-muc/cham-soc-da-mat', 'position' => 'home_hero', 'mau' => ['#D3DDD4', '#2E5A4C']],
+        ['title' => 'Chống nắng mỗi ngày – ưu đãi đến 15%', 'subtitle' => 'Màng lọc phổ rộng, mỏng nhẹ cho khí hậu nhiệt đới', 'link' => '/danh-muc/chong-nang', 'position' => 'home_hero', 'mau' => ['#EBE5DA', '#C2A878']],
+        ['title' => 'Quà tặng tinh tế cho người thương', 'subtitle' => 'Hộp quà đóng sẵn, kèm thiệp viết tay', 'link' => '/danh-muc/bo-qua-tang', 'position' => 'home_hero', 'mau' => ['#D3DDD4', '#C2A878']],
+        ['title' => 'Trang điểm nhẹ nhàng cho ngày dài', 'subtitle' => 'Lớp nền mỏng như lụa và sắc son trung tính', 'link' => '/danh-muc/trang-diem', 'position' => 'category_top', 'mau' => ['#EBE5DA', '#1E1B18']],
     ],
 
     'faqs' => [

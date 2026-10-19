@@ -2,7 +2,7 @@
 
 @section('title', 'Đăng nhập')
 
-@section('content')
+@section('form')
     <form method="POST" action="{{ route('login') }}" novalidate>
         @csrf
 
@@ -34,7 +34,7 @@
             <a href="{{ route('password.request') }}">Quên mật khẩu?</a>
         </div>
 
-        <button type="submit" class="btn btn-dark w-100">Đăng nhập</button>
+        <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
     </form>
 
     <p class="text-center mt-4 mb-0">

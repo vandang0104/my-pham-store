@@ -35,4 +35,10 @@ class ProductImage extends Model
     {
         return Attribute::get(fn (): string => Storage::disk('public')->url($this->path));
     }
+
+    /** Ảnh giữ chỗ do seeder sinh (mảng màu, không chữ) — giao diện vẽ thêm tên sản phẩm lên trên */
+    protected function isPlaceholder(): Attribute
+    {
+        return Attribute::get(fn (): bool => str_starts_with($this->path, 'placeholders/'));
+    }
 }

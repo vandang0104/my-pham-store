@@ -2,7 +2,7 @@
 
 @section('title', 'Đặt lại mật khẩu')
 
-@section('content')
+@section('form')
     <form method="POST" action="{{ route('password.update') }}" novalidate>
         @csrf
         <input type="hidden" name="token" value="{{ $token }}">
@@ -34,6 +34,6 @@
                    class="form-control" required autocomplete="new-password">
         </div>
 
-        <button type="submit" class="btn btn-dark w-100">Đặt lại mật khẩu</button>
+        <button type="submit" class="btn btn-primary w-100">Đặt lại mật khẩu</button>
     </form>
 @endsection

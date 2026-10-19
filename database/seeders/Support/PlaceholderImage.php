@@ -5,18 +5,31 @@ namespace Database\Seeders\Support;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Sinh ảnh placeholder SVG cục bộ trên disk public (không hotlink ảnh ngoài).
+ * Sinh ảnh placeholder SVG cục bộ trên disk public (không hotlink) theo DESIGN.md §6:
+ * mảng màu PHẲNG theo bảng màu (không gradient), góc vuông, đúng tỉ lệ ảnh thật.
  * Mỗi hàm ghi file và trả về đường dẫn tương đối để lưu vào DB.
+ *
+ * Ảnh sản phẩm KHÔNG in chữ: SVG nạp qua <img> không dùng được web font của trang nên chữ rơi về Georgia
+ * và vỡ dấu tiếng Việt ("Hồng" → "Hồ ng"). Thẻ sản phẩm vẽ tên bằng Cormorant lên trên ảnh giữ chỗ (HTML).
  */
 final class PlaceholderImage
 {
     public const DIR = 'placeholders';
 
-    private const SERIF = "Georgia, 'Times New Roman', serif";
+    // Bảng màu DESIGN.md §3
+    public const GROUND = '#F5F2EC';
 
-    private const SANS = "'Segoe UI', Helvetica, Arial, sans-serif";
+    public const SURFACE = '#EBE5DA';
 
-    private const INK = '#3B2F2A';
+    public const FIELD = '#D3DDD4';
+
+    public const CHAMPAGNE = '#C2A878';
+
+    public const INK = '#1E1B18';
+
+    public const ACCENT = '#2E5A4C';
+
+    private const SERIF = "'Cormorant Garamond', Georgia, 'Times New Roman', serif";
 
     /** Xoá toàn bộ placeholder cũ trước khi seed lại */
     public static function reset(): void
@@ -25,65 +38,67 @@ final class PlaceholderImage
     }
 
     /**
-     * @param  array{0: string, 1: string}  $colors
+     * Ảnh sản phẩm 4:5 (800×1000): nền phẳng + dáng sản phẩm phẳng (chai, hũ, tuýp, chai xịt), không chữ.
+     *
+     * @param  array{0: string, 1: string}  $colors  [nền, màu dáng sản phẩm]
      */
-    public static function product(string $path, string $name, string $brand, array $colors, int $variant): string
+    public static function product(string $path, array $colors, int $variant): string
     {
-        [$light, $dark] = $colors;
-        $shape = match ($variant % 4) {
-            // Chai serum
-            0 => '<rect x="350" y="250" width="100" height="40" rx="8" fill="'.self::INK.'" opacity=".85"/>'
-                .'<rect x="320" y="285" width="160" height="230" rx="28" fill="#FFFFFF" opacity=".75"/>',
+        [$bg, $shape] = $colors;
+        $cap = $shape === self::INK ? self::CHAMPAGNE : self::INK;
+
+        $object = match ($variant % 4) {
+            // Chai serum có nắp nhỏ giọt
+            0 => '<rect x="350" y="250" width="100" height="60" fill="'.$cap.'"/>'
+                .'<rect x="318" y="310" width="164" height="300" fill="'.$shape.'"/>',
             // Hũ kem
-            1 => '<rect x="285" y="300" width="230" height="45" rx="10" fill="'.self::INK.'" opacity=".85"/>'
-                .'<rect x="270" y="340" width="260" height="150" rx="36" fill="#FFFFFF" opacity=".75"/>',
+            1 => '<rect x="262" y="330" width="276" height="56" fill="'.$cap.'"/>'
+                .'<rect x="248" y="386" width="304" height="196" fill="'.$shape.'"/>',
             // Tuýp
-            2 => '<path d="M330 260 h140 l-20 250 h-100 z" fill="#FFFFFF" opacity=".75"/>'
-                .'<rect x="370" y="505" width="60" height="30" rx="6" fill="'.self::INK.'" opacity=".85"/>',
-            // Bố cục kết cấu sản phẩm
-            default => '<circle cx="400" cy="380" r="120" fill="#FFFFFF" opacity=".55"/>'
-                .'<circle cx="470" cy="330" r="55" fill="'.$dark.'" opacity=".55"/>',
+            2 => '<path d="M318 250 h164 l-24 330 h-116 z" fill="'.$shape.'"/>'
+                .'<rect x="364" y="580" width="72" height="40" fill="'.$cap.'"/>',
+            // Chai xịt
+            default => '<rect x="380" y="232" width="40" height="40" fill="'.$cap.'"/>'
+                .'<rect x="360" y="272" width="80" height="40" fill="'.$cap.'"/>'
+                .'<rect x="298" y="312" width="204" height="300" fill="'.$shape.'"/>',
         };
 
-        $svg = self::open(800, 800, $light, $dark, 135 + 30 * $variant)
-            .$shape
-            .self::text(400, 110, mb_strtoupper($brand), 22, self::SANS, 6, .7)
-            .self::lines(400, 610, self::wrap($name, 24), 34, 44)
-            .'</svg>';
+        $svg = self::open(800, 1000, $bg).$object.'</svg>';
 
         return self::put($path, $svg);
     }
 
     /**
-     * @param  array{0: string, 1: string}  $colors
+     * Banner: chỉ mảng màu và hình khối — KHÔNG in chữ vào ảnh (chữ đặt cạnh ảnh trên trang, DESIGN.md §6).
+     *
+     * @param  array{0: string, 1: string}  $colors  [nền, màu khối]
      */
-    public static function banner(string $path, string $title, string $subtitle, array $colors, bool $mobile = false): string
+    public static function banner(string $path, array $colors, bool $mobile = false): string
     {
-        [$light, $dark] = $colors;
+        [$bg, $shape] = $colors;
         [$w, $h] = $mobile ? [800, 1000] : [1920, 720];
-        $x = $mobile ? 80 : 160;
-        $titleLines = self::wrap($title, $mobile ? 18 : 28);
 
-        $svg = self::open($w, $h, $light, $dark, 120)
-            .'<circle cx="'.($mobile ? 600 : 1500).'" cy="'.($mobile ? 760 : 360).'" r="'.($mobile ? 260 : 300).'" fill="#FFFFFF" opacity=".35"/>'
-            .self::lines($x, $mobile ? 260 : 270, $titleLines, $mobile ? 60 : 72, $mobile ? 76 : 88, 'start')
-            .self::text($x, ($mobile ? 260 : 270) + count($titleLines) * ($mobile ? 76 : 88) + 20, $subtitle, $mobile ? 28 : 32, self::SANS, 0, .8, 'start')
+        $svg = self::open($w, $h, $bg)
+            .($mobile
+                ? '<rect x="160" y="300" width="480" height="560" fill="'.$shape.'"/><rect x="300" y="200" width="200" height="100" fill="'.self::INK.'"/>'
+                : '<rect x="1180" y="140" width="460" height="580" fill="'.$shape.'"/><rect x="1320" y="60" width="180" height="80" fill="'.self::INK.'"/>')
             .'</svg>';
 
         return self::put($path, $svg);
     }
 
     /**
-     * @param  array{0: string, 1: string}  $colors
+     * Ảnh bìa (danh mục 1:1, bài viết 16:9): nền phẳng + một khối màu, không chữ (tên hiện bằng HTML cạnh ảnh).
+     *
+     * @param  array{0: string, 1: string}  $colors  [nền, màu khối]
      */
-    public static function cover(string $path, string $title, array $colors, int $w = 1200, int $h = 675): string
+    public static function cover(string $path, array $colors, int $w = 1200, int $h = 675): string
     {
-        [$light, $dark] = $colors;
-        $lines = self::wrap($title, 30);
+        [$bg, $shape] = $colors;
 
-        $svg = self::open($w, $h, $light, $dark, 160)
-            .'<rect x="60" y="60" width="'.($w - 120).'" height="'.($h - 120).'" fill="none" stroke="#FFFFFF" stroke-opacity=".6" stroke-width="2"/>'
-            .self::lines($w / 2, $h / 2 - (count($lines) - 1) * 28, $lines, 46, 56)
+        $svg = self::open($w, $h, $bg)
+            .'<rect x="'.($w - $w * .32).'" y="0" width="'.($w * .32).'" height="'.($h * .58).'" fill="'.$shape.'"/>'
+            .'<rect x="'.($w * .08).'" y="'.($h * .7).'" width="'.($w * .24).'" height="'.($h * .3).'" fill="'.self::INK.'"/>'
             .'</svg>';
 
         return self::put($path, $svg);
@@ -91,61 +106,23 @@ final class PlaceholderImage
 
     public static function logo(string $path, string $name): string
     {
-        $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200">'
-            .'<rect width="400" height="200" fill="#FFFFFF"/>'
-            .self::text(200, 112, mb_strtoupper($name), mb_strlen($name) > 14 ? 24 : 30, self::SERIF, 4, 1)
+        $svg = self::open(400, 200, self::GROUND)
+            .self::text(200, 112, $name, mb_strlen($name) > 14 ? 26 : 32, self::SERIF, 600, 'middle')
             .'</svg>';
 
         return self::put($path, $svg);
     }
 
-    private static function open(int $w, int $h, string $light, string $dark, int $angle): string
+    private static function open(int $w, int $h, string $bg): string
     {
         return '<svg xmlns="http://www.w3.org/2000/svg" width="'.$w.'" height="'.$h.'" viewBox="0 0 '.$w.' '.$h.'">'
-            .'<defs><linearGradient id="g" gradientTransform="rotate('.($angle % 360).' .5 .5)">'
-            .'<stop offset="0" stop-color="'.$light.'"/><stop offset="1" stop-color="'.$dark.'"/></linearGradient></defs>'
-            .'<rect width="'.$w.'" height="'.$h.'" fill="url(#g)"/>';
+            .'<rect width="'.$w.'" height="'.$h.'" fill="'.$bg.'"/>';
     }
 
-    private static function text(float $x, float $y, string $content, int $size, string $font, int $spacing = 0, float $opacity = 1, string $anchor = 'middle'): string
+    private static function text(float $x, float $y, string $content, int $size, string $font, int $weight, string $anchor): string
     {
-        return '<text x="'.$x.'" y="'.$y.'" font-family="'.self::esc($font).'" font-size="'.$size.'" letter-spacing="'.$spacing
-            .'" fill="'.self::INK.'" fill-opacity="'.$opacity.'" text-anchor="'.$anchor.'">'.self::esc($content).'</text>';
-    }
-
-    /**
-     * @param  list<string>  $lines
-     */
-    private static function lines(float $x, float $y, array $lines, int $size, int $lineHeight, string $anchor = 'middle'): string
-    {
-        $out = '';
-        foreach ($lines as $i => $line) {
-            $out .= self::text($x, $y + $i * $lineHeight, $line, $size, self::SERIF, 0, 1, $anchor);
-        }
-
-        return $out;
-    }
-
-    /**
-     * Ngắt dòng theo số ký tự (đếm đa byte cho tiếng Việt).
-     *
-     * @return list<string>
-     */
-    private static function wrap(string $text, int $max): array
-    {
-        $lines = [];
-        $current = '';
-        foreach (explode(' ', $text) as $word) {
-            $candidate = $current === '' ? $word : "{$current} {$word}";
-            if ($current !== '' && mb_strlen($candidate) > $max) {
-                $lines[] = $current;
-                $current = $word;
-            } else {
-                $current = $candidate;
-            }
-        }
-
-        return [...$lines, $current];
+        return '<text x="'.$x.'" y="'.$y.'" font-family="'.self::esc($font).'" font-size="'.$size.'" font-weight="'.$weight
+            .'" fill="'.self::INK.'" text-anchor="'.$anchor.'">'.self::esc($content).'</text>';
     }
 
     private static function esc(string $value): string

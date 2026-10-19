@@ -1,0 +1,142 @@
+// Footer — "mặt sau của tấm nhãn" (DESIGN.md §9): nền sơn mài, chữ thương hiệu dựng khối.
+
+.site-footer {
+    &__inner {
+        padding-block: var(--sp-8) var(--sp-6);
+
+        @include media-breakpoint-up(md) {
+            padding-block: var(--sp-9) var(--sp-7);
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--sp-6) var(--sp-5);
+
+        @include media-breakpoint-up(md) {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        @include media-breakpoint-up(xl) {
+            grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.4fr);
+        }
+    }
+
+    &__heading {
+        margin-bottom: var(--sp-4);
+        font-family: var(--font-body);
+        font-size: var(--fs-body);
+        font-weight: 500;
+        line-height: var(--lh-body);
+        color: var(--c-champagne);
+    }
+
+    &__links {
+        display: grid;
+        gap: var(--sp-3);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__contact {
+        grid-column: 1 / -1;
+
+        @include media-breakpoint-up(xl) {
+            grid-column: auto;
+        }
+
+        address {
+            margin: 0;
+        }
+
+        p {
+            margin-bottom: var(--sp-3);
+        }
+    }
+
+    &__bottom {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-3) var(--sp-5);
+        margin-top: var(--sp-8);
+        color: var(--c-muted-dark);
+        font-size: var(--fs-small);
+
+        .link-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--sp-2);
+            min-height: 44px;
+        }
+    }
+
+    .icon-up {
+        transform: rotate(-90deg);
+    }
+}
+
+// ---- Chữ thương hiệu dựng khối: mỗi chữ cắt khỏi một khối màu, cao 60–100%, khe 4px ----
+.footer-mark {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0 0 var(--sp-8);
+
+    @include media-breakpoint-up(md) {
+        flex-direction: row;
+        height: clamp(180px, 24vw, 320px);
+        margin-bottom: var(--sp-9);
+    }
+
+    &__word {
+        display: flex;
+        flex: 1;
+        align-items: flex-end;
+        gap: 4px;
+        height: clamp(120px, 34vw, 200px);
+
+        @include media-breakpoint-up(md) {
+            height: auto;
+        }
+    }
+
+    &__block {
+        position: relative;
+        display: flex;
+        flex: 1;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: .12em;
+        color: var(--c-ink);
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: clamp(5.5rem, 18vw, 9rem);
+        line-height: 1.1;
+
+        @include media-breakpoint-up(md) {
+            font-size: clamp(7rem, 12vw, 12.5rem);
+        }
+
+        &--1 { height: 100%; background: var(--c-champagne); }
+        &--2 { height: 84%; background: var(--c-field); }
+        &--3 { height: 92%; background: var(--c-ground); }
+        &--4 { height: 72%; background: var(--c-surface); }
+        &--5 { height: 88%; background: var(--c-champagne); }
+        &--6 { height: 100%; background: var(--c-field); }
+    }
+
+    &__dot {
+        position: absolute;
+        left: 50%;
+        bottom: .04em;
+        width: .12em;
+        height: .12em;
+        border-radius: 50%;
+        background: var(--c-accent);
+        transform: translateX(-50%);
+    }
+}

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 #[Fillable(['parent_id', 'name', 'slug', 'image', 'sort_order', 'is_active'])]
 #[RouteKey('slug')]
@@ -18,6 +19,14 @@ class Category extends Model
 {
     /** @use HasFactory<CategoryFactory> */
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        // Menu chính được cache: xoá khi danh mục thay đổi
+        $forget = fn () => Cache::forget(config('navigation.cache_key'));
+        static::saved($forget);
+        static::deleted($forget);
+    }
 
     protected function casts(): array
     {

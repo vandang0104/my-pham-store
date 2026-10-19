@@ -1,4 +1,4 @@
-# Từ điển dữ liệu — Mỹ Phẩm Shop
+# Từ điển dữ liệu — Mộc Lam
 
 > Sinh từ schema MySQL hiện tại (sau toàn bộ migrations đến `2026_10_19_120300`). Nguồn sự thật là migrations; khi đổi schema phải cập nhật tài liệu này và `docs/erd.mmd`.
 

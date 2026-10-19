@@ -1,0 +1,85 @@
+// Nền tảng chung: chữ trên body, vòng focus, vùng nền tối, giảm chuyển động (DESIGN.md §3, §8, §9).
+
+body {
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+::selection {
+    background: var(--c-field);
+    color: var(--c-ink);
+}
+
+// Vòng focus: men ngọc trên nền sáng, champagne trên nền tối (.on-dark đổi --focus-ring)
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    box-shadow: none; // taste-skill-ignore: tắt bóng focus mặc định của Bootstrap
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus,
+.btn:focus,
+.page-link:focus,
+.btn-close:focus {
+    box-shadow: none; // taste-skill-ignore: tắt bóng focus mặc định của Bootstrap
+}
+
+// Vùng nền sơn mài (hero, CTA đảo màu, footer)
+.on-dark {
+    --focus-ring: var(--c-champagne);
+    --bs-body-color: var(--c-ground);
+    --bs-link-color-rgb: #{to-rgb($c-lua)};
+    --bs-link-hover-color-rgb: #{to-rgb($c-champagne)};
+    background-color: var(--c-ink);
+    color: var(--c-ground);
+
+    .text-muted,
+    .text-body-secondary {
+        color: var(--c-muted-dark) !important;
+    }
+
+    :where(h1, h2, h3, h4, h5, h6) {
+        color: var(--c-ground);
+    }
+}
+
+// Chỉ thứ thật sự nổi mới có bóng (§5)
+.dropdown-menu,
+.offcanvas,
+.shadow-float {
+    box-shadow: var(--shadow-float); // taste-skill-ignore: chỉ thứ nổi thật (menu thả, ngăn kéo)
+}
+
+// Reveal khi cuộn (§8): chỉ ẩn khi JS đã gắn class .js-reveal lên <html>, nên nội dung vẫn hiện nếu JS lỗi
+.js-reveal [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity var(--t-reveal) var(--ease-expo), transform var(--t-reveal) var(--ease-expo);
+}
+
+.js-reveal [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+}
+
+// Giảm chuyển động: giữ nội dung, bỏ di chuyển (§8)
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .js-reveal [data-reveal] {
+        opacity: 1;
+        transform: none;
+    }
+}

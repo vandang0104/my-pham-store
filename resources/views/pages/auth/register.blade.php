@@ -2,7 +2,7 @@
 
 @section('title', 'Đăng ký tài khoản')
 
-@section('content')
+@section('form')
     <form method="POST" action="{{ route('register') }}" novalidate>
         @csrf
 
@@ -53,7 +53,7 @@
                    class="form-control" required autocomplete="new-password">
         </div>
 
-        <button type="submit" class="btn btn-dark w-100">Đăng ký</button>
+        <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
     </form>
 
     <p class="text-center mt-4 mb-0">

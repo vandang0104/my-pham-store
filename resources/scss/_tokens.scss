@@ -1,0 +1,91 @@
+// Token thiết kế theo DESIGN.md §3–§8. Nguồn duy nhất của màu, cỡ chữ, khoảng cách, chuyển động.
+// Biến Sass dùng để cấu hình Bootstrap; custom property (--*) dùng trong mọi CSS còn lại.
+
+// ---- Màu (§3) ----
+$c-lua: #F5F2EC;            // nền chính
+$c-giay-do: #EBE5DA;        // bậc bề mặt
+$c-ngoc-nhat: #D3DDD4;      // mảng nền giữa trang
+$c-champagne: #C2A878;      // chỉ làm mảng / nút trên nền tối — KHÔNG làm màu chữ trên nền sáng
+$c-son-mai: #1E1B18;        // chữ chính, nền tối
+$c-son-mai-2: #2B241E;      // bề mặt trên nền tối
+$c-muc-nhat: #5C544C;       // chữ phụ trên nền sáng
+$c-muc-nhat-toi: #B8AE9F;   // chữ phụ trên nền tối
+$c-men-ngoc: #2E5A4C;       // màu nhấn duy nhất trên nền sáng
+$c-men-ngoc-dam: #234539;   // hover nút chính
+$c-do-son: #8E2F23;         // giá khuyến mãi, lỗi
+$c-do-son-toi: #E39A8C;     // giá khuyến mãi trên nền tối
+$c-do-son-nhat: #F1DEDA;    // nền khung báo lỗi
+$c-ho-phach: #7A5410;       // cảnh báo, sắp hết hàng
+$c-vien: #8A8174;           // chỉ viền ô nhập, bảng
+$c-trang: #FFFFFF;
+
+// ---- Chữ (§4) ----
+$font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+$font-body: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+
+// ---- Khoảng cách (§5): thang 4/8 ----
+$sp: (
+    1: 4px, 2: 8px, 3: 12px, 4: 16px, 5: 24px, 6: 32px,
+    7: 48px, 8: 64px, 9: 96px, 10: 128px, 11: 160px,
+);
+
+$shadow-float: 0 12px 32px rgba($c-son-mai, .14), 0 2px 6px rgba($c-son-mai, .08);
+
+:root {
+    --c-ground: #{$c-lua};
+    --c-surface: #{$c-giay-do};
+    --c-field: #{$c-ngoc-nhat};
+    --c-champagne: #{$c-champagne};
+    --c-ink: #{$c-son-mai};
+    --c-ink-2: #{$c-son-mai-2};
+    --c-muted: #{$c-muc-nhat};
+    --c-muted-dark: #{$c-muc-nhat-toi};
+    --c-accent: #{$c-men-ngoc};
+    --c-accent-hover: #{$c-men-ngoc-dam};
+    --c-sale: #{$c-do-son};
+    --c-sale-dark: #{$c-do-son-toi};
+    --c-error-bg: #{$c-do-son-nhat};
+    --c-warning: #{$c-ho-phach};
+    --c-line: #{$c-vien};
+    --c-white: #{$c-trang};
+
+    --font-display: #{$font-display};
+    --font-body: #{$font-body};
+
+    // 5 bậc cỡ chữ, nội suy tuyến tính từ 390px đến 1440px (§4)
+    --fs-display: clamp(2.5rem, 1.386rem + 4.571vw, 5.5rem);     // 40 → 88
+    --fs-title: clamp(1.75rem, 1.471rem + 1.143vw, 2.5rem);      // 28 → 40
+    --fs-lead: clamp(1.25rem, 1.157rem + .381vw, 1.5rem);        // 20 → 24
+    --fs-body: clamp(1rem, .977rem + .095vw, 1.0625rem);         // 16 → 17
+    --fs-small: clamp(.8125rem, .789rem + .095vw, .875rem);      // 13 → 14
+    // Line-height tiêu đề ≥ 1.1 vì dấu tiếng Việt xếp chồng (DESIGN.md §4, §12)
+    --lh-display: 1.1;
+    --lh-title: 1.15;
+    --lh-lead: 1.35;
+    --lh-body: 1.55;
+    --lh-small: 1.4;
+
+    @each $step, $value in $sp {
+        --sp-#{$step}: #{$value};
+    }
+    --section-gap: 96px;
+    --page-margin: 16px;
+
+    --radius: 0;
+    --radius-input: 2px;
+    --shadow-float: #{$shadow-float};
+    --focus-ring: #{$c-men-ngoc};
+
+    // Chuyển động (§8)
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+    --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+    --t-press: 140ms;
+    --t-hover: 180ms;
+    --t-ui: 240ms;
+    --t-drawer: 360ms;
+    --t-reveal: 800ms;
+    --stagger-item: 70ms;
+    --stagger-line: 90ms;
+}

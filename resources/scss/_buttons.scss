@@ -1,0 +1,100 @@
+// Nút (DESIGN.md §9): phẳng, góc vuông, cao 48px (52px trên điện thoại), một nút chính mỗi màn hình.
+//   .btn-primary   nền men ngọc, chữ lụa — trên nền sáng
+//   .btn-champagne nền champagne, chữ sơn mài — trên nền tối (men ngọc trên sơn mài chỉ 2,19:1)
+//   .btn-text      nút phụ: chữ sơn mài gạch chân, không khung
+//   .btn-danger-text  hành động phá huỷ: chữ đỏ son
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-2);
+    min-height: 52px;
+    text-decoration: none;
+
+    @include media-breakpoint-up(md) {
+        min-height: 48px;
+    }
+
+    &:active {
+        transform: scale(.98);
+    }
+
+    &:disabled,
+    &.disabled {
+        cursor: not-allowed;
+    }
+}
+
+.btn-primary {
+    --bs-btn-color: var(--c-ground);
+    --bs-btn-bg: var(--c-accent);
+    --bs-btn-border-color: var(--c-accent);
+    --bs-btn-hover-color: var(--c-ground);
+    --bs-btn-hover-bg: var(--c-accent-hover);
+    --bs-btn-hover-border-color: var(--c-accent-hover);
+    --bs-btn-active-color: var(--c-ground);
+    --bs-btn-active-bg: var(--c-accent-hover);
+    --bs-btn-active-border-color: var(--c-accent-hover);
+    --bs-btn-disabled-color: var(--c-ground);
+    --bs-btn-disabled-bg: var(--c-accent);
+    --bs-btn-disabled-border-color: var(--c-accent);
+}
+
+.btn-champagne {
+    --bs-btn-color: var(--c-ink);
+    --bs-btn-bg: var(--c-champagne);
+    --bs-btn-border-color: var(--c-champagne);
+    --bs-btn-hover-color: var(--c-ink);
+    --bs-btn-hover-bg: #{tint-color($c-champagne, 18%)};
+    --bs-btn-hover-border-color: #{tint-color($c-champagne, 18%)};
+    --bs-btn-active-color: var(--c-ink);
+    --bs-btn-active-bg: #{tint-color($c-champagne, 18%)};
+    --bs-btn-active-border-color: #{tint-color($c-champagne, 18%)};
+    --bs-btn-disabled-color: var(--c-ink);
+    --bs-btn-disabled-bg: var(--c-champagne);
+    --bs-btn-disabled-border-color: var(--c-champagne);
+}
+
+// Nút phụ dạng chữ: không khung, giữ vùng bấm 48px
+.btn-text,
+.btn-danger-text {
+    --bs-btn-padding-x: 0;
+    --bs-btn-bg: transparent;
+    --bs-btn-border-color: transparent;
+    --bs-btn-hover-bg: transparent;
+    --bs-btn-hover-border-color: transparent;
+    --bs-btn-active-bg: transparent;
+    --bs-btn-active-border-color: transparent;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: transparent;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .18em;
+
+    &:hover,
+    &:focus-visible {
+        text-decoration-line: underline;
+        text-decoration-thickness: 2px;
+    }
+}
+
+.btn-text {
+    --bs-btn-color: var(--c-ink);
+    --bs-btn-hover-color: var(--c-ink);
+    --bs-btn-active-color: var(--c-ink);
+    --bs-btn-disabled-color: var(--c-ink);
+
+    .on-dark & {
+        --bs-btn-color: var(--c-ground);
+        --bs-btn-hover-color: var(--c-champagne);
+        --bs-btn-active-color: var(--c-champagne);
+    }
+}
+
+.btn-danger-text {
+    --bs-btn-color: var(--c-sale);
+    --bs-btn-hover-color: var(--c-sale);
+    --bs-btn-active-color: var(--c-sale);
+    --bs-btn-disabled-color: var(--c-sale);
+}

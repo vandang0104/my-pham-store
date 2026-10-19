@@ -1,0 +1,207 @@
+// Cấu hình Bootstrap 5 theo DESIGN.md §13. Nạp SAU bootstrap/functions và TRƯỚC bootstrap/variables.
+// Mọi giá trị lấy từ _tokens.scss; không còn màu xanh mặc định (#0d6efd) của Bootstrap.
+
+// ---- Tuỳ chọn chung ----
+$enable-shadows: false;
+$enable-gradients: false;
+$enable-dark-mode: false;
+$enable-rfs: false;               // cỡ chữ do token clamp() quyết định
+$enable-negative-margins: false;
+$enable-validation-icons: false;  // lỗi form: viền + câu lỗi, không icon trong ô
+$gradient: none;                  // DESIGN.md §11: không gradient (Bootstrap vẫn sinh biến --bs-gradient)
+
+// ---- Màu ----
+$primary: $c-men-ngoc;
+$secondary: $c-muc-nhat;
+$success: $c-men-ngoc;
+$info: $c-son-mai;
+$warning: $c-ho-phach;
+$danger: $c-do-son;
+$light: $c-giay-do;
+$dark: $c-son-mai;
+
+// Bảng màu sinh biến --bs-*: chỉ màu của dự án (thay blue, indigo, purple… mặc định)
+$colors: (
+    'lua': $c-lua,
+    'giay-do': $c-giay-do,
+    'ngoc-nhat': $c-ngoc-nhat,
+    'champagne': $c-champagne,
+    'son-mai': $c-son-mai,
+    'muc-nhat': $c-muc-nhat,
+    'men-ngoc': $c-men-ngoc,
+    'do-son': $c-do-son,
+    'ho-phach': $c-ho-phach,
+    'white': $c-trang,
+);
+
+$body-bg: $c-lua;
+$body-color: $c-son-mai;
+$body-secondary-color: $c-muc-nhat;
+$body-tertiary-bg: $c-giay-do;
+$border-color: $c-vien;
+$border-width: 1px;
+
+// ---- Bo góc: 0 ở mọi nơi (§5); ô nhập 2px ----
+$border-radius: 0;
+$border-radius-sm: 0;
+$border-radius-lg: 0;
+$border-radius-xl: 0;
+$border-radius-xxl: 0;
+
+// ---- Chữ ----
+$font-family-sans-serif: $font-body;
+$font-family-base: $font-body;
+$font-size-base: 1rem;
+$line-height-base: 1.55;
+$headings-font-family: $font-display;
+$headings-font-weight: 600;
+$headings-line-height: 1.1;
+$headings-color: $c-son-mai;
+$headings-margin-bottom: map-get($sp, 4);
+$paragraph-margin-bottom: map-get($sp, 4);
+$text-muted: $c-muc-nhat;
+$code-color: $c-muc-nhat;        // mặc định Bootstrap là hồng #d63384 — ngoài bảng màu
+
+// ---- Link: luôn gạch chân trong nội dung (§8) ----
+$link-color: $c-men-ngoc;
+$link-hover-color: $c-men-ngoc-dam;
+$link-decoration: underline;
+$link-hover-decoration: underline;
+
+// ---- Khoảng cách: utility p-*, m-*, gap-* đi theo thang 4/8 ----
+$spacer: 1rem;
+$spacers: (
+    0: 0,
+    1: map-get($sp, 1),
+    2: map-get($sp, 2),
+    3: map-get($sp, 3),
+    4: map-get($sp, 4),
+    5: map-get($sp, 5),
+    6: map-get($sp, 6),
+    7: map-get($sp, 7),
+    8: map-get($sp, 8),
+    9: map-get($sp, 9),
+    10: map-get($sp, 10),
+    11: map-get($sp, 11),
+);
+
+// ---- Lưới, container (§5): tối đa 1320px nội dung + 2 × 32px lề ----
+$grid-gutter-width: 1.5rem;
+$container-padding-x: 1rem;
+$container-max-widths: (
+    xxl: 1384px,
+);
+
+// ---- Focus: dùng outline riêng (_base.scss), bỏ box-shadow mặc định ----
+$focus-ring-width: 2px;
+$focus-ring-opacity: 1;
+$focus-ring-color: $c-men-ngoc;
+$focus-ring-blur: 0;
+$input-btn-focus-width: 0;
+$input-btn-focus-box-shadow: none; // taste-skill-ignore: tắt bóng mặc định
+
+// ---- Nút (§9): vuông, phẳng, cao 48px ----
+$btn-padding-y: .6875rem;
+$btn-padding-x: 1.5rem;
+$btn-font-family: $font-body;
+$btn-font-size: 1rem;
+$btn-line-height: 1.5;
+$btn-font-weight: 500;
+$btn-border-width: 1px;
+$btn-disabled-opacity: .45;
+$btn-focus-box-shadow: none; // taste-skill-ignore: tắt bóng mặc định
+$btn-active-box-shadow: none; // taste-skill-ignore: tắt bóng mặc định
+$btn-transition: color var(--t-hover) ease, background-color var(--t-hover) ease, border-color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
+
+// ---- Form (§9): nhãn trên ô, ô 48px nền trắng, viền 1px, bo 2px ----
+$input-bg: $c-trang;
+$input-color: $c-son-mai;
+$input-border-color: $c-vien;
+$input-border-width: 1px;
+$input-border-radius: 2px;
+$input-border-radius-sm: 2px;
+$input-border-radius-lg: 2px;
+$input-padding-y: .6875rem;
+$input-padding-x: 1rem;
+$input-font-size: 1rem;
+$input-line-height: 1.5;
+$input-placeholder-color: $c-muc-nhat;
+$input-focus-bg: $c-trang;
+$input-focus-border-color: $c-men-ngoc;
+$input-focus-color: $c-son-mai;
+$input-focus-box-shadow: none; // taste-skill-ignore: tắt bóng mặc định
+$input-disabled-bg: $c-giay-do;
+$form-label-font-size: .875rem;
+$form-label-font-weight: 500;
+$form-label-color: $c-son-mai;
+$form-label-margin-bottom: map-get($sp, 2);
+$form-text-font-size: .8125rem;
+$form-text-color: $c-muc-nhat;
+$form-text-margin-top: map-get($sp, 1);
+$form-select-indicator-color: $c-son-mai;
+$form-select-focus-box-shadow: none; // taste-skill-ignore: tắt bóng mặc định
+$form-check-input-width: 1.25em;
+$form-check-input-bg: $c-trang;
+$form-check-input-border: 1px solid $c-vien; // taste-skill-ignore: viền ô form (ngoại lệ của skill, WCAG 1.4.11)
+$form-check-input-border-radius: 0;
+$form-check-input-checked-bg-color: $c-men-ngoc;
+$form-check-input-checked-border-color: $c-men-ngoc;
+$form-check-input-focus-border: $c-men-ngoc;
+$form-check-input-focus-box-shadow: none; // taste-skill-ignore: tắt bóng mặc định
+$form-check-label-cursor: pointer;
+$form-feedback-font-size: .8125rem;
+$form-feedback-valid-color: $c-men-ngoc;
+$form-feedback-invalid-color: $c-do-son;
+$form-switch-color: $c-vien;
+
+// ---- Bảng: chỉ đường kẻ ngang, không sọc vằn ----
+$table-bg: transparent;
+$table-color: $c-son-mai;
+$table-border-color: $c-vien;
+$table-cell-padding-y: .75rem;
+$table-cell-padding-x: .75rem;
+$table-th-font-weight: 500;
+
+// ---- Phân trang, breadcrumb (tinh chỉnh thêm ở _pagination.scss, _breadcrumb.scss) ----
+$pagination-padding-y: .625rem;
+$pagination-padding-x: .875rem;
+$pagination-font-size: 1rem;
+$pagination-color: $c-son-mai;
+$pagination-bg: transparent;
+$pagination-border-width: 0;
+$pagination-border-radius: 0;
+$pagination-margin-start: 0;
+$pagination-hover-color: $c-son-mai;
+$pagination-hover-bg: $c-giay-do;
+$pagination-focus-color: $c-son-mai;
+$pagination-focus-bg: transparent;
+$pagination-focus-box-shadow: none; // taste-skill-ignore: tắt bóng mặc định
+$pagination-active-color: $c-son-mai;
+$pagination-active-bg: transparent;
+$pagination-disabled-color: $c-muc-nhat;
+$pagination-disabled-bg: transparent;
+$breadcrumb-font-size: .8125rem;
+$breadcrumb-margin-bottom: 0;
+$breadcrumb-divider: quote('/');
+$breadcrumb-divider-color: $c-muc-nhat;
+$breadcrumb-active-color: $c-son-mai;
+$breadcrumb-item-padding-x: map-get($sp, 2);
+
+// ---- Thứ nổi: menu thả, ngăn kéo (bóng thêm ở _base.scss vì $enable-shadows = false) ----
+$dropdown-bg: $c-lua;
+$dropdown-color: $c-son-mai;
+$dropdown-border-width: 0;
+$dropdown-link-color: $c-son-mai;
+$dropdown-link-hover-bg: $c-giay-do;
+$dropdown-link-active-color: $c-son-mai;
+$dropdown-link-active-bg: $c-giay-do;
+$offcanvas-bg-color: $c-lua;
+$offcanvas-color: $c-son-mai;
+$offcanvas-border-width: 0;
+$offcanvas-horizontal-width: 420px;
+$offcanvas-backdrop-bg: $c-son-mai;
+$offcanvas-backdrop-opacity: .4;
+$offcanvas-transition-duration: .36s;
+$btn-close-color: $c-son-mai;
+$btn-close-opacity: 1;
+$btn-close-focus-shadow: none;

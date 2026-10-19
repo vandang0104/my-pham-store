@@ -1,0 +1,48 @@
+// Breadcrumb (DESIGN.md §9): một dòng 13px mực nhạt, phân cách "/", mục cuối sơn mài không phải link.
+// Điện thoại: chỉ hiện mục cha gần nhất kèm "‹".
+
+.breadcrumb {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    font-weight: 500;
+    line-height: var(--lh-small);
+}
+
+.breadcrumb-item {
+    white-space: nowrap;
+    color: var(--c-muted);
+
+    a {
+        color: var(--c-muted);
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            color: var(--c-ink);
+            text-decoration: underline;
+        }
+    }
+
+    &.active {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .breadcrumb-item {
+        display: none;
+    }
+
+    .breadcrumb-item:nth-last-child(2) {
+        display: block;
+        padding-left: 0;
+
+        &::before {
+            content: '‹';
+            float: none;
+            padding-right: var(--sp-2);
+            color: var(--c-muted);
+        }
+    }
+}

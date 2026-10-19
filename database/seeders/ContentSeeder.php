@@ -17,7 +17,12 @@ use Illuminate\Support\Str;
  */
 class ContentSeeder extends Seeder
 {
-    private const POST_COLORS = [['#F6E7E1', '#E8C9BD'], ['#FBF0DC', '#EBCB8E'], ['#EDE6F0', '#C4B1CF'], ['#F3E3E6', '#D9A9B3'], ['#ECEBE3', '#C9C5AE'], ['#EAF0EA', '#B9CDB9']];
+    /** [nền, màu khối] theo bảng màu DESIGN.md §3 */
+    private const POST_COLORS = [
+        [PlaceholderImage::SURFACE, PlaceholderImage::ACCENT],
+        [PlaceholderImage::FIELD, PlaceholderImage::INK],
+        [PlaceholderImage::SURFACE, PlaceholderImage::CHAMPAGNE],
+    ];
 
     public function run(): void
     {
@@ -27,8 +32,8 @@ class ContentSeeder extends Seeder
             $slug = Str::slug($data['title']);
             Banner::factory()->create([
                 'title' => $data['title'],
-                'image_desktop' => PlaceholderImage::banner("banners/{$slug}-desktop.svg", $data['title'], $data['subtitle'], $data['mau']),
-                'image_mobile' => PlaceholderImage::banner("banners/{$slug}-mobile.svg", $data['title'], $data['subtitle'], $data['mau'], mobile: true),
+                'image_desktop' => PlaceholderImage::banner("banners/{$slug}-desktop.svg", $data['mau']),
+                'image_mobile' => PlaceholderImage::banner("banners/{$slug}-mobile.svg", $data['mau'], mobile: true),
                 'link' => $data['link'],
                 'position' => $data['position'],
                 'sort_order' => $i + 1,
@@ -47,7 +52,7 @@ class ContentSeeder extends Seeder
                 'slug' => $slug,
                 'excerpt' => $data['excerpt'],
                 'content' => $data['content'],
-                'thumbnail' => PlaceholderImage::cover("posts/{$slug}.svg", $data['title'], self::POST_COLORS[$i % count(self::POST_COLORS)]),
+                'thumbnail' => PlaceholderImage::cover("posts/{$slug}.svg", self::POST_COLORS[$i % count(self::POST_COLORS)]),
                 'status' => PostStatus::Published,
                 // Bài đầu mới nhất
                 'published_at' => now()->subDays(3 + $i * 6)->setTime(9, 0),

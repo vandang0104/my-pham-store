@@ -1,0 +1,55 @@
+// Phân trang (DESIGN.md §9): số trang chữ 16px, trang hiện tại gạch chân 2px men ngọc,
+// ô bấm tối thiểu 44×44px; "Trước"/"Sau" dạng chữ. Dùng được với view phân trang bootstrap-5 của Laravel.
+
+.pagination {
+    flex-wrap: wrap;
+    gap: var(--sp-1);
+    margin-bottom: 0;
+}
+
+.page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+}
+
+.page-item.active .page-link {
+    font-weight: 500;
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--c-accent);
+    text-underline-offset: .35em;
+}
+
+.page-item.disabled .page-link {
+    opacity: .7;
+}
+
+// Bản rút gọn cho điện thoại: "Trước · Trang 2/5 · Sau"
+.pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    font-variant-numeric: tabular-nums;
+
+    &__status {
+        color: var(--c-muted);
+        font-size: var(--fs-small);
+    }
+
+    &__link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        font-weight: 500;
+
+        &.is-disabled {
+            color: var(--c-muted);
+        }
+    }
+}

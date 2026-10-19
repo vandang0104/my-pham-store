@@ -1,0 +1,221 @@
+// Component nhỏ dùng chung (DESIGN.md §7, §9): skip link, icon, wordmark, giá, đánh giá,
+// tiêu đề section, trạng thái trống, dải sọc nhãn.
+
+// ---- Skip link: ẩn tới khi nhận focus ----
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: var(--page-margin);
+    z-index: 2000;
+    padding: var(--sp-3) var(--sp-4);
+    background: var(--c-ink);
+    color: var(--c-ground);
+    font-weight: 500;
+    text-decoration: none;
+
+    &:focus {
+        top: var(--sp-4);
+        color: var(--c-ground);
+        outline-color: var(--c-champagne);
+    }
+}
+
+main:focus {
+    outline: none;
+}
+
+.section-sm {
+    padding-block: var(--sp-8);
+
+    @include media-breakpoint-up(md) {
+        padding-block: var(--sp-9);
+    }
+}
+
+// ---- Icon ----
+.icon {
+    flex: none;
+    vertical-align: middle;
+}
+
+.icon-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--c-ink);
+    text-decoration: none;
+    transition: color var(--t-hover) ease;
+
+    &:hover {
+        color: var(--c-accent);
+    }
+}
+
+// ---- Wordmark "mộc lam": chấm men ngọc thay dấu nặng dưới "ộ" ----
+.wordmark {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 1;
+    letter-spacing: -.02em;
+    white-space: nowrap;
+    color: var(--c-ink);
+
+    &__o {
+        position: relative;
+        display: inline-block;
+    }
+
+    &__dot {
+        position: absolute;
+        left: 50%;
+        bottom: -.16em;
+        width: .14em;
+        height: .14em;
+        border-radius: 50%;
+        background: var(--c-accent);
+        transform: translateX(-50%);
+    }
+
+    .on-dark & {
+        color: var(--c-ground);
+    }
+
+    .on-dark & .wordmark__dot {
+        background: var(--c-champagne);
+    }
+}
+
+// ---- Giá ----
+.price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 var(--sp-2);
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+
+    &__current {
+        font-weight: 500;
+    }
+
+    &__current--sale {
+        color: var(--c-sale);
+    }
+
+    &__original {
+        color: var(--c-muted);
+        font-size: var(--fs-small);
+    }
+
+    &--sm .price__current {
+        font-size: var(--fs-body);
+    }
+
+    &--lg .price__current {
+        font-size: var(--fs-lead);
+    }
+}
+
+// ---- Đánh giá ----
+.rating {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-1) var(--sp-2);
+    margin: 0;
+    font-size: var(--fs-small);
+    font-weight: 500;
+
+    &__stars {
+        display: inline-flex;
+        gap: 2px;
+        color: var(--c-ink);
+    }
+
+    &__count,
+    &--empty {
+        color: var(--c-muted);
+    }
+}
+
+// ---- Tiêu đề section ----
+.section-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--sp-4) var(--sp-6);
+    margin-bottom: var(--sp-6);
+
+    @include media-breakpoint-up(md) {
+        margin-bottom: var(--sp-7);
+    }
+
+    &__title {
+        margin: 0;
+    }
+
+    &__lead {
+        margin: var(--sp-3) 0 0;
+    }
+
+    &__link {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--sp-2);
+        font-weight: 500;
+        min-height: 44px;
+    }
+}
+
+// ---- Trạng thái trống: khoảnh khắc căn giữa duy nhất của màn hình ----
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-4);
+    padding-block: var(--sp-8);
+    text-align: center;
+
+    &__art {
+        width: 160px;
+        color: var(--c-muted);
+    }
+
+    &__title,
+    &__text {
+        margin: 0;
+    }
+}
+
+// ---- Dải sọc nhãn: các thanh 28px xen kẽ (vẽ bằng SVG, không gradient) ----
+.label-stripe {
+    height: 8px;
+    background-color: var(--c-ink);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='8'%3E%3Crect width='28' height='8' fill='%23F5F2EC'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+}
+
+// ---- Trang chủ tạm ----
+.home-intro {
+    padding-block: var(--section-gap);
+
+    &__title {
+        max-width: 14ch;
+        margin-bottom: var(--sp-5);
+    }
+
+    // Chữ dẫn cỡ lớn: 65ch của .measure ra ~89 ký tự/dòng → thu lại cho dễ đọc
+    &__lead {
+        max-width: 40ch;
+        margin-bottom: var(--sp-6);
+    }
+}

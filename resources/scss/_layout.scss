@@ -1,0 +1,37 @@
+// Lưới và lề trang (DESIGN.md §5): lề ngoài 16 / 24 / 32px, khoảng cột 12 / 16 / 24px,
+// khoảng giữa các section 96px (mobile) → 160px (desktop).
+
+:root {
+    @include media-breakpoint-up(md) {
+        --page-margin: 24px;
+        --section-gap: 128px;
+    }
+
+    @include media-breakpoint-up(xl) {
+        --page-margin: 32px;
+        --section-gap: 160px;
+    }
+}
+
+.container,
+.container-fluid,
+.container-xxl {
+    padding-inline: var(--page-margin);
+}
+
+// Khoảng cột mặc định theo màn hình; utility g-* (nạp sau) vẫn ghi đè được
+.row {
+    --bs-gutter-x: 12px;
+
+    @include media-breakpoint-up(md) {
+        --bs-gutter-x: 16px;
+    }
+
+    @include media-breakpoint-up(xl) {
+        --bs-gutter-x: 24px;
+    }
+}
+
+.section {
+    padding-block: var(--section-gap);
+}

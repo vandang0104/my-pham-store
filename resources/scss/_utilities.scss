@@ -1,0 +1,50 @@
+// Utility riêng của dự án (DESIGN.md §3, §5). Utility của Bootstrap (p-*, m-*, d-*…) vẫn dùng được;
+// p-*/m-* đã theo thang 4/8 (_bootstrap-config.scss).
+
+// Mảng nền theo bậc màu (thay cho viền/bóng để tách bề mặt)
+.surface-ground {
+    background-color: var(--c-ground);
+}
+
+.surface {
+    background-color: var(--c-surface);
+}
+
+.surface-field {
+    background-color: var(--c-field);
+}
+
+.surface-champagne {
+    background-color: var(--c-champagne);
+    color: var(--c-ink);
+}
+
+// Panel phẳng (thay .card của Bootstrap): bậc màu, không viền, không bóng
+.panel {
+    background-color: var(--c-surface);
+    padding: var(--sp-5);
+
+    @include media-breakpoint-up(md) {
+        padding: var(--sp-6);
+    }
+}
+
+.text-ink {
+    color: var(--c-ink) !important;
+}
+
+.text-sale {
+    color: var(--c-sale) !important;
+}
+
+.text-warning-ink {
+    color: var(--c-warning) !important;
+}
+
+.font-display {
+    font-family: var(--font-display) !important;
+}
+
+.font-body {
+    font-family: var(--font-body) !important;
+}

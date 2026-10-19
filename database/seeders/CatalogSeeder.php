@@ -38,7 +38,7 @@ class CatalogSeeder extends Seeder
             $parent = Category::factory()->create([
                 'name' => $parentData['ten'],
                 'slug' => $parentData['slug'],
-                'image' => PlaceholderImage::cover("categories/{$parentData['slug']}.svg", $parentData['ten'], $parentData['mau'], 600, 600),
+                'image' => PlaceholderImage::cover("categories/{$parentData['slug']}.svg", $parentData['mau'], 600, 600),
                 'sort_order' => $i + 1,
             ]);
 
@@ -46,7 +46,7 @@ class CatalogSeeder extends Seeder
                 Category::factory()->childOf($parent)->create([
                     'name' => $childData['ten'],
                     'slug' => $childData['slug'],
-                    'image' => PlaceholderImage::cover("categories/{$childData['slug']}.svg", $childData['ten'], $parentData['mau'], 600, 600),
+                    'image' => PlaceholderImage::cover("categories/{$childData['slug']}.svg", $parentData['mau'], 600, 600),
                     'sort_order' => $j + 1,
                 ]);
                 $colors[$childData['slug']] = $parentData['mau'];
@@ -118,7 +118,7 @@ class CatalogSeeder extends Seeder
                 $product->images()->create([
                     'path' => $seedImages->available()
                         ? $seedImages->next()
-                        : PlaceholderImage::product("products/{$product->slug}-".($k + 1).'.svg', $product->name, $brand['model']->name, $categoryColors[$data['dm']], $k),
+                        : PlaceholderImage::product("products/{$product->slug}-".($k + 1).'.svg', $categoryColors[$data['dm']], $k),
                     'is_primary' => $k === 0,
                     'sort_order' => $k,
                 ]);

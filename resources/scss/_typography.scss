@@ -1,0 +1,124 @@
+// Chữ (DESIGN.md §4): Cormorant Garamond cho chữ hiển thị ≥ 28px, Be Vietnam Pro cho mọi chữ ≤ 24px.
+// Đúng 5 bậc cỡ chữ; line-height tiêu đề ≥ 1.1 vì dấu tiếng Việt xếp chồng.
+
+// Mặc định: h1, h2 ở bậc "tiêu đề"; trang chủ dùng .t-display cho h1
+h1, .h1,
+h2, .h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--fs-title);
+    line-height: var(--lh-title);
+    letter-spacing: -.01em;
+}
+
+h3, .h3 {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+}
+
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+}
+
+.t-display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--fs-display);
+    line-height: var(--lh-display);
+    letter-spacing: -.02em;
+}
+
+.t-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--fs-title);
+    line-height: var(--lh-title);
+    letter-spacing: -.01em;
+}
+
+// Câu tuyên bố lớn: Cormorant 500, giữ ở bậc tiêu đề (taste skill: statement ≤ 36px desktop)
+.t-statement {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--fs-title);
+    line-height: var(--lh-title);
+}
+
+.t-lead {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+}
+
+.t-body {
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+}
+
+.t-small {
+    font-size: var(--fs-small);
+    font-weight: 500;
+    line-height: var(--lh-small);
+}
+
+.measure {
+    max-width: 65ch;
+}
+
+.tnum {
+    font-variant-numeric: tabular-nums;
+}
+
+// ---- Link ----
+// Link trong nội dung: LUÔN gạch chân khi nghỉ — men ngọc và sơn mài chỉ chênh 2,19:1,
+// dưới 3:1 của WCAG 1.4.1 nên không phân biệt link chỉ bằng màu (DESIGN.md §8).
+a {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .18em;
+    transition: color var(--t-hover) ease, text-decoration-thickness var(--t-hover) ease;
+
+    &:hover,
+    &:focus-visible {
+        text-decoration-thickness: 2px;
+    }
+}
+
+// Link điều hướng (menu, footer, breadcrumb): bỏ gạch chân khi nghỉ, gạch chân chạy từ trái khi hover/focus
+.link-nav {
+    position: relative;
+    color: inherit;
+    text-decoration: none;
+
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -.15em;
+        height: 1px; // taste-skill-ignore: gạch chân chạy của link điều hướng, không phải đường kẻ phân cách
+        background: currentColor;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform var(--t-ui) var(--ease-out);
+    }
+
+    &:hover,
+    &:focus-visible,
+    &[aria-current='page'] {
+        color: inherit;
+        text-decoration: none;
+
+        &::after {
+            transform: scaleX(1);
+        }
+    }
+}

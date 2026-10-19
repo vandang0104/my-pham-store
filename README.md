@@ -1,6 +1,6 @@
-# Mỹ Phẩm Shop
+# Mộc Lam
 
-Website thương mại điện tử bán mỹ phẩm (đồ án) — Laravel 13, MySQL 8, Blade, Bootstrap 5 (Sass + Vite).
+Website thương mại điện tử bán mỹ phẩm thảo mộc Việt (đồ án) — Laravel 13, MySQL 8, Blade, Bootstrap 5 (Sass + Vite). Thiết kế: [DESIGN.md](DESIGN.md).
 
 Tài liệu dự án: [CLAUDE.md](CLAUDE.md) (quy ước, nghiệp vụ) · [docs/architecture.md](docs/architecture.md) (kiến trúc).
 

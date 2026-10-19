@@ -1,0 +1,68 @@
+// Form (DESIGN.md §9): nhãn nằm TRÊN ô (không dùng floating label), ô cao 48px nền trắng,
+// viền 1px #8A8174 (3,43:1 — đạt WCAG 1.4.11), bo 2px; focus viền men ngọc + vòng focus; lỗi viền đỏ son.
+
+.form-label {
+    display: block;
+}
+
+// Ghi rõ "(bắt buộc)" bằng chữ, không chỉ dấu *
+.form-required {
+    font-weight: 400;
+    color: var(--c-muted);
+}
+
+.form-control,
+.form-select {
+    min-height: 48px;
+}
+
+textarea.form-control {
+    min-height: 120px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--c-accent);
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: var(--c-sale);
+}
+
+.invalid-feedback {
+    font-weight: 500;
+}
+
+.form-text {
+    display: block;
+}
+
+// Checkbox, radio 20px; nhãn đủ lớn để bấm bằng ngón tay
+.form-check {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-3);
+    min-height: 44px;
+    padding-left: 0;
+    padding-top: var(--sp-2);
+
+    .form-check-input {
+        float: none;
+        flex: none;
+        margin: .15em 0 0;
+    }
+}
+
+.form-check-input {
+    cursor: pointer;
+
+    &[type='radio'] {
+        border-radius: 50%;
+    }
+}
+
+// Nhóm trường: khoảng cách đều giữa các cặp nhãn–ô
+.form-field + .form-field {
+    margin-top: var(--sp-5);
+}

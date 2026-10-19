@@ -4,11 +4,11 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\StyleguideController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+// Trang chủ tạm; HomeController và nội dung thật ở bước 4.1
+Route::view('/', 'pages.home')->name('home');
 
 // Xác thực — URL tiếng Việt, giữ tên route chuẩn của Laravel
 Route::middleware('guest')->group(function () {
@@ -30,3 +30,8 @@ Route::middleware('guest')->group(function () {
 Route::post('/dang-xuat', [LoginController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
+
+// Trang xem token và component theo DESIGN.md — chỉ đăng ký ở môi trường local
+if (app()->environment('local')) {
+    Route::get('/styleguide', StyleguideController::class)->name('styleguide');
+}

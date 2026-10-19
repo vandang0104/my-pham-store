@@ -1,2 +1,55 @@
-// Entry Sass phía khách. Tuỳ biến biến/token và chỉ import module cần thiết sẽ làm ở bước thiết kế (DESIGN.md).
-@use 'bootstrap/scss/bootstrap';
+// Entry Sass phía khách — theo DESIGN.md. Chỉ import các module Bootstrap cần dùng;
+// KHÔNG import card, navbar, alert, badge, carousel, toast và floating label (tự viết component theo §9).
+
+// 1. Cấu hình
+@import 'bootstrap/scss/functions';
+@import 'tokens';
+@import 'bootstrap-config';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/utilities';
+
+// 2. Bootstrap — chỉ phần cần
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+@import 'bootstrap/scss/type';
+@import 'bootstrap/scss/images';
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/tables';
+@import 'bootstrap/scss/forms/labels';
+@import 'bootstrap/scss/forms/form-text';
+@import 'bootstrap/scss/forms/form-control';
+@import 'bootstrap/scss/forms/form-select';
+@import 'bootstrap/scss/forms/form-check';
+@import 'bootstrap/scss/forms/input-group';
+@import 'bootstrap/scss/forms/validation';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/transitions';
+@import 'bootstrap/scss/dropdown';       // mega menu, menu tài khoản
+@import 'bootstrap/scss/offcanvas';      // mini-cart, menu điện thoại, bộ lọc
+@import 'bootstrap/scss/close';
+@import 'bootstrap/scss/pagination';
+@import 'bootstrap/scss/breadcrumb';
+@import 'bootstrap/scss/helpers';
+
+// 3. Lớp riêng của dự án
+@import 'base';
+@import 'layout';
+@import 'typography';
+@import 'buttons';
+@import 'forms';
+@import 'pagination';
+@import 'breadcrumb';
+@import 'flash';
+@import 'components';
+@import 'header';
+@import 'footer';
+@import 'product-card';
+@import 'utilities';
+@import 'styleguide';
+
+// 4. Utility API của Bootstrap nạp cuối để class utility thắng các lớp ở trên
+@import 'bootstrap/scss/utilities/api';

@@ -1,0 +1,61 @@
+// Bố cục riêng của trang /styleguide (chỉ môi trường local) — không dùng ở trang thật.
+
+.sg-section {
+    padding-block: var(--sp-8);
+
+    & + & {
+        border-top: 0;
+        background-image: none;
+    }
+
+    &:nth-of-type(even) {
+        background-color: var(--c-surface);
+    }
+}
+
+.sg-swatches {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-4);
+
+    @include media-breakpoint-up(md) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.sg-swatch {
+    // Ô màu không chứa chữ: màu tầm trung (viền #8A8174) không đạt 4,5:1 với chữ nào
+    &__chip {
+        aspect-ratio: 4 / 3;
+    }
+
+    &__meta {
+        margin-top: var(--sp-2);
+        font-size: var(--fs-small);
+        line-height: var(--lh-small);
+    }
+}
+
+.sg-type-row {
+    display: grid;
+    gap: var(--sp-2);
+    padding-block: var(--sp-5);
+
+    @include media-breakpoint-up(md) {
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: var(--sp-6);
+        align-items: baseline;
+    }
+
+    .t-body,
+    .t-small {
+        max-width: 65ch;
+    }
+}
+
+.sg-demo-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-4);
+}
