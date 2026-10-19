@@ -23,10 +23,37 @@ describe('middleware khu quản trị', function () {
         'staff' => ['staff', 'Nhân viên'],
     ]);
 
-    it('chỉ admin vào được mục nhân viên và cài đặt', function (string $uri) {
-        $this->actingAs(User::factory()->staff()->create())->get($uri)->assertForbidden();
-        $this->actingAs(User::factory()->admin()->create())->get($uri)->assertOk();
-    })->with(['/admin/staff', '/admin/settings']);
+    it('áp dụng đúng ma trận quyền trên từng nhóm route admin', function (string $uri, ?string $role, string $expected) {
+        if ($role !== null) {
+            $this->actingAs(User::factory()->{$role}()->create());
+        }
+
+        $response = $this->get($uri);
+
+        match ($expected) {
+            'đăng nhập' => $response->assertRedirect(route('login')),
+            '403' => $response->assertForbidden(),
+            '200' => $response->assertOk(),
+        };
+    })->with(function () {
+        // Kết quả theo thứ tự: guest, customer, staff, admin
+        $matrix = [
+            '/admin' => ['đăng nhập', '403', '200', '200'],
+            '/admin/staff' => ['đăng nhập', '403', '403', '200'],
+            '/admin/settings' => ['đăng nhập', '403', '403', '200'],
+            '/admin/reports' => ['đăng nhập', '403', '403', '200'],
+        ];
+        $roles = ['khách vãng lai' => null, 'customer' => 'customer', 'staff' => 'staff', 'admin' => 'admin'];
+
+        $cases = [];
+        foreach ($matrix as $uri => $results) {
+            foreach (array_keys($roles) as $i => $label) {
+                $cases["{$label} vào {$uri} → {$results[$i]}"] = [$uri, $roles[$label], $results[$i]];
+            }
+        }
+
+        return $cases;
+    });
 });
 
 describe('tài khoản bị khoá', function () {

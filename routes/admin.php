@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-// Chỉ admin: quản lý nhân viên và cài đặt (quy tắc 9). Tạm là trang giữ chỗ, controller làm ở giai đoạn quản trị.
+// Chỉ admin: nhân viên, cài đặt, thống kê doanh thu (quy tắc 9). Tạm là trang giữ chỗ, controller làm ở giai đoạn quản trị.
 Route::middleware('role:admin')->group(function () {
     Route::view('staff', 'admin.placeholder', ['title' => 'Quản lý nhân viên'])->name('staff.index');
     Route::view('settings', 'admin.placeholder', ['title' => 'Cài đặt cửa hàng'])->name('settings.edit');
+    Route::view('reports', 'admin.placeholder', ['title' => 'Thống kê doanh thu'])->name('reports.index');
 });

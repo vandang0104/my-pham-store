@@ -104,8 +104,8 @@ Các endpoint giỏ hàng dùng chung cho form thường và AJAX: controller tr
 - `Route::resource`: `products`, `categories`, `brands`, `coupons`, `posts`.
 - `orders`: index, show, `PATCH orders/{order}/status` → `admin.orders.status`.
 - `reviews`: index, `PATCH reviews/{review}/approve`, destroy.
-- `customers`: index, show. `reports`: index (+ export CSV). `dashboard`: `/admin`.
-- Nhóm thêm `role:admin`: `staff` (resource), `settings` (edit/update) — staff không vào được (quy tắc 9).
+- `customers`: index, show. `dashboard`: `/admin` (staff chỉ thấy số liệu vận hành).
+- Nhóm thêm `role:admin`: `staff` (resource), `settings` (edit/update), `reports` (index + export CSV — thống kê doanh thu) — staff không vào được (quy tắc 9). Ma trận chi tiết: `docs/permissions.md`.
 
 **Phân quyền 2 tầng:** middleware `role` chặn theo nhóm route; Policy chặn theo đối tượng (vd `UserPolicy::delete` cấm xoá/hạ quyền admin cuối cùng; `OrderPolicy::cancel` khách chỉ huỷ đơn của mình khi pending/confirmed; `ReviewPolicy::create` chỉ khi đã có đơn delivered chứa SP và chưa đánh giá). FormRequest gọi policy trong `authorize()`.
 

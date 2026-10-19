@@ -9,7 +9,7 @@ Vai trò: **Admin** (quản trị), **Staff** (nhân viên), **Customer** (khác
 
 | Tầng | Cơ chế | Phạm vi |
 |---|---|---|
-| 1. Route | Middleware `auth` + `role:admin,staff` cho toàn bộ `/admin`; nhóm con `role:admin` cho nhân viên và cài đặt | Chặn theo khu vực. Guest → chuyển về `/dang-nhap`; Customer → 403 |
+| 1. Route | Middleware `auth` + `role:admin,staff` cho toàn bộ `/admin`; nhóm con `role:admin` cho nhân viên, cài đặt và thống kê doanh thu | Chặn theo khu vực. Guest → chuyển về `/dang-nhap`; Customer → 403; Staff vào nhóm `role:admin` → 403 |
 | 2. Đối tượng | Policy trong `app/Policies` (gọi qua `Gate`/`authorize()` trong FormRequest) | Chặn theo từng bản ghi và điều kiện nghiệp vụ |
 | Toàn cục | Middleware `EnsureAccountIsActive` (nhóm `web`) | Tài khoản bị khoá đang đăng nhập bị đăng xuất ở request kế tiếp; tài khoản bị khoá không đăng nhập được |
 
@@ -19,7 +19,7 @@ Sau khi đăng nhập: Admin/Staff → `/admin`; Customer → trang chủ.
 
 | Tài nguyên | Hành động | Admin | Staff | Customer | Guest | Thực thi | Ghi chú |
 |---|---|:-:|:-:|:-:|:-:|---|---|
-| Dashboard | Xem | ✅ | ✅ | ❌ | ❌ | Route | |
+| Dashboard | Xem | ✅ | ✅ | ❌ | ❌ | Route | Dashboard của staff chỉ có số liệu vận hành (đơn mới, đơn chờ xử lý, sản phẩm sắp hết hàng), **không** có doanh thu |
 | Sản phẩm | Xem, tạo, sửa | ✅ | ✅ | ❌ | ❌ | `ProductPolicy` | |
 | Sản phẩm | Xoá mềm, khôi phục | ✅ | ❌ | ❌ | ❌ | `ProductPolicy` | Staff không xoá dữ liệu |
 | Sản phẩm | Xoá cứng | ⚠️ | ❌ | ❌ | ❌ | `ProductPolicy::forceDelete` | Chỉ khi sản phẩm chưa có trong đơn nào (quy tắc 10) |
@@ -29,7 +29,7 @@ Sau khi đăng nhập: Admin/Staff → `/admin`; Customer → trang chủ.
 | Đơn hàng | Đổi trạng thái theo luồng | ✅ | ✅ | ❌ | ❌ | `OrderPolicy::updateStatus` | Luồng hợp lệ do `OrderStatus::canTransitionTo()` + OrderService kiểm tra |
 | Đơn hàng | Đánh dấu đã thanh toán | ✅ | ✅ | ❌ | ❌ | `OrderPolicy::updatePayment` | |
 | Đơn hàng | Huỷ | ⚠️ | ⚠️ | ❌ | ❌ | `OrderPolicy::cancel` | Chỉ khi đơn đang `pending`/`confirmed` |
-| Đơn hàng | Xoá | ⚠️ | ❌ | ❌ | ❌ | `OrderPolicy::delete` | **Đề xuất:** chỉ xoá được đơn đã huỷ, để giữ số liệu doanh thu |
+| Đơn hàng | Xoá | ❌ | ❌ | ❌ | ❌ | `OrderPolicy::delete` | Không ai xoá được đơn hàng, kể cả đơn đã huỷ (giữ để thống kê doanh thu và tỉ lệ huỷ) |
 | Đánh giá | Xem, duyệt / từ chối | ✅ | ✅ | ❌ | ❌ | `ReviewPolicy::viewAny/moderate` | |
 | Đánh giá | Xoá | ✅ | ❌ | ❌ | ❌ | `ReviewPolicy::delete` | |
 | Banner, Tin tức, FAQ | Xem, tạo, sửa | ✅ | ✅ | ❌ | ❌ | Route (Policy làm ở bước CRUD) | |
@@ -44,7 +44,7 @@ Sau khi đăng nhập: Admin/Staff → `/admin`; Customer → trang chủ.
 | Coupon | Tạo, sửa | ✅ | ❌ | ❌ | ❌ | `CouponPolicy::create/update` | |
 | Coupon | Xoá | ⚠️ | ❌ | ❌ | ❌ | `CouponPolicy::delete` | Chỉ khi chưa dùng trong đơn nào; nếu đã dùng thì tắt `is_active` |
 | Cài đặt cửa hàng | Xem, sửa | ✅ | ❌ | ❌ | ❌ | Route `role:admin` + `SettingPolicy` | |
-| Thống kê doanh thu | Xem, xuất CSV | ✅ | ✅ | ❌ | ❌ | Route | **Cần duyệt:** có cho staff xem doanh thu không |
+| Thống kê doanh thu | Xem, xuất CSV | ✅ | ❌ | ❌ | ❌ | Route `role:admin` (`/admin/reports`) | Staff không xem doanh thu |
 
 ## Khu khách hàng
 
@@ -58,8 +58,11 @@ Sau khi đăng nhập: Admin/Staff → `/admin`; Customer → trang chủ.
 | Viết đánh giá | ⚠️ | ⚠️ | ⚠️ | ❌ | `ReviewPolicy::create` | Đã có đơn **đã giao** chứa sản phẩm và chưa đánh giá sản phẩm đó (quy tắc 6) |
 | Hồ sơ, đổi mật khẩu, sổ địa chỉ | ✅ | ✅ | ✅ | ❌ | Middleware `auth` | Chỉ tài khoản của chính mình |
 
-## Điểm cần duyệt
+## Quyết định đã chốt
 
-1. **Xoá đơn hàng:** đề xuất admin chỉ xoá được đơn đã huỷ (bảo toàn doanh thu). Nếu muốn "admin toàn quyền" tuyệt đối, sửa `OrderPolicy::delete`.
-2. **Staff xem thống kê doanh thu:** đang để ✅ vì nằm trong khu quản trị; đổi thành ❌ thì thêm nhóm `role:admin` cho route thống kê.
-3. **Danh mục, thương hiệu, banner, tin tức, FAQ, liên hệ** chưa có Policy riêng (không nằm trong danh sách Policy của architecture.md); quyền đang ghi ở đây sẽ được thực thi bằng Policy khi làm các bước CRUD tương ứng.
+1. **Không ai xoá được đơn hàng** (kể cả admin, kể cả đơn đã huỷ) — đơn huỷ được giữ để thống kê tỉ lệ huỷ.
+2. **Thống kê doanh thu chỉ dành cho admin** (nhóm route `role:admin`); dashboard của staff chỉ hiển thị số liệu vận hành.
+
+## Còn để ngỏ
+
+- **Danh mục, thương hiệu, banner, tin tức, FAQ, liên hệ** chưa có Policy riêng (không nằm trong danh sách Policy của architecture.md); quyền đang ghi ở đây sẽ được thực thi bằng Policy khi làm các bước CRUD tương ứng.

@@ -42,10 +42,10 @@ class OrderPolicy
         return $user->isBackOffice() || $this->owns($user, $order);
     }
 
-    /** Không xoá đơn còn hiệu lực để giữ số liệu doanh thu; admin chỉ xoá được đơn đã huỷ */
+    /** Không ai xoá được đơn hàng, kể cả đơn đã huỷ (giữ để thống kê doanh thu và tỉ lệ huỷ) */
     public function delete(User $user, Order $order): bool
     {
-        return $user->isAdmin() && $order->status === OrderStatus::Cancelled;
+        return false;
     }
 
     private function owns(User $user, Order $order): bool

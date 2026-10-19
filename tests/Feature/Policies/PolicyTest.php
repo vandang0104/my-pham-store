@@ -81,10 +81,13 @@ describe('OrderPolicy', function () {
             ->and(quyen('cancel', Order::factory()->guest()->create()))->toBe([true, true, false]);
     });
 
-    it('chỉ admin xoá được và chỉ đơn đã huỷ', function () {
-        expect(quyen('delete', Order::factory()->status(OrderStatus::Cancelled)->create()))->toBe([true, false, false])
-            ->and(quyen('delete', Order::factory()->delivered()->create()))->toBe([false, false, false]);
-    });
+    it('không ai xoá được đơn hàng, kể cả đơn đã huỷ', function (OrderStatus $status) {
+        expect(quyen('delete', Order::factory()->status($status)->create()))->toBe([false, false, false]);
+    })->with([
+        'đã huỷ' => [OrderStatus::Cancelled],
+        'đã giao' => [OrderStatus::Delivered],
+        'chờ xác nhận' => [OrderStatus::Pending],
+    ]);
 });
 
 describe('ReviewPolicy', function () {
