@@ -17,7 +17,8 @@ Tên bảng số nhiều snake_case; Model số ít PascalCase; route name dạn
 
 ## Cơ sở dữ liệu
 Xem sheet 'Database' trong file kế hoạch; nguồn sự thật là migrations. Mọi thay đổi schema phải qua migration mới và cập nhật mục này + docs/erd.mmd.
-Đã có migration: users (+ phone, role, avatar, birthday, skin_type, is_active), addresses, categories, brands, products (xoá mềm), product_images.
+Đã có migration (18 bảng nghiệp vụ): users (+ phone, role, avatar, birthday, skin_type, is_active), addresses, categories, brands, products (xoá mềm), product_images, carts, cart_items, coupons, orders, order_items, order_status_histories, reviews, banners, posts, faqs, contact_messages, settings.
+Ràng buộc xoá chính: xoá user → đơn giữ lại (user_id null), giỏ/địa chỉ/đánh giá xoá theo; coupon/sản phẩm đã có trong đơn không xoá được (restrict); danh mục/thương hiệu còn sản phẩm không xoá được.
 
 ## Giao diện
 Phong cách sang trọng, tối giản cho thương hiệu mỹ phẩm cao cấp. Mọi quyết định thiết kế theo DESIGN.md (tạo ở bước 3.1). Dùng taste skill cho các bước giao diện. Không dùng giao diện Bootstrap mặc định. Responsive mobile-first. Ảnh lazy-load, có alt.

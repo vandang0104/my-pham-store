@@ -11,7 +11,10 @@ app/
 │  ├─ UserRole.php            # admin | staff | customer
 │  ├─ OrderStatus.php         # pending|confirmed|shipping|delivered|cancelled + canTransitionTo()
 │  ├─ CouponType.php          # percent | fixed
-│  └─ PaymentMethod.php
+│  ├─ PaymentMethod.php       # cod | bank_transfer | vnpay
+│  ├─ PaymentStatus.php       # unpaid | paid | refunded
+│  ├─ ReviewStatus.php        # pending | approved | rejected
+│  └─ PostStatus.php          # draft | published
 ├─ Exceptions/                # lỗi nghiệp vụ, render tập trung ở bootstrap/app.php
 │  ├─ OutOfStockException.php
 │  ├─ InvalidCouponException.php

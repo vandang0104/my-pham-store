@@ -1,10 +1,24 @@
-%% ERD theo migrations hiện tại (bước 1.1). Hoàn thiện toàn bộ ở bước 1.5.
+%% ERD theo migrations hiện tại (bước 1.2). Rà soát & hoàn thiện ở bước 1.5.
+%% Không vẽ các bảng hạ tầng của Laravel: cache, cache_locks, jobs, job_batches, failed_jobs, sessions, password_reset_tokens, migrations.
 erDiagram
-    users ||--o{ addresses : "có"
-    categories |o--o{ categories : "cha - con"
-    categories ||--o{ products : "chứa"
-    brands ||--o{ products : "sản xuất"
-    products ||--o{ product_images : "có"
+    users ||--o{ addresses : "có (cascade)"
+    users |o--o| carts : "có (cascade)"
+    users |o--o{ orders : "đặt (set null)"
+    users ||--o{ reviews : "viết (cascade)"
+    users |o--o{ posts : "là tác giả (set null)"
+    users |o--o{ order_status_histories : "thao tác (set null)"
+    categories |o--o{ categories : "cha - con (restrict)"
+    categories ||--o{ products : "chứa (restrict)"
+    brands ||--o{ products : "sản xuất (restrict)"
+    products ||--o{ product_images : "có (cascade)"
+    products ||--o{ cart_items : "nằm trong (cascade)"
+    products |o--o{ order_items : "được đặt (restrict)"
+    products ||--o{ reviews : "được đánh giá (cascade)"
+    carts ||--o{ cart_items : "gồm (cascade)"
+    coupons |o--o{ orders : "áp dụng (restrict)"
+    orders ||--o{ order_items : "gồm (cascade)"
+    orders ||--o{ order_status_histories : "ghi nhật ký (cascade)"
+    orders |o--o{ reviews : "chứng minh đã mua (set null)"
 
     users {
         bigint id PK
@@ -25,7 +39,7 @@ erDiagram
 
     addresses {
         bigint id PK
-        bigint user_id FK "cascade"
+        bigint user_id FK
         varchar receiver_name
         varchar phone
         varchar province
@@ -39,7 +53,7 @@ erDiagram
 
     categories {
         bigint id PK
-        bigint parent_id FK "nullable, restrict"
+        bigint parent_id FK "nullable"
         varchar name
         varchar slug UK
         varchar image "nullable"
@@ -62,8 +76,8 @@ erDiagram
 
     products {
         bigint id PK
-        bigint category_id FK "restrict"
-        bigint brand_id FK "restrict"
+        bigint category_id FK
+        bigint brand_id FK
         varchar name
         varchar slug UK
         varchar sku UK
@@ -88,10 +102,167 @@ erDiagram
 
     product_images {
         bigint id PK
-        bigint product_id FK "cascade"
+        bigint product_id FK
         varchar path
         boolean is_primary "mặc định 0"
         int sort_order "mặc định 0"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    carts {
+        bigint id PK
+        bigint user_id FK "nullable, unique"
+        varchar session_id "nullable, index"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    cart_items {
+        bigint id PK
+        bigint cart_id FK "unique cùng product_id"
+        bigint product_id FK
+        int quantity "mặc định 1"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    coupons {
+        bigint id PK
+        varchar code UK
+        enum type "percent|fixed"
+        int value "phần trăm hoặc VND"
+        int min_order "mặc định 0"
+        int max_discount "nullable"
+        int usage_limit "nullable"
+        int used_count "mặc định 0"
+        timestamp starts_at "nullable"
+        timestamp expires_at "nullable"
+        boolean is_active "index"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    orders {
+        bigint id PK
+        varchar code UK
+        bigint user_id FK "nullable"
+        bigint coupon_id FK "nullable"
+        varchar receiver_name
+        varchar phone
+        varchar email "nullable"
+        varchar province
+        varchar district "nullable"
+        varchar ward
+        varchar detail
+        enum payment_method "cod|bank_transfer|vnpay, mặc định cod"
+        enum payment_status "unpaid|paid|refunded, mặc định unpaid, index"
+        enum status "pending|confirmed|shipping|delivered|cancelled, mặc định pending, index"
+        int subtotal "VND"
+        int discount "VND, mặc định 0"
+        int shipping_fee "VND, mặc định 0"
+        int total "VND"
+        text note "nullable"
+        timestamp confirmed_at "nullable"
+        timestamp shipped_at "nullable"
+        timestamp delivered_at "nullable"
+        timestamp cancelled_at "nullable"
+        timestamp created_at "index"
+        timestamp updated_at
+    }
+
+    order_items {
+        bigint id PK
+        bigint order_id FK
+        bigint product_id FK "nullable"
+        varchar product_name "snapshot"
+        varchar sku "snapshot"
+        int price "snapshot, VND"
+        int quantity
+        int line_total "VND"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    order_status_histories {
+        bigint id PK
+        bigint order_id FK
+        enum from_status "nullable"
+        enum to_status
+        bigint changed_by FK "nullable"
+        varchar note "nullable"
+        timestamp created_at
+    }
+
+    reviews {
+        bigint id PK
+        bigint product_id FK "index cùng status"
+        bigint user_id FK "unique cùng product_id"
+        bigint order_id FK "nullable"
+        tinyint rating "1-5"
+        text comment
+        json images "nullable"
+        enum status "pending|approved|rejected, mặc định pending, index"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    banners {
+        bigint id PK
+        varchar title
+        varchar image_desktop
+        varchar image_mobile "nullable"
+        varchar link "nullable"
+        varchar position "index cùng is_active"
+        int sort_order "mặc định 0"
+        timestamp starts_at "nullable"
+        timestamp ends_at "nullable"
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    posts {
+        bigint id PK
+        varchar title
+        varchar slug UK
+        varchar excerpt "nullable"
+        longtext content "Markdown"
+        varchar thumbnail "nullable"
+        enum status "draft|published, mặc định draft, index cùng published_at"
+        timestamp published_at "nullable"
+        bigint author_id FK "nullable"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    faqs {
+        bigint id PK
+        varchar group "index cùng is_active"
+        varchar question
+        text answer
+        int sort_order "mặc định 0"
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    contact_messages {
+        bigint id PK
+        varchar name
+        varchar email
+        varchar phone "nullable"
+        varchar subject
+        text message
+        boolean is_handled "mặc định 0, index"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    settings {
+        bigint id PK
+        varchar key UK
+        text value "nullable"
         timestamp created_at
         timestamp updated_at
     }

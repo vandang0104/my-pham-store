@@ -7,22 +7,6 @@ use Illuminate\Support\Facades\Schema;
 
 uses(RefreshDatabase::class);
 
-// Dùng query builder vì Model sẽ tạo ở bước sau
-function taoSanPham(array $attrs = []): int
-{
-    $categoryId = DB::table('categories')->insertGetId(['name' => 'Chăm sóc da', 'slug' => 'cham-soc-da-'.uniqid()]);
-    $brandId = DB::table('brands')->insertGetId(['name' => 'La Roche-Posay', 'slug' => 'la-roche-posay-'.uniqid()]);
-
-    return DB::table('products')->insertGetId($attrs + [
-        'category_id' => $categoryId,
-        'brand_id' => $brandId,
-        'name' => 'Sữa rửa mặt',
-        'slug' => 'sua-rua-mat-'.uniqid(),
-        'sku' => 'SKU-'.uniqid(),
-        'price' => 350000,
-    ]);
-}
-
 it('tạo đủ các bảng và cột của catalog, tài khoản', function () {
     expect(Schema::hasColumns('users', ['phone', 'role', 'avatar', 'birthday', 'skin_type', 'is_active']))->toBeTrue()
         ->and(Schema::hasColumns('addresses', ['user_id', 'receiver_name', 'phone', 'province', 'district', 'ward', 'detail', 'is_default']))->toBeTrue()
