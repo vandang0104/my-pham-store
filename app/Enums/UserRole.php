@@ -16,4 +16,10 @@ enum UserRole: string
             self::Customer => 'Khách hàng',
         };
     }
+
+    /** Vai trò được vào khu quản trị /admin */
+    public function isBackOffice(): bool
+    {
+        return $this === self::Admin || $this === self::Staff;
+    }
 }

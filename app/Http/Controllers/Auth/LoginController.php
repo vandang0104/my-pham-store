@@ -23,8 +23,10 @@ class LoginController extends Controller
         // Chống session fixation
         $request->session()->regenerate();
 
-        // Tạm thời mọi vai trò về trang chủ; bước phân quyền sẽ đưa admin/staff sang /admin
-        return redirect()->intended(route('home'))->with('status', __('auth.logged_in'));
+        // Admin/staff vào khu quản trị, khách hàng về trang chủ (trừ khi đang được chuyển hướng tới trang khác)
+        $default = $request->user()->role->isBackOffice() ? route('admin.dashboard') : route('home');
+
+        return redirect()->intended($default)->with('status', __('auth.logged_in'));
     }
 
     public function destroy(Request $request): RedirectResponse

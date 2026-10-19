@@ -39,6 +39,17 @@ class User extends Authenticatable
         ];
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::Admin;
+    }
+
+    /** Admin hoặc staff */
+    public function isBackOffice(): bool
+    {
+        return $this->role->isBackOffice();
+    }
+
     /** @return HasMany<Address, $this> */
     public function addresses(): HasMany
     {
