@@ -77,9 +77,10 @@ Ghi chú:
 | Method | URL | Route name |
 |---|---|---|
 | GET | `/` | `home` |
-| GET | `/san-pham` (tìm + lọc bằng query `?q=&danh-muc=&thuong-hieu=&gia-tu=&gia-den=&khuyen-mai=1`) | `products.index` |
-| GET | `/san-pham/{product:slug}` | `products.show` |
-| GET | `/danh-muc/{category:slug}` | `categories.show` |
+| GET | `/san-pham` (tìm + lọc, xem chú thích dưới bảng) | `products.index` |
+| GET | `/san-pham/{product:slug}` (ẩn / xoá mềm → 404) | `products.show` |
+| GET | `/danh-muc/{category:slug}` (cùng view danh sách, danh mục cha gồm cả con) | `categories.show` |
+| GET | `/thuong-hieu/{brand:slug}` (cùng view danh sách; thương hiệu chỉ từ seed, không CRUD) | `brands.show` |
 | GET | `/gio-hang` | `cart.index` |
 | POST | `/gio-hang` | `cart.add` |
 | PATCH / DELETE | `/gio-hang/{item}` | `cart.update` / `cart.remove` |
@@ -94,7 +95,8 @@ Ghi chú:
 | POST | `/tai-khoan/don-hang/{order:code}/huy` | `account.orders.cancel` |
 | GET / PUT | `/tai-khoan/thong-tin`, PUT `/tai-khoan/mat-khau` | `account.profile.edit` / `.update`, `account.password.update` |
 
-Tham số lọc và URL chat ở trên là dự kiến; bước làm tương ứng (S1, S6) chốt tên cuối cùng và cập nhật bảng này. Đã cắt: `/thuong-hieu/{slug}`, đánh giá, mã giảm giá, `/tra-cuu-don-hang`, `/tin-tuc`.
+**Tham số lọc danh sách (chốt ở S1, `ProductFilterRequest`):** `q` (từ khoá: tên, SKU, mô tả, tên thương hiệu — LIKE), `danh-muc` (slug, danh mục cha gồm cả con), `thuong-hieu[]` (một hoặc nhiều slug; `?thuong-hieu=slug` cũng nhận), `gia-tu`, `gia-den` (số nguyên ≥ 0, so với **giá hiện hành**; giá đến < giá từ thì bỏ giá đến), `khuyen-mai=1` (đang giảm giá), `page`. Tham số sai bị bỏ qua (không redirect, không 500). Sắp xếp cố định: mới nhất trước; 12 SP/trang, `->withQueryString()`.
+URL chat ở trên là dự kiến; S6 chốt tên cuối cùng. Đã cắt: đánh giá, mã giảm giá, `/tra-cuu-don-hang`, `/tin-tuc`, lọc loại da, sắp xếp khác.
 
 Các endpoint giỏ hàng dùng chung cho form thường và AJAX: controller trả JSON khi `$request->expectsJson()`, ngược lại redirect + flash.
 

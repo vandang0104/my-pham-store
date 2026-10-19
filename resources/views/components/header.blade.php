@@ -84,14 +84,14 @@
         </div>
     </div>
 
-    {{-- Tìm kiếm: form GET /san-pham?q= (xử lý ở S1); gợi ý tìm kiếm tự động đã cắt --}}
+    {{-- Tìm kiếm: form GET /san-pham?q= (ProductController@index); gợi ý tìm kiếm tự động đã cắt --}}
     <div class="offcanvas offcanvas-top search-panel" id="search-panel" tabindex="-1" aria-labelledby="search-panel-title" data-search-panel>
         <div class="container search-panel__inner">
             <h2 id="search-panel-title" class="visually-hidden">Tìm kiếm sản phẩm</h2>
-            <form action="{{ url('/san-pham') }}" method="GET" role="search" class="search-form">
+            <form action="{{ route('products.index') }}" method="GET" role="search" class="search-form">
                 <label for="search-q" class="visually-hidden">Tìm sản phẩm, thương hiệu</label>
                 <x-icon name="search" class="search-form__icon" />
-                <input id="search-q" name="q" type="search" class="search-form__input" placeholder="Tìm serum, kem chống nắng, thương hiệu…" autocomplete="off" enterkeyhint="search">
+                <input id="search-q" name="q" type="search" class="search-form__input" placeholder="Tìm serum, kem chống nắng, thương hiệu…" autocomplete="off" enterkeyhint="search" value="{{ request()->routeIs('products.index') && is_string(request('q')) ? request('q') : '' }}">
                 <button type="submit" class="btn btn-primary search-form__submit">Tìm</button>
             </form>
             <button type="button" class="icon-btn search-panel__close" data-bs-dismiss="offcanvas" aria-label="Đóng tìm kiếm">

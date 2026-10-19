@@ -5,10 +5,17 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StyleguideController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+
+// Sản phẩm: danh sách (tìm + lọc), theo danh mục, theo thương hiệu, chi tiết — bind theo slug
+Route::get('/san-pham', [ProductController::class, 'index'])->name('products.index');
+Route::get('/san-pham/{product:slug}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/danh-muc/{category:slug}', [ProductController::class, 'category'])->name('categories.show');
+Route::get('/thuong-hieu/{brand:slug}', [ProductController::class, 'brand'])->name('brands.show');
 
 // Xác thực — URL tiếng Việt, giữ tên route chuẩn của Laravel
 Route::middleware('guest')->group(function () {

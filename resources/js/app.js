@@ -2,8 +2,10 @@
 import 'bootstrap';
 import { initHeader } from './header';
 import { initFlash } from './flash';
+import { initGallery } from './gallery';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHeader();
     initFlash();
+    initGallery();
 });

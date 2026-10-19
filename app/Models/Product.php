@@ -141,6 +141,38 @@ class Product extends Model
         });
     }
 
+    /**
+     * Áp bộ lọc của trang danh sách (ProductFilterRequest::filters()): từ khoá, danh mục (gồm con),
+     * thương hiệu (nhiều slug), khoảng giá hiện hành, đang giảm giá. Slug không tồn tại → không có kết quả.
+     *
+     * @param  array{q?: ?string, category?: Category|string|null, brands?: list<string>, price_from?: ?int, price_to?: ?int, on_sale?: bool}  $filters
+     */
+    #[Scope]
+    protected function filter(Builder $query, array $filters): void
+    {
+        $query->search($filters['q'] ?? null)
+            ->priceBetween($filters['price_from'] ?? null, $filters['price_to'] ?? null);
+
+        $category = $filters['category'] ?? null;
+        if (is_string($category)) {
+            $category = Category::query()->active()->where('slug', $category)->first();
+            if ($category === null) {
+                $query->whereRaw('1 = 0');
+            }
+        }
+        if ($category instanceof Category) {
+            $query->inCategory($category);
+        }
+
+        if (($filters['brands'] ?? []) !== []) {
+            $query->whereHas('brand', fn (Builder $b) => $b->active()->whereIn('slug', $filters['brands']));
+        }
+
+        if ($filters['on_sale'] ?? false) {
+            $query->onSale();
+        }
+    }
+
     /** Sản phẩm thuộc danh mục, gồm cả mọi danh mục con cháu */
     #[Scope]
     protected function inCategory(Builder $query, Category|int $category): void
