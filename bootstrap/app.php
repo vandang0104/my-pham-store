@@ -22,6 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Tin proxy phía trước (Cloudflare Tunnel khi demo) để nhận đúng https từ X-Forwarded-Proto.
+        // Khi triển khai thật (bước 10.5) đổi '*' thành địa chỉ proxy cụ thể.
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias(['role' => EnsureUserHasRole::class]);
         $middleware->web(append: [EnsureAccountIsActive::class]);
 
