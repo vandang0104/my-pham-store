@@ -2,8 +2,12 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ChatController;
+use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Nạp trong bootstrap/app.php: prefix /admin, tên admin., middleware web + auth + role:admin,staff.
@@ -27,9 +31,16 @@ Route::put('products/{product:id}', [ProductController::class, 'update'])->name(
 Route::delete('products/{product:id}', [ProductController::class, 'destroy'])->name('products.destroy');
 Route::patch('products/{product:id}/restore', [ProductController::class, 'restore'])->name('products.restore')->withTrashed();
 
-// Đơn hàng, tin liên hệ: trang giữ chỗ tới bước A2
-Route::view('orders', 'admin.placeholder', ['title' => 'Đơn hàng'])->name('orders.index');
-Route::view('contacts', 'admin.placeholder', ['title' => 'Tin liên hệ'])->name('contacts.index');
+// Đơn hàng (bind theo mã đơn): xem, đổi trạng thái theo luồng (huỷ = hoàn kho), đánh dấu đã thanh toán. Không có xoá.
+Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+Route::get('orders/{order:code}', [OrderController::class, 'show'])->name('orders.show');
+Route::patch('orders/{order:code}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+Route::patch('orders/{order:code}/paid', [OrderController::class, 'markPaid'])->name('orders.paid');
+
+// Tin liên hệ
+Route::get('contacts', [ContactController::class, 'index'])->name('contacts.index');
+Route::get('contacts/{contact}', [ContactController::class, 'show'])->name('contacts.show');
+Route::patch('contacts/{contact}/handled', [ContactController::class, 'markHandled'])->name('contacts.handled');
 
 // Chat trực tuyến: admin + staff
 Route::get('chats', [ChatController::class, 'index'])->name('chats.index');
@@ -38,8 +49,11 @@ Route::get('chats/{conversation}/messages', [ChatController::class, 'messages'])
 Route::post('chats/{conversation}/messages', [ChatController::class, 'reply'])->name('chats.reply')->middleware('throttle:60,1');
 Route::patch('chats/{conversation}/close', [ChatController::class, 'close'])->name('chats.close');
 
-// Chỉ admin: quản lý tài khoản (khách + nhân viên gộp một màn) và thống kê doanh thu (quy tắc 9) — giữ chỗ tới A2
+// Chỉ admin: quản lý tài khoản (khách + nhân viên gộp một màn) và thống kê doanh thu (quy tắc 9)
 Route::middleware('role:admin')->group(function () {
-    Route::view('users', 'admin.placeholder', ['title' => 'Quản lý tài khoản'])->name('users.index');
-    Route::view('reports', 'admin.placeholder', ['title' => 'Thống kê doanh thu'])->name('reports.index');
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::patch('users/{user}/role', [UserController::class, 'updateRole'])->name('users.role');
+    Route::patch('users/{user}/toggle', [UserController::class, 'toggleActive'])->name('users.toggle');
+    Route::get('reports', ReportController::class)->name('reports.index');
 });

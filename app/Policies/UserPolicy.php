@@ -40,6 +40,10 @@ class UserPolicy
         if (! $user->isAdmin()) {
             return false;
         }
+        // Không tự hạ quyền chính mình (tránh tự khoá mình khỏi khu quản trị)
+        if ($user->is($target) && $newRole !== UserRole::Admin) {
+            return false;
+        }
 
         return $newRole === UserRole::Admin || ! $this->isLastActiveAdmin($target);
     }

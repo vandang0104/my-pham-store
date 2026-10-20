@@ -121,6 +121,49 @@ class OrderService
     }
 
     /**
+     * Đổi trạng thái theo luồng (quy tắc 3) — admin/staff. Huỷ chuyển sang cancel() để hoàn kho.
+     * Ghi mốc thời gian tương ứng và lịch sử (người thực hiện).
+     *
+     * @throws InvalidOrderTransitionException
+     */
+    public function changeStatus(Order $order, OrderStatus $to, ?User $by, ?string $note = null): Order
+    {
+        if ($to === OrderStatus::Cancelled) {
+            return $this->cancel($order, $by, $note);
+        }
+
+        return DB::transaction(function () use ($order, $to, $by, $note) {
+            $locked = Order::query()->whereKey($order->id)->lockForUpdate()->firstOrFail();
+            if (! $locked->status->canTransitionTo($to)) {
+                throw InvalidOrderTransitionException::make($locked->status, $to);
+            }
+
+            $from = $locked->status;
+            $timestamp = match ($to) {
+                OrderStatus::Confirmed => 'confirmed_at',
+                OrderStatus::Shipping => 'shipped_at',
+                OrderStatus::Delivered => 'delivered_at',
+                default => null,
+            };
+            $locked->forceFill(['status' => $to, ...($timestamp ? [$timestamp => now()] : [])])->save();
+            $locked->statusHistories()->create(['from_status' => $from, 'to_status' => $to, 'changed_by' => $by?->id, 'note' => $note]);
+
+            return $locked;
+        });
+    }
+
+    /** Đánh dấu đã thanh toán (chỉ đổi payment_status; đơn đã huỷ thì không) */
+    public function markPaid(Order $order): Order
+    {
+        if ($order->status === OrderStatus::Cancelled || $order->payment_status === PaymentStatus::Paid) {
+            return $order;
+        }
+        $order->forceFill(['payment_status' => PaymentStatus::Paid])->save();
+
+        return $order;
+    }
+
+    /**
      * Huỷ đơn (quy tắc 3): chỉ từ pending/confirmed; hoàn kho, trừ sold_count, ghi lịch sử.
      * Dùng chung cho khách (trang tài khoản) và admin/staff (S9). Quyền kiểm ở Policy, đây chỉ kiểm luồng trạng thái.
      *
@@ -149,7 +192,12 @@ class OrderService
             }
 
             $from = $locked->status;
-            $locked->forceFill(['status' => OrderStatus::Cancelled, 'cancelled_at' => now()])->save();
+            $locked->forceFill([
+                'status' => OrderStatus::Cancelled,
+                'cancelled_at' => now(),
+                // Đã nhận tiền (chuyển khoản) thì ghi nhận cần hoàn tiền
+                'payment_status' => $locked->payment_status === PaymentStatus::Paid ? PaymentStatus::Refunded : $locked->payment_status,
+            ])->save();
             $locked->statusHistories()->create([
                 'from_status' => $from,
                 'to_status' => OrderStatus::Cancelled,

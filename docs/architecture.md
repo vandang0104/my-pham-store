@@ -109,9 +109,9 @@ Các endpoint giỏ hàng dùng chung cho form thường và AJAX: controller tr
 - Layout `layouts/admin`: topbar + sidebar theo quyền (`AdminMenuComposer`), flash dùng `<x-flash>`.
 - `dashboard`: `/admin` (staff chỉ thấy số liệu vận hành).
 - `categories` (index, create, store, edit, update, destroy) và `products` (như trên + `PATCH products/{id}/restore`), bind theo `{model:id}` (URL khách theo slug); slug tự sinh duy nhất (`App\Support\Slug`); sản phẩm 1 ảnh chính (upload thay ảnh chính).
-- `orders`: index, show, `PATCH orders/{order}/status` → `admin.orders.status`.
-- `chats` (hội thoại + trả lời), `contacts` (tin nhắn liên hệ, đánh dấu đã xử lý).
-- Nhóm thêm `role:admin`: `users` (tài khoản khách + nhân viên gộp một màn: đổi vai trò, khoá/mở khoá), `reports` (doanh thu theo ngày/tháng + top SP bán chạy, không CSV) — staff không vào được (quy tắc 9). Ma trận chi tiết: `docs/permissions.md`.
+- `orders` (bind `{order:code}`): index (lọc `?trang-thai=`, tìm `?q=` mã/tên/SĐT), show, `PATCH orders/{order}/status` → `admin.orders.status` (`OrderService::changeStatus`; chọn huỷ → `cancel()`: hoàn kho, đã thanh toán → `refunded`), `PATCH orders/{order}/paid` → `admin.orders.paid`. Không có route xoá.
+- `chats` (hội thoại + trả lời), `contacts` (index chưa xử lý lên đầu, show, `PATCH contacts/{id}/handled`).
+- Nhóm thêm `role:admin`: `users` (index lọc `?vai-tro=` + tìm, show số đơn + tổng chi tiêu, `PATCH users/{id}/role`, `PATCH users/{id}/toggle`), `reports` (`?tu-ngay=&den-ngay=`, mặc định 30 ngày; doanh thu theo ngày + 12 tháng + top 10 bán chạy, Chart.js nạp động chỉ ở trang này; không CSV) — staff không vào được (quy tắc 9). Ma trận chi tiết: `docs/permissions.md`.
 
 **Phân quyền 2 tầng:** middleware `role` chặn theo nhóm route; Policy chặn theo đối tượng (vd `UserPolicy::delete` cấm xoá/hạ quyền admin cuối cùng; `OrderPolicy::cancel` khách chỉ huỷ đơn của mình khi pending/confirmed). FormRequest gọi policy trong `authorize()`.
 
@@ -158,7 +158,7 @@ Cố ý **không** cài: Breeze/Jetstream/Fortify (tự viết auth, xem quyết
 | `vite`, `laravel-vite-plugin` | có sẵn skeleton, build asset |
 | `bootstrap`, `@popperjs/core` | UI theo CLAUDE.md; Popper cho dropdown/tooltip |
 | `sass` | biên dịch Sass tuỳ biến Bootstrap |
-| `chart.js` | biểu đồ thống kê admin — **chưa cài**, thêm ở S10 |
+| `chart.js` | biểu đồ thống kê admin (cài ở A2, nạp động chỉ ở trang thống kê) |
 
 Không dùng `alpinejs` (JS thuần + `fetch` đủ cho giỏ/chat; mini-cart đã cắt).
 

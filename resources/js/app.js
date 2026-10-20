@@ -10,4 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initFlash();
     initGallery();
     initChat();
+
+    // Chart.js chỉ tải ở trang có biểu đồ (thống kê admin) — Vite tách thành chunk riêng
+    const charts = document.querySelectorAll('canvas[data-chart]');
+    if (charts.length) {
+        import('./charts').then(({ initCharts }) => initCharts(charts));
+    }
 });

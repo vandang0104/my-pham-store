@@ -36,7 +36,7 @@ Route dự kiến: `dashboard`, `products`, `categories`, `orders`, `users`, `re
 | Chat trực tuyến | Xem hội thoại, trả lời, đóng | ✅ | ✅ | ❌ | ❌ | Route `role:admin,staff` (`/admin/chats`) | Không cần Policy riêng: mọi admin/staff thấy mọi hội thoại |
 | Tin nhắn liên hệ | Xem, đánh dấu đã xử lý | ✅ | ✅ | ❌ | ❌ | Route (làm ở S5/S7) | |
 | Tài khoản (khách + nhân viên) | Xem danh sách, chi tiết | ✅ | ❌ | ❌ | ❌ | Route `role:admin` + `UserPolicy::viewAny/view` | Một màn chung cho mọi vai trò |
-| Tài khoản | Đổi vai trò | ⚠️ | ❌ | ❌ | ❌ | `UserPolicy::changeRole` | Không hạ quyền **admin đang hoạt động cuối cùng** (quy tắc 9) |
+| Tài khoản | Đổi vai trò | ⚠️ | ❌ | ❌ | ❌ | `UserPolicy::changeRole` | Không tự hạ quyền chính mình; không hạ quyền **admin đang hoạt động cuối cùng** (quy tắc 9) |
 | Tài khoản | Khoá / mở khoá | ⚠️ | ❌ | ❌ | ❌ | `UserPolicy::toggleActive` | Không tự khoá mình; không khoá admin hoạt động cuối cùng |
 | Tài khoản | Xoá | ⚠️ | ❌ | ❌ | ❌ | `UserPolicy::delete` | Không tự xoá mình; đơn hàng được giữ lại (user_id → NULL) |
 | Thống kê doanh thu | Xem (theo ngày/tháng + top SP bán chạy) | ✅ | ❌ | ❌ | ❌ | Route `role:admin` (`/admin/reports`) | Staff không xem doanh thu; không xuất CSV |
