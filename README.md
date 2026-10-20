@@ -1,78 +1,77 @@
-# Mộc Lam
+# Mộc Lam — website bán mỹ phẩm thảo mộc Việt
 
-Website thương mại điện tử bán mỹ phẩm thảo mộc Việt (đồ án) — Laravel 13, MySQL 8, Blade, Bootstrap 5 (Sass + Vite). Thiết kế: [DESIGN.md](DESIGN.md).
+Đồ án website thương mại điện tử bán mỹ phẩm: khách xem / tìm / lọc sản phẩm, đặt hàng (kể cả không cần tài khoản), theo dõi đơn, chat với cửa hàng; nhân viên và quản trị quản lý sản phẩm, danh mục, đơn hàng, tài khoản và xem thống kê doanh thu. Giao diện và nội dung tiếng Việt, tiền tệ VND.
 
-Tài liệu dự án: [CLAUDE.md](CLAUDE.md) (quy ước, nghiệp vụ) · [docs/architecture.md](docs/architecture.md) (kiến trúc).
+Tài liệu: [CLAUDE.md](CLAUDE.md) (quy ước, nghiệp vụ, phạm vi) · [docs/architecture.md](docs/architecture.md) · [docs/permissions.md](docs/permissions.md) · [docs/checklist-chuc-nang.md](docs/checklist-chuc-nang.md) · [docs/test-cases/](docs/test-cases/) · [docs/erd.mmd](docs/erd.mmd), [docs/data-dictionary.md](docs/data-dictionary.md).
 
-## Yêu cầu
+## Chức năng chính
 
-- PHP 8.3+ (có `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`) và Composer 2
+- **Khách:** trang chủ (banner, sản phẩm nổi bật, đang ưu đãi, danh mục, giới thiệu); danh sách theo danh mục / thương hiệu; tìm theo từ khoá + lọc giá, danh mục, thương hiệu, đang giảm giá; chi tiết sản phẩm.
+- **Giỏ hàng & đặt hàng:** giỏ cho khách vãng lai (session) và tài khoản (DB, gộp khi đăng nhập); thanh toán COD / chuyển khoản; trang + email xác nhận đơn.
+- **Tài khoản:** đăng ký, đăng nhập, quên mật khẩu; hồ sơ, đổi mật khẩu, lịch sử đơn, huỷ đơn chờ xác nhận / đã xác nhận.
+- **Hỗ trợ:** chat trực tuyến (tự làm, polling), form liên hệ, câu hỏi thường gặp.
+- **Quản trị (`/admin/login`):** tổng quan; sản phẩm (1 ảnh chính, xoá mềm); danh mục; đơn hàng (đổi trạng thái theo luồng, huỷ hoàn kho); chat; tin liên hệ. Chỉ admin: tài khoản (đổi vai trò, khoá), thống kê doanh thu theo ngày / tháng + top bán chạy (Chart.js).
+- **Đã cắt** theo phạm vi rút gọn 19/10/2026: đánh giá, mã giảm giá, CRUD banner / tin tức / FAQ, sổ địa chỉ, VNPay… — chi tiết trong [checklist](docs/checklist-chuc-nang.md).
+
+## Công nghệ
+
+PHP 8.3+ · Laravel 13 · MySQL 8 (utf8mb4) · Blade + Bootstrap 5 (Sass, Vite) · JavaScript thuần · Chart.js · Pest 4 · Laravel Pint.
+
+## Yêu cầu môi trường
+
+- PHP 8.3+ (có `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`) và Composer 2 — Windows: cài nhanh bằng [php.new](https://php.new)
 - Node.js 20+ và npm
-- MySQL 8 — dùng sẵn container trong `compose.yaml` (cần Docker) hoặc MySQL cài trên máy
+- MySQL 8 — dùng container trong `compose.yaml` (cần Docker) hoặc MySQL cài trên máy
 
-> Windows chưa có PHP/Composer: cài nhanh bằng [php.new](https://php.new) rồi mở lại terminal.
-
-## Cài đặt nhanh
+## Cài đặt
 
 ```bash
-git clone <url-repo> mypham-shop
-cd mypham-shop
-
+git clone <url-repo> mypham-shop && cd mypham-shop
 composer install
-npm install
-
-cp .env.example .env          # Windows PowerShell: Copy-Item .env.example .env
+cp .env.example .env              # Windows PowerShell: Copy-Item .env.example .env
 php artisan key:generate
 
-docker compose up -d          # khởi động MySQL (bỏ qua nếu dùng MySQL trên máy)
-php artisan migrate --seed
-php artisan storage:link      # để ảnh trong storage/app/public hiển thị được qua /storage
+# Tạo database mypham_shop: dùng Docker…
+docker compose up -d
+# …hoặc MySQL trên máy (rồi sửa DB_USERNAME / DB_PASSWORD trong .env):
+#   CREATE DATABASE mypham_shop CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-npm run build                 # hoặc `npm run dev` khi đang phát triển giao diện
+php artisan migrate --seed
+php artisan storage:link          # ảnh trong storage/app/public hiển thị qua /storage
+npm install && npm run build
 php artisan serve
 ```
 
-Mở http://localhost:8000.
-
-**Dùng MySQL trên máy thay vì Docker:** tạo database rồi sửa `DB_USERNAME`, `DB_PASSWORD` trong `.env` cho khớp:
-
-```sql
-CREATE DATABASE mypham_shop CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
+Mở http://localhost:8000 (cửa hàng) và http://localhost:8000/admin/login (quản trị). Email gửi bằng driver `log` — xem trong `storage/logs/laravel.log`.
 
 ## Tài khoản demo
 
-> ⚠️ **Chỉ dùng để demo trên máy phát triển.** Không dùng các tài khoản/mật khẩu này trên môi trường thật.
+> ⚠️ Chỉ dùng để demo trên máy phát triển. Mọi tài khoản có chung mật khẩu **`Demo@123`**.
 
-Mọi tài khoản dưới đây có chung mật khẩu **`Demo@123`**.
+| Vai trò | Email | Đăng nhập tại |
+|---|---|---|
+| Quản trị (admin) | `admin@mypham.test` | `/admin/login` |
+| Nhân viên (staff) | `nhanvien1@mypham.test`, `nhanvien2@mypham.test` | `/admin/login` |
+| Khách hàng | `khachhang01@mypham.test` … `khachhang20@mypham.test` (01–07 có đơn đã giao) | `/dang-nhap` |
 
-| Vai trò | Email |
-|---|---|
-| Quản trị (admin) | `admin@mypham.test` |
-| Nhân viên (staff) | `nhanvien1@mypham.test`, `nhanvien2@mypham.test` |
-| Khách hàng | `khachhang01@mypham.test` … `khachhang20@mypham.test` |
+Dữ liệu mẫu (`php artisan migrate:fresh --seed`): 8 danh mục cha + 26 danh mục con, 10 thương hiệu **hư cấu**, 48 sản phẩm, 4 banner, 8 FAQ, 15 đơn đủ trạng thái, cài đặt cửa hàng (phí ship 30.000 ₫, miễn phí từ 500.000 ₫, tài khoản ngân hàng **mẫu**). Ảnh là placeholder SVG sinh tự động; muốn dùng ảnh thật cho sản phẩm thì chép ảnh vào `storage/app/public/seed/` rồi seed lại (gán luân phiên theo tên file), hoặc tải ảnh từng sản phẩm trong trang quản trị.
 
-Khách hàng 01–07 có đơn đã giao.
+## Kiểm thử
 
-## Dữ liệu mẫu & ảnh
+```bash
+php artisan test          # toàn bộ test (SQLite in-memory, không đụng DB thật)
+./vendor/bin/pint         # định dạng code
+```
 
-`php artisan migrate:fresh --seed` tạo: 23 tài khoản, 8 danh mục cha + 26 danh mục con, 10 thương hiệu **hư cấu**, 48 sản phẩm (168 ảnh), 4 banner, 8 FAQ, 15 đơn hàng đủ trạng thái (không dùng mã giảm giá). Nội dung soạn sẵn nằm trong `database/seeders/data/`.
-Phạm vi rút gọn (19/10, xem CLAUDE.md): seeder vẫn tạo dữ liệu cho các bảng của phần đã cắt (6 coupon, 6 bài tin tức, 30 đánh giá, địa chỉ mẫu) nhưng giao diện không dùng.
+Bảng test case cho Chương 5 nằm trong `docs/test-cases/`.
 
-**Ảnh:** mặc định seeder tự sinh ảnh placeholder SVG vào `storage/app/public/placeholders/` (không tải ảnh từ Internet). Để dùng ảnh thật cho sản phẩm:
+## Demo qua Cloudflare Tunnel
 
-1. Chép ảnh (`.jpg`, `.jpeg`, `.png`, `.webp`, `.avif`, `.svg`) vào `storage/app/public/seed/` (đặt trực tiếp trong thư mục, không để trong thư mục con).
-2. Chạy lại `php artisan migrate:fresh --seed` — ảnh được gán **luân phiên** theo thứ tự tên file cho 168 ảnh sản phẩm (nên đặt tên `001.jpg`, `002.jpg`… để kiểm soát thứ tự).
-3. Chưa chạy `php artisan storage:link` thì chạy để ảnh hiển thị.
+`bootstrap/app.php` đã bật `trustProxies(at: '*')` để Laravel nhận đúng `https` và tên miền từ header của tunnel; ảnh dùng đường dẫn tương đối `/storage/...` nên hiển thị đúng dưới mọi tên miền.
 
-Banner, ảnh danh mục, logo thương hiệu và ảnh bài viết vẫn dùng placeholder; thay sau qua trang quản trị. Thư mục `storage/app/public` không được đưa lên Git.
+```bash
+php artisan serve
+cloudflared tunnel --url http://localhost:8000
+```
 
-## Lệnh thường dùng
-
-| Lệnh | Tác dụng |
-|---|---|
-| `php artisan test` | Chạy kiểm thử (Pest) |
-| `./vendor/bin/pint` | Định dạng code |
-| `npm run dev` | Vite dev server (hot reload) |
-| `php artisan migrate:fresh --seed` | Tạo lại DB và dữ liệu mẫu |
-| `docker compose down` | Tắt MySQL (dữ liệu giữ trong volume `mysql-data`) |
+Khi triển khai thật nên đổi `trustProxies(at: '*')` thành địa chỉ proxy cụ thể và đặt `APP_URL` đúng tên miền (link tuyệt đối trong email dùng `APP_URL`).
