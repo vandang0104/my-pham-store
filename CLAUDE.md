@@ -1,7 +1,7 @@
 # CLAUDE.md - Web bán mỹ phẩm (Laravel)
 
 ## Tổng quan dự án
-Dự án đồ án: Website thương mại điện tử bán mỹ phẩm (cửa hàng cao cấp, thị trường Việt Nam). Người dùng: khách vãng lai, khách hàng, nhân viên (staff), quản trị (admin). Ngôn ngữ giao diện & nội dung: tiếng Việt (có dấu). Tiền tệ: VND, lưu số nguyên không có phần thập phân.
+Dự án đồ án: Website thương mại điện tử bán mỹ phẩm (cửa hàng cao cấp, thị trường Việt Nam). Từ 20/10/2026 cửa hàng CHỈ bán sản phẩm chăm sóc da mặt (khoảng 20 SP, danh mục: làm sạch, dưỡng da, mặt nạ, chống nắng da mặt). Người dùng: khách vãng lai, khách hàng, nhân viên (staff), quản trị (admin). Ngôn ngữ giao diện & nội dung: tiếng Việt (có dấu). Tiền tệ: VND, lưu số nguyên không có phần thập phân.
 
 ## Phạm vi rút gọn (chốt 19/10/2026 — hạn nộp 25/10/2026)
 Ưu tiên làm XONG, chức năng cơ bản, không cầu kì. Kế hoạch mới: sheet 'Kế hoạch rút gọn' trong file kế hoạch.
