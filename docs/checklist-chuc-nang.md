@@ -2,6 +2,7 @@
 
 > Theo sheet "Ma trận chức năng" trong file kế hoạch. ✅ đã làm (route → controller) · ✂️ đã cắt theo **phạm vi rút gọn 19/10/2026** (CLAUDE.md, hạn nộp 25/10/2026) · ⚠️ làm một phần.
 > Test tương ứng: `docs/test-cases/` (5.1 → 5.5, phụ lục hỗ trợ).
+> Ngành hàng (từ 20/10/2026): chỉ chăm sóc da mặt — dữ liệu mẫu 4 danh mục cha (Làm sạch, Dưỡng da, Mặt nạ, Chống nắng), 9 danh mục con, 5 thương hiệu hư cấu, 21 sản phẩm.
 
 ## 1. Trang chủ
 

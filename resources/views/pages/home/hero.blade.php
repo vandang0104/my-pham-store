@@ -9,11 +9,11 @@
             <div class="home-hero__body">
                 <x-wordmark class="home-hero__wordmark" />
                 <h1 id="home-title" class="home-hero__title">{{ $banner?->title ?? 'Mỹ phẩm thảo mộc Việt' }}</h1>
-                <p class="home-hero__lead">Chăm sóc da, trang điểm và nước hoa từ nguyên liệu Đà Lạt, Hội An, Đắk Lắk — ghi rõ thành phần và nơi trồng.</p>
+                <p class="home-hero__lead">Chăm sóc da mặt từ nguyên liệu Đà Lạt, Bảo Lộc, Hưng Yên — ghi rõ thành phần và nơi trồng.</p>
                 <a href="{{ url($banner?->link ?: '/san-pham') }}" class="btn btn-primary">{{ $banner ? 'Xem bộ sưu tập' : 'Xem sản phẩm' }}</a>
 
                 <ul class="home-hero__links">
-                    <li><a href="{{ url('/danh-muc/cham-soc-da-mat') }}" class="link-nav">Chăm sóc da mặt</a></li>
+                    <li><a href="{{ url('/danh-muc/duong-da') }}" class="link-nav">Dưỡng da</a></li>
                     <li><a href="{{ url('/san-pham?khuyen-mai=1') }}" class="link-nav">Đang ưu đãi</a></li>
                     <li><a href="#gioi-thieu" class="link-nav">Về Mộc Lam</a></li>
                 </ul>

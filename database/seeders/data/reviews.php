@@ -10,18 +10,18 @@ return [
         'Rất đáng tiền. Lúc đầu hơi nghi ngờ vì giá mềm nhưng dùng xong thì mê luôn.',
         'Mình mua làm quà cho mẹ, hộp đẹp, mẹ khen mãi.',
         'Lỗ chân lông vùng mũi nhìn thoáng hơn rõ rệt sau một tháng.',
-        'Màu lên chuẩn như ảnh, đi làm cả ngày vẫn còn khá đẹp.',
-        'Tóc mềm và ít rụng hơn, mùi thơm nhẹ chứ không hắc.',
-        'Hương thơm tinh tế, lưu hương lâu, đồng nghiệp hỏi mua ở đâu.',
+        'Da căng mướt cả ngày, đi làm máy lạnh không còn bị khô.',
+        'Da mềm và ít đỏ hơn, mùi rất nhẹ chứ không hắc.',
+        'Kết cấu thấm nhanh, không bết, đồng nghiệp hỏi mua ở đâu.',
     ],
     4 => [
         'Sản phẩm tốt, chỉ là vòi hơi khó bấm lúc đầu.',
         'Dùng ổn, da không bị bết. Trừ một sao vì giá hơi cao so với dung tích.',
         'Thấm nhanh, không gây mụn. Mong shop có thêm bản dung tích lớn.',
         'Chất lượng tốt, giao hơi chậm do cuối tuần nhưng shop có báo trước.',
-        'Màu đẹp nhưng hơi khô môi nếu không dưỡng trước.',
+        'Dùng ổn nhưng vùng má hơi khô nếu không dưỡng ẩm kỹ.',
         'Hiệu quả thấy được sau khoảng ba tuần, cần kiên nhẫn một chút.',
-        'Mùi hơi nồng lúc mới xịt, khoảng mười phút sau thì rất dễ chịu.',
+        'Mùi thảo mộc hơi nồng lúc mới thoa, một lúc sau thì rất dễ chịu.',
         'Da mình dầu, dùng thấy kiềm dầu được tầm năm tiếng.',
     ],
     3 => [
@@ -31,6 +31,6 @@ return [
     ],
     2 => [
         'Da mình bị châm chích nhẹ mấy ngày đầu nên phải ngưng.',
-        'Màu thực tế đậm hơn ảnh khá nhiều, không hợp với mình.',
+        'Kết cấu bết hơn mình nghĩ, da dầu như mình dùng không hợp.',
     ],
 ];

@@ -4,10 +4,10 @@ return [
     // position: home_hero (slider trang chủ), category_top (đầu trang danh mục)
     // 'mau': [nền, màu khối] của ảnh placeholder — bảng màu DESIGN.md §3 (lụa, giấy dó, ngọc nhạt, champagne, sơn mài, men ngọc)
     'banners' => [
-        ['title' => 'Dưỡng da mùa thu – êm dịu từ thảo mộc', 'subtitle' => 'Bộ sưu tập làm sạch và cấp ẩm cho làn da chuyển mùa', 'link' => '/danh-muc/cham-soc-da-mat', 'position' => 'home_hero', 'mau' => ['#D3DDD4', '#2E5A4C']],
-        ['title' => 'Chống nắng mỗi ngày – ưu đãi đến 15%', 'subtitle' => 'Màng lọc phổ rộng, mỏng nhẹ cho khí hậu nhiệt đới', 'link' => '/danh-muc/chong-nang', 'position' => 'home_hero', 'mau' => ['#EBE5DA', '#C2A878']],
-        ['title' => 'Quà tặng tinh tế cho người thương', 'subtitle' => 'Hộp quà đóng sẵn, kèm thiệp viết tay', 'link' => '/danh-muc/bo-qua-tang', 'position' => 'home_hero', 'mau' => ['#D3DDD4', '#C2A878']],
-        ['title' => 'Trang điểm nhẹ nhàng cho ngày dài', 'subtitle' => 'Lớp nền mỏng như lụa và sắc son trung tính', 'link' => '/danh-muc/trang-diem', 'position' => 'category_top', 'mau' => ['#EBE5DA', '#1E1B18']],
+        ['title' => 'Dưỡng da mùa thu – êm dịu từ thảo mộc', 'subtitle' => 'Toner, serum và kem dưỡng cấp ẩm cho làn da chuyển mùa', 'link' => '/danh-muc/duong-da', 'position' => 'home_hero', 'mau' => ['#D3DDD4', '#2E5A4C']],
+        ['title' => 'Chống nắng mỗi ngày – ưu đãi đến 15%', 'subtitle' => 'Màng lọc phổ rộng, mỏng nhẹ cho da mặt trong khí hậu nhiệt đới', 'link' => '/danh-muc/chong-nang', 'position' => 'home_hero', 'mau' => ['#EBE5DA', '#C2A878']],
+        ['title' => 'Làm sạch dịu nhẹ – nền tảng của làn da khoẻ', 'subtitle' => 'Sữa rửa mặt, tẩy trang và tẩy tế bào chết cho từng loại da', 'link' => '/danh-muc/lam-sach', 'position' => 'home_hero', 'mau' => ['#D3DDD4', '#C2A878']],
+        ['title' => 'Mặt nạ cho buổi tối thư giãn', 'subtitle' => 'Đất sét làm sạch sâu và mặt nạ giấy cấp ẩm tức thì', 'link' => '/danh-muc/mat-na', 'position' => 'category_top', 'mau' => ['#EBE5DA', '#1E1B18']],
     ],
 
     'faqs' => [
@@ -97,74 +97,63 @@ Nếu da bạn đã quen, có thể dùng cả hai trong cùng một buổi: tho
 MD,
         ],
         [
-            'title' => 'Giữ lớp nền bền màu trong thời tiết nồm ẩm',
-            'excerpt' => 'Độ ẩm cao khiến lớp nền nhanh xuống tông và loang lổ. Vài điều chỉnh nhỏ trong cách dưỡng và trang điểm sẽ tạo khác biệt lớn.',
+            'title' => 'Da dầu trong thời tiết nồm ẩm: làm sạch và dưỡng thế nào cho đủ',
+            'excerpt' => 'Độ ẩm cao khiến da tiết dầu nhiều và dễ bí lỗ chân lông. Vài điều chỉnh nhỏ trong bước làm sạch và dưỡng ẩm sẽ tạo khác biệt lớn.',
             'content' => <<<'MD'
-Thời tiết nồm ẩm làm da tiết dầu nhiều, lớp nền dễ trôi và bóng loáng chỉ sau vài giờ.
+Thời tiết nồm ẩm làm da tiết dầu nhiều, bề mặt bóng loáng và lỗ chân lông dễ bít tắc.
 
-## Trước khi trang điểm
+## Làm sạch
 
-- Dưỡng ẩm bằng **gel mỏng nhẹ** thay vì kem đặc.
-- Đợi kem chống nắng khô hẳn khoảng 5 phút.
+- Rửa mặt **hai lần mỗi ngày** bằng sữa rửa mặt dịu nhẹ; không rửa quá nhiều lần khiến da càng tiết dầu.
+- Buổi tối, tẩy trang trước rồi mới rửa mặt để lấy sạch kem chống nắng.
 
-## Khi trang điểm
+## Dưỡng ẩm
 
-- Tán kem nền **từng lớp mỏng** bằng mút ẩm, tập trung che vùng cần thiết.
-- Dùng phấn phủ kiềm dầu ở vùng chữ T, ấn nhẹ chứ không quét.
+- Chuyển sang **gel dưỡng mỏng nhẹ** thay vì kem đặc.
+- Toner có diếp cá hoặc tràm trà giúp da sạch thoáng hơn.
 
-## Trong ngày
+## Mỗi tuần
 
-Mang theo giấy thấm dầu. Thấm trước, dặm phấn sau — dặm phấn chồng lên dầu sẽ khiến lớp nền vón cục.
+Tẩy tế bào chết dạng BHA 2–3 lần và đắp mặt nạ đất sét 1 lần để thông thoáng lỗ chân lông.
 MD,
         ],
         [
-            'title' => 'Chăm sóc tóc khô xơ sau khi uốn, nhuộm',
-            'excerpt' => 'Hoá chất và nhiệt độ làm tóc mất lớp biểu bì bảo vệ. Một chu trình phục hồi đơn giản giúp tóc mềm mượt trở lại sau vài tuần.',
+            'title' => 'Tẩy tế bào chết cho da mặt: hoá học hay vật lý?',
+            'excerpt' => 'Hạt chà xát dễ gây trầy xước li ti trên da mặt. Tẩy tế bào chết dạng hoá học (AHA, BHA, PHA, enzyme) nhẹ nhàng và đều tay hơn.',
             'content' => <<<'MD'
-Sau khi uốn hoặc nhuộm, tóc thường khô, dễ rối và gãy. Đây là cách phục hồi tại nhà.
+Lớp tế bào chết tích tụ khiến da xỉn màu, sần sùi và dễ nổi mụn ẩn.
 
-## Gội đúng cách
+## Các nhóm hoạt chất
 
-- Gội **2–3 lần mỗi tuần** thay vì mỗi ngày.
-- Dùng nước ấm, không dùng nước quá nóng.
+- **BHA (salicylic acid):** tan trong dầu, đi sâu vào lỗ chân lông — hợp với da dầu, mụn đầu đen.
+- **AHA, PHA:** tác động trên bề mặt, làm da mịn và đều màu; PHA dịu hơn cho da nhạy cảm.
+- **Enzyme (đu đủ, dứa):** nhẹ nhất, phù hợp người mới bắt đầu.
 
-## Ủ tóc định kỳ
+## Dùng bao nhiêu lần?
 
-Ủ tóc với kem có **keratin** hoặc **dầu argan** 1–2 lần mỗi tuần, để 15 phút rồi xả sạch.
+Bắt đầu **2 lần mỗi tuần** vào buổi tối, tăng dần nếu da không đỏ rát.
 
-## Bảo vệ khỏi nhiệt
-
-- Thoa tinh dầu dưỡng trước khi sấy.
-- Để máy sấy ở chế độ mát hoặc ấm, cách tóc khoảng 15 cm.
-
-> Cắt tỉa phần ngọn chẻ mỗi 6–8 tuần giúp tóc trông khoẻ hơn rất nhiều.
+> Sau khi tẩy tế bào chết, da nhạy nắng hơn — luôn dùng kem chống nắng vào ban ngày.
 MD,
         ],
         [
-            'title' => 'Chọn nước hoa theo mùa và dịp sử dụng',
-            'excerpt' => 'Cùng một mùi hương có thể dễ chịu vào mùa đông nhưng nặng nề giữa trưa hè. Bí quyết nằm ở nhóm hương và cách xịt.',
+            'title' => 'Đắp mặt nạ đúng cách: bao lâu một lần là đủ?',
+            'excerpt' => 'Mặt nạ đất sét và mặt nạ giấy có vai trò khác nhau. Chọn đúng loại và đúng tần suất giúp da khoẻ mà không bị quá tải.',
             'content' => <<<'MD'
-Mùi hương phản ứng với nhiệt độ và độ ẩm của môi trường lẫn làn da.
+Mặt nạ là bước chăm sóc bổ sung, không thay thế các bước cơ bản hằng ngày.
 
-## Mùa nóng
+## Theo loại mặt nạ
 
-Ưu tiên nhóm hương **tươi mát**: cam chanh, hương biển, trà xanh. Nồng độ **EDT** hoặc xịt thơm toàn thân là vừa đủ.
+| Loại | Công dụng | Tần suất |
+| --- | --- | --- |
+| Mặt nạ đất sét | Hút dầu, làm sạch sâu | 1–2 lần/tuần |
+| Mặt nạ giấy | Cấp ẩm tức thì | 2–3 lần/tuần |
 
-## Mùa lạnh
+## Lưu ý khi đắp
 
-Nhóm hương **ấm**: gỗ, trầm, vani, xạ hương. Nồng độ **EDP** lưu hương lâu hơn trong thời tiết khô lạnh.
-
-## Theo dịp
-
-| Dịp | Gợi ý |
-| --- | --- |
-| Đi làm | Hương hoa nhẹ, xạ hương trắng |
-| Hẹn hò | Hoa trắng, gỗ đàn hương |
-| Dự tiệc tối | Trầm hương, da thuộc |
-
-## Cách xịt
-
-Xịt vào các điểm mạch đập (cổ tay, sau tai) và **không chà xát** để giữ nguyên các tầng hương.
+- Đắp sau bước làm sạch và toner.
+- Không để mặt nạ đất sét **khô nứt** hoàn toàn; không đắp mặt nạ giấy quá 20 phút.
+- Sau khi đắp, tiếp tục với serum và kem dưỡng để khoá ẩm.
 MD,
         ],
     ],

@@ -11,7 +11,7 @@
             {{ config('app.name') }} — Mỹ phẩm thảo mộc Việt
         @endif
     </title>
-    <meta name="description" content="@yield('meta_description', 'Mộc Lam — mỹ phẩm thảo mộc Việt: chăm sóc da, trang điểm, nước hoa. Giao hàng toàn quốc, miễn phí từ 500.000 ₫.')">
+    <meta name="description" content="@yield('meta_description', 'Mộc Lam — chăm sóc da mặt từ thảo mộc Việt: làm sạch, dưỡng da, mặt nạ, chống nắng. Giao hàng toàn quốc, miễn phí từ 500.000 ₫.')">
     <meta name="theme-color" content="#F5F2EC">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <x-fonts />

@@ -55,7 +55,7 @@ Schema::create('products', function (Blueprint $table) {
 
 Khoá ngoại khai báo hành vi khi xoá ngay trong migration (`restrictOnDelete`, `cascadeOnDelete`, `nullOnDelete`), hiện thực các ràng buộc đã thiết kế ở mục 3.7. `softDeletes()` thêm cột `deleted_at` cho xoá mềm.
 
-**Dữ liệu mẫu** do các seeder sinh ra, gọi theo thứ tự trong `DatabaseSeeder`: `SettingSeeder` → `UserSeeder` → `CatalogSeeder` → `ContentSeeder` → `CouponSeeder` → `OrderSeeder` → `ReviewSeeder`. Faker được cố định hạt giống (`fake()->seed(20261019)`) để mỗi lần seed cho cùng một bộ dữ liệu. Kết quả: 1 admin, 2 nhân viên, 20 khách hàng; 8 danh mục cha và 26 danh mục con; 10 thương hiệu hư cấu; 48 sản phẩm; 4 banner; 8 câu hỏi thường gặp; 15 đơn hàng đủ các trạng thái. Model có **factory** tương ứng (`database/factories`) dùng cho kiểm thử.
+**Dữ liệu mẫu** do các seeder sinh ra, gọi theo thứ tự trong `DatabaseSeeder`: `SettingSeeder` → `UserSeeder` → `CatalogSeeder` → `ContentSeeder` → `CouponSeeder` → `OrderSeeder` → `ReviewSeeder`. Faker được cố định hạt giống (`fake()->seed(20261019)`) để mỗi lần seed cho cùng một bộ dữ liệu. Kết quả: 1 admin, 2 nhân viên, 20 khách hàng; 4 danh mục cha (Làm sạch, Dưỡng da, Mặt nạ, Chống nắng) và 9 danh mục con; 5 thương hiệu hư cấu; 21 sản phẩm chăm sóc da mặt (6 sản phẩm nổi bật, 7 sản phẩm có giá khuyến mãi); 4 banner; 8 câu hỏi thường gặp; 15 đơn hàng đủ các trạng thái. Model có **factory** tương ứng (`database/factories`) dùng cho kiểm thử.
 
 [HÌNH 4.3: Bảng `products` trong công cụ quản lý MySQL (vd. phpMyAdmin / DBeaver / MySQL Workbench) sau khi seed]
 
@@ -459,7 +459,7 @@ Chuẩn bị: `php artisan migrate:fresh --seed`, `npm run build`, `php artisan 
 | 4.3 | Bảng `products` trong công cụ quản lý MySQL | — | DB `mypham_shop` |
 | 4.4 | Trang chủ (desktop) | `/` | Khách vãng lai |
 | 4.5 | Trang chủ (mobile 390px), mở menu | `/` | Khách vãng lai |
-| 4.6 | Danh sách sản phẩm có lọc | `/san-pham?danh-muc=…&khuyen-mai=1` | Khách vãng lai |
+| 4.6 | Danh sách sản phẩm có lọc | `/san-pham?danh-muc=duong-da&khuyen-mai=1` | Khách vãng lai |
 | 4.7 | Chi tiết sản phẩm đang giảm giá | `/san-pham/{slug}` (chọn SP có nhãn −%) | Khách vãng lai |
 | 4.8 | Đăng nhập khách, nhập sai mật khẩu | `/dang-nhap` | `khachhang01@mypham.test` |
 | 4.9 | Đăng nhập quản trị | `/admin/login` | — |

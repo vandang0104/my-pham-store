@@ -54,7 +54,7 @@ Mở http://localhost:8000 (cửa hàng) và http://localhost:8000/admin/login (
 | Nhân viên (staff) | `nhanvien1@mypham.test`, `nhanvien2@mypham.test` | `/admin/login` |
 | Khách hàng | `khachhang01@mypham.test` … `khachhang20@mypham.test` (01–07 có đơn đã giao) | `/dang-nhap` |
 
-Dữ liệu mẫu (`php artisan migrate:fresh --seed`): 8 danh mục cha + 26 danh mục con, 10 thương hiệu **hư cấu**, 48 sản phẩm, 4 banner, 8 FAQ, 15 đơn đủ trạng thái, cài đặt cửa hàng (phí ship 30.000 ₫, miễn phí từ 500.000 ₫, tài khoản ngân hàng **mẫu**). Ảnh là placeholder SVG sinh tự động; muốn dùng ảnh thật cho sản phẩm thì chép ảnh vào `storage/app/public/seed/` rồi seed lại (gán luân phiên theo tên file), hoặc tải ảnh từng sản phẩm trong trang quản trị.
+Dữ liệu mẫu (`php artisan migrate:fresh --seed`): chỉ chăm sóc da mặt — 4 danh mục cha (Làm sạch, Dưỡng da, Mặt nạ, Chống nắng) + 9 danh mục con, 5 thương hiệu **hư cấu**, 21 sản phẩm, 4 banner, 8 FAQ, 15 đơn đủ trạng thái, cài đặt cửa hàng (phí ship 30.000 ₫, miễn phí từ 500.000 ₫, tài khoản ngân hàng **mẫu**). Ảnh là placeholder SVG sinh tự động; muốn dùng ảnh thật cho sản phẩm thì chép ảnh vào `storage/app/public/seed/` rồi seed lại (gán luân phiên theo tên file), hoặc tải ảnh từng sản phẩm trong trang quản trị.
 
 ## Kiểm thử
 

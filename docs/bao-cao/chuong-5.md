@@ -28,7 +28,7 @@ Mỗi bước phát triển đều có Feature test cho luồng chính và chạ
 
 ### Tổng hợp kết quả chạy tự động
 
-Lần chạy toàn bộ ngày 20/10/2026: **410/410 test đạt, 2.148 assertion, thời gian ≈ 24 giây, 0 lỗi.** Số liệu trong bảng dưới tính theo từng bộ dữ liệu (một test có dataset 4 bộ được tính 4 lần).
+Lần chạy toàn bộ ngày 20/10/2026: **410/410 test đạt, 1.998 assertion, thời gian ≈ 29 giây, 0 lỗi** (sau khi thu hẹp dữ liệu mẫu còn 21 sản phẩm chăm sóc da mặt). Số liệu trong bảng dưới tính theo từng bộ dữ liệu (một test có dataset 4 bộ được tính 4 lần).
 
 | Nhóm (thư mục `tests/`) | Nội dung | Số test | Assertion |
 |---|---|---:|---:|
@@ -40,10 +40,10 @@ Lần chạy toàn bộ ngày 20/10/2026: **410/410 test đạt, 2.148 assertion
 | Feature/Admin | Khu quản trị | 29 | 133 |
 | Feature/Support | FAQ, liên hệ, chat | 21 | 90 |
 | Feature/Final | Kịch bản demo end-to-end, kiểm link nội bộ, trang lỗi | 9 | 61 |
-| Feature/Database, Models, Policies | Lược đồ, seeder, model, policy | 92 | 874 |
+| Feature/Database, Models, Policies | Lược đồ, seeder, model, policy | 92 | 724 |
 | Feature/Components, Layout, Home, Styleguide… | Giao diện dùng chung, trang chủ | 56 | 306 |
 | Unit | Enum, định dạng tiền | 27 | 97 |
-| **Tổng** | | **410** | **2.148** |
+| **Tổng** | | **410** | **1.998** |
 
 [HÌNH 5.1: Kết quả lệnh `php artisan test` trên terminal (dòng tổng "410 passed")]
 

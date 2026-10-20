@@ -11,7 +11,7 @@
 | 3. Tài khoản khách hàng | Đạt. Đăng ký, đăng nhập, quên mật khẩu, hồ sơ, đổi mật khẩu, lịch sử đơn, huỷ đơn có hoàn kho |
 | 4. Hỗ trợ khách hàng | Đạt. Chat trực tuyến (polling), form liên hệ chống spam, trang câu hỏi thường gặp |
 | 5. Khu quản trị phân quyền hai vai trò | Đạt. Sản phẩm, danh mục, đơn hàng, tài khoản, tin liên hệ, chat; thống kê doanh thu theo ngày/tháng và top bán chạy (chỉ admin) |
-| 6. Đúng nghiệp vụ, có kiểm chứng tự động | Đạt. 410 test tự động (2.148 assertion) đều đạt, gồm một kịch bản demo end-to-end |
+| 6. Đúng nghiệp vụ, có kiểm chứng tự động | Đạt. 410 test tự động (1.998 assertion) đều đạt, gồm một kịch bản demo end-to-end |
 
 Về mặt kỹ thuật, đề tài đã vận dụng mô hình MVC kết hợp lớp Service của Laravel; Eloquent ORM với scope và accessor; phân quyền hai tầng bằng middleware và Policy; giao dịch CSDL với `lockForUpdate()`; lưu snapshot dòng đơn; xoá mềm; và quy trình kiểm thử tự động trước mỗi lần commit. Toàn bộ quá trình được quản lý bằng Git, mỗi bước một commit theo chuẩn Conventional Commits.
 
@@ -73,7 +73,7 @@ Sách, giáo trình và báo cáo:
 | 9 | Luồng trạng thái đơn | pending → confirmed → shipping → delivered; huỷ chỉ từ pending/confirmed · Huỷ hoàn kho, đã thanh toán → hoàn tiền · Lịch sử ghi người thực hiện |
 | 10 | Giao diện phía khách | Ảnh trang chủ, danh sách có lọc, chi tiết · Responsive trên điện thoại · Tiếng Việt, ảnh có alt, form báo lỗi từng trường |
 | 11 | Khu quản trị | Ảnh quản lý đơn, sản phẩm · Thống kê doanh thu bằng Chart.js · Chat với khách bằng polling |
-| 12 | Kiểm thử | 410 test / 2.148 assertion đều đạt · Test case theo nhóm chức năng + kịch bản end-to-end · Lỗi đã phát hiện và sửa (test chập chờn, proxy https, cache URL) |
+| 12 | Kiểm thử | 410 test / 1.998 assertion đều đạt · Test case theo nhóm chức năng + kịch bản end-to-end · Lỗi đã phát hiện và sửa (test chập chờn, proxy https, cache URL) |
 | 13 | Kết quả và hạn chế | Đạt 6/6 mục tiêu ở mức cơ bản · Hạn chế: phạm vi rút gọn, email ghi log, chat polling · Chưa triển khai thật |
 | 14 | Hướng phát triển — Hỏi đáp | Đánh giá, mã giảm giá, VNPay · WebSocket, CRUD nội dung · Triển khai máy chủ thật · Cảm ơn và hỏi đáp |
 
@@ -84,7 +84,7 @@ Sách, giáo trình và báo cáo:
 | Thời gian | Thao tác | Điểm cần nói |
 |---|---|---|
 | 0:00–0:45 | (A) Trang chủ: banner, sản phẩm nổi bật, đang ưu đãi; thu nhỏ cửa sổ / bật chế độ điện thoại | Giao diện tiếng Việt, responsive; giá khuyến mãi hiển thị nhãn −% |
-| 0:45–1:45 | (A) Tìm "serum"; lọc danh mục *Chăm sóc da*, chọn thương hiệu, khoảng giá, "Đang giảm giá"; chuyển trang 2; mở chi tiết một sản phẩm | Lọc theo giá hiện hành; phân trang giữ bộ lọc; trang chi tiết có thành phần, tồn kho |
+| 0:45–1:45 | (A) Tìm "serum"; lọc danh mục *Dưỡng da*, chọn thương hiệu, khoảng giá, "Đang giảm giá"; chuyển trang 2; mở chi tiết một sản phẩm | Lọc theo giá hiện hành; phân trang giữ bộ lọc; trang chi tiết có thành phần, tồn kho |
 | 1:45–2:30 | (A) Thêm 2 sản phẩm vào giỏ khi chưa đăng nhập; mở giỏ, đổi số lượng vượt tồn kho | Giỏ khách vãng lai lưu session; chặn vượt tồn kho; dòng "còn … để được miễn phí giao hàng" |
 | 2:30–3:45 | (A) Đăng nhập `khachhang01@mypham.test` → giỏ vẫn còn (đã gộp); thanh toán (thông tin điền sẵn), chọn chuyển khoản, đặt hàng; mở log xem email | Gộp giỏ khi đăng nhập; đặt hàng trong transaction, trừ kho; trang xác nhận có thông tin chuyển khoản; email xác nhận |
 | 3:45–4:15 | (A) Bấm Back và gửi lại form | Chống gửi trùng: không tạo đơn thứ hai |

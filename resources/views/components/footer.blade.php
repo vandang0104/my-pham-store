@@ -24,9 +24,10 @@
             <nav class="site-footer__col" aria-labelledby="footer-shop">
                 <h2 id="footer-shop" class="site-footer__heading">Mua sắm</h2>
                 <ul class="site-footer__links">
-                    <li><a href="{{ url('/danh-muc/cham-soc-da-mat') }}" class="link-nav">Chăm sóc da mặt</a></li>
-                    <li><a href="{{ url('/danh-muc/trang-diem') }}" class="link-nav">Trang điểm</a></li>
-                    <li><a href="{{ url('/danh-muc/nuoc-hoa') }}" class="link-nav">Nước hoa</a></li>
+                    <li><a href="{{ url('/danh-muc/lam-sach') }}" class="link-nav">Làm sạch</a></li>
+                    <li><a href="{{ url('/danh-muc/duong-da') }}" class="link-nav">Dưỡng da</a></li>
+                    <li><a href="{{ url('/danh-muc/mat-na') }}" class="link-nav">Mặt nạ</a></li>
+                    <li><a href="{{ url('/danh-muc/chong-nang') }}" class="link-nav">Chống nắng</a></li>
                     <li><a href="{{ url('/san-pham?khuyen-mai=1') }}" class="link-nav">Đang ưu đãi</a></li>
                 </ul>
             </nav>

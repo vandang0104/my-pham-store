@@ -16,5 +16,6 @@ it('gán luân phiên ảnh thật khi có file trong thư mục seed', function
 
     $paths = Product::query()->with('images')->get()->flatMap->images->pluck('path');
     expect($paths->unique()->sort()->values()->all())->toBe(['seed/001.jpg', 'seed/002.png'])
-        ->and($paths->countBy()->all())->toBe(['seed/001.jpg' => 84, 'seed/002.png' => 84]);
+        // 21 sản phẩm: 11 SP × 4 ảnh + 10 SP × 3 ảnh = 74 ảnh, chia đều cho 2 file
+        ->and($paths->countBy()->all())->toBe(['seed/001.jpg' => 37, 'seed/002.png' => 37]);
 });

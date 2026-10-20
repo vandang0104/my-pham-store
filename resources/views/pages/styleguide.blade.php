@@ -61,9 +61,9 @@
                 <div>
                     <p class="measure">Link trong đoạn văn luôn gạch chân khi nghỉ, ví dụ <a href="#sg-link">chính sách đổi trả trong 7 ngày</a> hoặc <a href="#sg-link">hướng dẫn chọn kem chống nắng</a>. Rê chuột để thấy gạch chân dày lên.</p>
                     <nav aria-label="Ví dụ link điều hướng" class="sg-demo-row mt-5">
-                        <a href="#sg-link" class="link-nav">Chăm sóc da</a>
-                        <a href="#sg-link" class="link-nav" aria-current="page">Trang điểm</a>
-                        <a href="#sg-link" class="link-nav">Nước hoa</a>
+                        <a href="#sg-link" class="link-nav">Làm sạch</a>
+                        <a href="#sg-link" class="link-nav" aria-current="page">Dưỡng da</a>
+                        <a href="#sg-link" class="link-nav">Mặt nạ</a>
                         <a href="#sg-link" class="link-nav">Thương hiệu</a>
                     </nav>
                 </div>
@@ -208,7 +208,7 @@
     <section class="sg-section" aria-labelledby="sg-breadcrumb">
         <div class="container">
             <h2 id="sg-breadcrumb" class="mb-5">{{ $sections['sg-breadcrumb'] }}</h2>
-            <x-breadcrumb :items="[['label' => 'Chăm sóc da mặt', 'url' => url('/danh-muc/cham-soc-da-mat')], ['label' => 'Serum – Tinh chất', 'url' => url('/danh-muc/serum-tinh-chat')], ['label' => 'Serum Niacinamide 10% Sáng Da']]" />
+            <x-breadcrumb :items="[['label' => 'Dưỡng da', 'url' => url('/danh-muc/duong-da')], ['label' => 'Serum – Tinh chất', 'url' => url('/danh-muc/serum-tinh-chat')], ['label' => 'Serum Niacinamide 10% Sáng Da']]" />
         </div>
     </section>
 

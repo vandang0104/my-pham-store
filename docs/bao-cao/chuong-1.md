@@ -6,7 +6,7 @@ Thương mại điện tử tại Việt Nam tăng trưởng nhanh trong những
 
 Nhiều cửa hàng mỹ phẩm quy mô nhỏ và vừa vẫn bán chủ yếu qua mạng xã hội, quản lý đơn bằng tin nhắn và bảng tính, dẫn tới sai sót tồn kho, khó tra cứu lịch sử đơn và khó thống kê doanh thu [CẦN TRÍCH DẪN nếu đưa số liệu]. Một website bán hàng riêng giúp cửa hàng chủ động trình bày sản phẩm, nhận đơn 24/7, kiểm soát tồn kho tự động và có số liệu kinh doanh tin cậy.
 
-Từ góc độ học tập, đề tài cho phép vận dụng tổng hợp kiến thức về phân tích – thiết kế hệ thống, cơ sở dữ liệu quan hệ, lập trình web phía máy chủ theo mô hình MVC, bảo mật ứng dụng web và kiểm thử tự động. Vì vậy, đề tài **"Xây dựng website bán mỹ phẩm"** được lựa chọn, với thương hiệu giả định **Mộc Lam** — cửa hàng mỹ phẩm thảo mộc Việt (tên và toàn bộ dữ liệu thương hiệu, sản phẩm đều là hư cấu phục vụ demo).
+Từ góc độ học tập, đề tài cho phép vận dụng tổng hợp kiến thức về phân tích – thiết kế hệ thống, cơ sở dữ liệu quan hệ, lập trình web phía máy chủ theo mô hình MVC, bảo mật ứng dụng web và kiểm thử tự động. Vì vậy, đề tài **"Xây dựng website bán mỹ phẩm"** được lựa chọn, với thương hiệu giả định **Mộc Lam** — cửa hàng mỹ phẩm thảo mộc Việt chuyên **chăm sóc da mặt** (tên và toàn bộ dữ liệu thương hiệu, sản phẩm đều là hư cấu phục vụ demo).
 
 ## 1.2. Mục tiêu
 
@@ -24,6 +24,8 @@ Từ góc độ học tập, đề tài cho phép vận dụng tổng hợp ki�
 ## 1.3. Phạm vi
 
 ### 1.3.1. Phạm vi thực hiện
+
+**Ngành hàng:** cửa hàng chỉ kinh doanh sản phẩm chăm sóc da mặt, gồm 4 nhóm danh mục: làm sạch (sữa rửa mặt, tẩy trang, tẩy tế bào chết da mặt), dưỡng da (toner, serum – tinh chất, kem dưỡng ẩm), mặt nạ (đất sét, mặt nạ giấy) và chống nắng da mặt. Dữ liệu mẫu gồm 21 sản phẩm của 5 thương hiệu hư cấu. Trang điểm, nước hoa, chăm sóc tóc và cơ thể nằm ngoài phạm vi.
 
 Đề tài thực hiện các chức năng sau (đối chiếu chi tiết trong `docs/checklist-chuc-nang.md`):
 

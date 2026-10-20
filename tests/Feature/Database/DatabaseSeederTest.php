@@ -5,6 +5,7 @@ use App\Enums\ReviewStatus;
 use App\Enums\SkinType;
 use App\Enums\UserRole;
 use App\Models\Banner;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\Faq;
@@ -33,11 +34,13 @@ it('tạo đúng số tài khoản theo vai trò, ai cũng có đúng một đ�
 it('tạo catalog đúng yêu cầu', function () {
     $products = Product::query()->with('images')->get();
 
-    expect(Category::roots()->count())->toBe(8)
-        ->and(Category::query()->whereNotNull('parent_id')->count())->toBeGreaterThan(8)
-        ->and($products)->toHaveCount(48)
-        ->and($products->where('is_featured', true))->toHaveCount(12)
-        ->and($products->where('is_on_sale', true)->count())->toBeBetween(13, 15)
+    // Chỉ chăm sóc da mặt: 4 danh mục cha, 9 danh mục con, 5 thương hiệu
+    expect(Category::roots()->pluck('slug')->sort()->values()->all())->toBe(['chong-nang', 'duong-da', 'lam-sach', 'mat-na'])
+        ->and(Category::query()->whereNotNull('parent_id')->count())->toBe(9)
+        ->and(Brand::count())->toBe(5)
+        ->and($products)->toHaveCount(21)
+        ->and($products->where('is_featured', true))->toHaveCount(6)
+        ->and($products->where('is_on_sale', true)->count())->toBe(7)
         ->and($products->filter(fn (Product $p) => $p->sale_price !== null && $p->sale_price >= $p->price))->toBeEmpty()
         ->and($products->filter(fn (Product $p) => $p->price % 1000 !== 0 || ($p->sale_price ?? 0) % 1000 !== 0))->toBeEmpty()
         ->and($products->every(fn (Product $p) => in_array($p->images->count(), [3, 4], true)))->toBeTrue()

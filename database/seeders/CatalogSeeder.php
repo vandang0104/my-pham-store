@@ -12,12 +12,12 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 /**
- * Danh mục (cha + con), 10 thương hiệu hư cấu, 48 sản phẩm kèm 3–4 ảnh mỗi sản phẩm.
+ * Catalog chăm sóc da mặt: 4 danh mục cha + 9 danh mục con, 5 thương hiệu hư cấu, 21 sản phẩm kèm 3–4 ảnh mỗi sản phẩm.
  */
 class CatalogSeeder extends Seeder
 {
     /** Tồn kho cố định cho vài sản phẩm để có dữ liệu "sắp hết" / "hết hàng" */
-    private const STOCK_OVERRIDES = ['Mặt nạ đất sét Bí Đao' => 4, 'Tinh dầu dưỡng tóc Argan' => 3, 'Xịt thơm toàn thân Đào Hồng' => 0];
+    private const STOCK_OVERRIDES = ['Mặt nạ đất sét Bí Đao' => 4, 'Toner Gạo Sữa Cấp Ẩm' => 3, 'Mặt nạ giấy Hyaluronic Cấp Ẩm (hộp 5 miếng)' => 0];
 
     public function run(): void
     {

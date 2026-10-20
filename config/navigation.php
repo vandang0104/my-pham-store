@@ -13,16 +13,16 @@
 
 return [
 
-    // v2: cache giữ đường dẫn tương đối thay vì URL tuyệt đối — đổi khoá để bỏ bản cũ khác định dạng
-    'cache_key' => 'navigation.menu.v2',
+    // v2: cache giữ đường dẫn tương đối thay vì URL tuyệt đối; v3: catalog chỉ còn chăm sóc da mặt — đổi khoá để bỏ menu cũ
+    'cache_key' => 'navigation.menu.v3',
 
     'cache_ttl' => 60 * 60 * 24,
 
     'groups' => [
-        ['label' => 'Chăm sóc da', 'roots' => ['cham-soc-da-mat', 'chong-nang']],
-        ['label' => 'Trang điểm', 'roots' => ['trang-diem', 'dung-cu-lam-dep']],
-        ['label' => 'Chăm sóc tóc & cơ thể', 'roots' => ['cham-soc-toc', 'cham-soc-co-the']],
-        ['label' => 'Nước hoa', 'roots' => ['nuoc-hoa', 'bo-qua-tang']],
+        ['label' => 'Làm sạch', 'roots' => ['lam-sach']],
+        ['label' => 'Dưỡng da', 'roots' => ['duong-da']],
+        ['label' => 'Mặt nạ', 'roots' => ['mat-na']],
+        ['label' => 'Chống nắng', 'roots' => ['chong-nang']],
         ['label' => 'Thương hiệu', 'brands' => true],
     ],
 
