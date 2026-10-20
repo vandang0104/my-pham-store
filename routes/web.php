@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Account;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -50,6 +51,18 @@ Route::middleware('guest')->group(function () {
 Route::post('/dang-xuat', [LoginController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
+
+// Tài khoản khách hàng (chưa đăng nhập → /dang-nhap). Sổ địa chỉ, mua lại, avatar: đã cắt.
+Route::middleware('auth')->prefix('tai-khoan')->name('account.')->group(function () {
+    Route::get('/', Account\DashboardController::class)->name('dashboard');
+    Route::get('/thong-tin', [Account\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/thong-tin', [Account\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/mat-khau', [Account\ProfileController::class, 'editPassword'])->name('password.edit');
+    Route::put('/mat-khau', [Account\ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::get('/don-hang', [Account\OrderController::class, 'index'])->name('orders.index');
+    Route::get('/don-hang/{order:code}', [Account\OrderController::class, 'show'])->name('orders.show');
+    Route::post('/don-hang/{order:code}/huy', [Account\OrderController::class, 'cancel'])->name('orders.cancel');
+});
 
 // Trang xem token và component theo DESIGN.md — chỉ đăng ký ở môi trường local
 if (app()->environment('local')) {

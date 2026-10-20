@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
+use App\Exceptions\InvalidOrderTransitionException;
 use App\Exceptions\OrderException;
 use App\Mail\OrderPlaced;
 use App\Models\Order;
@@ -117,6 +118,47 @@ class OrderService
         $this->sendConfirmation($order);
 
         return $order;
+    }
+
+    /**
+     * Huỷ đơn (quy tắc 3): chỉ từ pending/confirmed; hoàn kho, trừ sold_count, ghi lịch sử.
+     * Dùng chung cho khách (trang tài khoản) và admin/staff (S9). Quyền kiểm ở Policy, đây chỉ kiểm luồng trạng thái.
+     *
+     * @throws InvalidOrderTransitionException
+     */
+    public function cancel(Order $order, ?User $by, ?string $note = null): Order
+    {
+        return DB::transaction(function () use ($order, $by, $note) {
+            // Khoá đơn trước (đọc lại trạng thái mới nhất), rồi khoá sản phẩm theo id tăng dần như lúc đặt
+            $locked = Order::query()->whereKey($order->id)->lockForUpdate()->firstOrFail();
+            if (! $locked->status->canTransitionTo(OrderStatus::Cancelled)) {
+                throw InvalidOrderTransitionException::make($locked->status, OrderStatus::Cancelled);
+            }
+
+            $items = $locked->items()->whereNotNull('product_id')->get();
+            $quantities = $items->groupBy('product_id')->map(fn ($rows) => $rows->sum('quantity'));
+            // withTrashed: sản phẩm đã xoá mềm vẫn được hoàn kho
+            $products = Product::withTrashed()->whereKey($quantities->keys())->orderBy('id')->lockForUpdate()->get();
+
+            foreach ($products as $product) {
+                $quantity = $quantities[$product->id];
+                $product->forceFill([
+                    'stock' => $product->stock + $quantity,
+                    'sold_count' => max(0, $product->sold_count - $quantity),
+                ])->save();
+            }
+
+            $from = $locked->status;
+            $locked->forceFill(['status' => OrderStatus::Cancelled, 'cancelled_at' => now()])->save();
+            $locked->statusHistories()->create([
+                'from_status' => $from,
+                'to_status' => OrderStatus::Cancelled,
+                'changed_by' => $by?->id,
+                'note' => $note,
+            ]);
+
+            return $locked;
+        });
     }
 
     /**

@@ -1,11 +1,15 @@
 <?php
 
+use App\Exceptions\CartException;
+use App\Exceptions\InvalidOrderTransitionException;
+use App\Exceptions\OrderException;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\CartService;
 use App\Support\Money;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -68,6 +72,15 @@ describe('thêm vào giỏ', function () {
         'đang ẩn' => ['đang ẩn', 'Sản phẩm này hiện không còn bán.'],
         'đã xoá mềm' => ['đã xoá', 'Sản phẩm này hiện không còn bán.'],
     ]);
+
+    it('lỗi nghiệp vụ (giỏ, đặt hàng, sai luồng trạng thái) chỉ báo cho khách, không ghi vào log lỗi', function () {
+        $handler = app(ExceptionHandler::class);
+
+        expect($handler->shouldReport(new CartException('x')))->toBeFalse()
+            ->and($handler->shouldReport(new OrderException('x')))->toBeFalse()
+            ->and($handler->shouldReport(new InvalidOrderTransitionException('x')))->toBeFalse()
+            ->and($handler->shouldReport(new RuntimeException('x')))->toBeTrue();
+    });
 
     it('dữ liệu không hợp lệ bị từ chối (sản phẩm không tồn tại, số lượng < 1)', function () {
         $this->post(route('cart.store'), ['product_id' => 999999])->assertSessionHasErrors('product_id');

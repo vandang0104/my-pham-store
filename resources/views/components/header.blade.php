@@ -58,8 +58,8 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end account-menu">
                         <li><p class="account-menu__hello">Xin chào, {{ auth()->user()->name }}</p></li>
-                        <li><a class="dropdown-item" href="{{ url('/tai-khoan') }}">Tài khoản của tôi</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/tai-khoan/don-hang') }}">Đơn hàng của tôi</a></li>
+                        <li><a class="dropdown-item" href="{{ route('account.dashboard') }}">Tài khoản của tôi</a></li>
+                        <li><a class="dropdown-item" href="{{ route('account.orders.index') }}">Đơn hàng của tôi</a></li>
                         @if (auth()->user()->isBackOffice())
                             <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Trang quản trị</a></li>
                         @endif
@@ -132,8 +132,8 @@
 
             <ul class="drawer-links">
                 @auth
-                    <li><a href="{{ url('/tai-khoan') }}">Tài khoản của tôi</a></li>
-                    <li><a href="{{ url('/tai-khoan/don-hang') }}">Đơn hàng của tôi</a></li>
+                    <li><a href="{{ route('account.dashboard') }}">Tài khoản của tôi</a></li>
+                    <li><a href="{{ route('account.orders.index') }}">Đơn hàng của tôi</a></li>
                     @if (auth()->user()->isBackOffice())
                         <li><a href="{{ route('admin.dashboard') }}">Trang quản trị</a></li>
                     @endif

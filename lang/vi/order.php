@@ -9,5 +9,8 @@ return [
     'duplicate' => 'Đơn hàng này đã được gửi. Nếu chưa thấy trang xác nhận, vui lòng kiểm tra email hoặc giỏ hàng.',
     'placed' => 'Đặt hàng thành công! Mã đơn của bạn là :code.',
     'history_placed' => 'Khách đặt hàng.',
+    'history_cancelled_by_customer' => 'Khách huỷ đơn.',
+    'invalid_transition' => 'Không thể chuyển đơn từ “:from” sang “:to”.',
+    'cancelled' => 'Đã huỷ đơn :code. Số lượng sản phẩm đã được hoàn lại kho.',
     'mail_subject' => 'Xác nhận đơn hàng :code — :app',
 ];

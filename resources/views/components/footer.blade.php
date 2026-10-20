@@ -35,7 +35,7 @@
                 <ul class="site-footer__links">
                     <li><a href="{{ url('/cau-hoi-thuong-gap') }}" class="link-nav">Câu hỏi thường gặp</a></li>
                     <li><a href="{{ url('/lien-he') }}" class="link-nav">Liên hệ</a></li>
-                    <li><a href="{{ url('/tai-khoan/don-hang') }}" class="link-nav">Đơn hàng của tôi</a></li>
+                    <li><a href="{{ route('account.orders.index') }}" class="link-nav">Đơn hàng của tôi</a></li>
                 </ul>
             </nav>
             {{-- Chính sách đổi trả / vận chuyển nằm trong FAQ (trang tĩnh đã cắt khỏi phạm vi rút gọn) --}}
@@ -43,7 +43,7 @@
                 <h2 id="footer-about" class="site-footer__heading">Về Mộc Lam</h2>
                 <ul class="site-footer__links">
                     <li><a href="{{ route('home') }}#gioi-thieu" class="link-nav">Giới thiệu</a></li>
-                    <li><a href="{{ url('/tai-khoan') }}" class="link-nav">Tài khoản</a></li>
+                    <li><a href="{{ route('account.dashboard') }}" class="link-nav">Tài khoản</a></li>
                 </ul>
             </nav>
             <div class="site-footer__contact">

@@ -40,8 +40,8 @@ class OrderPlaced extends Mailable
                 'holder' => Setting::get('bank_account_name'),
             ] : null,
             'hotline' => Setting::get('store_hotline'),
-            // Khách có tài khoản xem đơn ở trang tài khoản (S4); khách vãng lai không có link xem lại
-            'orderUrl' => $order->user_id ? url('/tai-khoan/don-hang/'.$order->code) : null,
+            // Khách có tài khoản xem đơn ở trang tài khoản; khách vãng lai không có link xem lại
+            'orderUrl' => $order->user_id ? route('account.orders.show', $order) : null,
             'shopUrl' => route('home'),
         ]);
     }

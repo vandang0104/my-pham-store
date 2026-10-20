@@ -37,6 +37,18 @@ enum OrderStatus: string
         };
     }
 
+    /** Class badge Bootstrap cho trạng thái (trang tài khoản, admin) */
+    public function badgeClass(): string
+    {
+        return match ($this) {
+            self::Pending => 'text-bg-warning',
+            self::Confirmed => 'text-bg-info',
+            self::Shipping => 'text-bg-primary',
+            self::Delivered => 'text-bg-success',
+            self::Cancelled => 'text-bg-secondary',
+        };
+    }
+
     public function canTransitionTo(self $next): bool
     {
         return in_array($next, $this->transitions(), true);

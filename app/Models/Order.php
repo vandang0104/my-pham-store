@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
+use App\Support\Money;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\RouteKey;
@@ -41,6 +42,11 @@ class Order extends Model
             'delivered_at' => 'datetime',
             'cancelled_at' => 'datetime',
         ];
+    }
+
+    protected function formattedTotal(): Attribute
+    {
+        return Attribute::get(fn (): string => Money::format($this->total));
     }
 
     /** Địa chỉ một dòng: chi tiết, phường/xã, (quận/huyện), tỉnh/thành — quận/huyện bỏ trống thì bỏ qua */

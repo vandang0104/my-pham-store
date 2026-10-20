@@ -50,8 +50,8 @@ Route dự kiến: `dashboard`, `products`, `categories`, `orders`, `users`, `re
 | Xem sản phẩm, tìm kiếm, FAQ | ✅ | ✅ | ✅ | ✅ | Công khai | Chỉ hiện dữ liệu đang bật |
 | Giỏ hàng, đặt hàng | ✅ | ✅ | ✅ | ✅ | Công khai | Khách vãng lai được đặt hàng (quy tắc 7) |
 | Gửi liên hệ, chat với cửa hàng | ✅ | ✅ | ✅ | ✅ | Công khai | |
-| Xem đơn của mình | ✅ | ✅ | ⚠️ | ❌ | `OrderPolicy::view` | Customer chỉ xem đơn của chính mình |
-| Huỷ đơn của mình | ⚠️ | ⚠️ | ⚠️ | ❌ | `OrderPolicy::cancel` | Chỉ đơn của mình, khi đang `pending`/`confirmed` |
+| Xem đơn của mình (`/tai-khoan/don-hang`) | ✅ | ✅ | ⚠️ | ❌ | `OrderPolicy::view` + kiểm `user_id` | Khu tài khoản chỉ liệt kê/hiện đơn của chính người đăng nhập (kể cả admin/staff); đơn người khác → **404** (không lộ mã đơn) |
+| Huỷ đơn của mình | ⚠️ | ⚠️ | ⚠️ | ❌ | Kiểm `user_id` + `OrderService::cancel` (luồng trạng thái) | Chỉ đơn của mình (khác → 404), khi đang `pending`/`confirmed` (khác → báo lỗi). Huỷ đơn người khác làm ở khu quản trị |
 | Hồ sơ, đổi mật khẩu | ✅ | ✅ | ✅ | ❌ | Middleware `auth` | Chỉ tài khoản của chính mình |
 
 ## Quyết định đã chốt
