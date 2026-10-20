@@ -22,7 +22,7 @@ Tên bảng số nhiều snake_case; Model số ít PascalCase; route name dạn
 
 ## Cơ sở dữ liệu
 Xem sheet 'Database' trong file kế hoạch; nguồn sự thật là migrations. Mọi thay đổi schema phải qua migration mới và cập nhật mục này + docs/erd.mmd.
-Đã có migration (18 bảng nghiệp vụ): users (+ phone, role, avatar, birthday, skin_type, is_active), addresses, categories, brands, products (xoá mềm), product_images, carts, cart_items, coupons, orders, order_items, order_status_histories, reviews, banners, posts, faqs, contact_messages, settings.
+Đã có migration (20 bảng nghiệp vụ): users (+ phone, role, avatar, birthday, skin_type, is_active), addresses, categories, brands, products (xoá mềm), product_images, carts, cart_items, coupons, orders, order_items, order_status_histories, reviews, banners, posts, faqs, contact_messages, settings, chat_conversations, chat_messages (chat — migration 2026_10_20_100000; khách vãng lai theo guest_token trong session).
 Ràng buộc xoá chính: xoá user → đơn giữ lại (user_id null), giỏ/địa chỉ/đánh giá xoá theo; coupon/sản phẩm đã có trong đơn không xoá được (restrict); danh mục/thương hiệu còn sản phẩm không xoá được.
 carts chỉ cho user đăng nhập (user_id bắt buộc, unique; đã bỏ session_id) — giỏ khách vãng lai lưu trong session. Doanh thu theo ngày tính theo orders.created_at (index ghép status + created_at).
 Tài liệu: docs/erd.mmd (ERD), docs/data-dictionary.md (cột, kiểu, ràng buộc, hành vi khi xoá).

@@ -33,7 +33,7 @@ Route dự kiến: `dashboard`, `products`, `categories`, `orders`, `users`, `re
 | Đơn hàng | Đánh dấu đã thanh toán | ✅ | ✅ | ❌ | ❌ | `OrderPolicy::updatePayment` | Chuyển khoản |
 | Đơn hàng | Huỷ | ⚠️ | ⚠️ | ❌ | ❌ | `OrderPolicy::cancel` | Chỉ khi đơn đang `pending`/`confirmed`; hoàn kho |
 | Đơn hàng | Xoá | ❌ | ❌ | ❌ | ❌ | `OrderPolicy::delete` | Không ai xoá được đơn hàng, kể cả đơn đã huỷ (quy tắc 11) |
-| Chat trực tuyến | Xem hội thoại, trả lời | ✅ | ✅ | ❌ | ❌ | Route (Policy làm ở S6) | |
+| Chat trực tuyến | Xem hội thoại, trả lời, đóng | ✅ | ✅ | ❌ | ❌ | Route `role:admin,staff` (`/admin/chats`) | Không cần Policy riêng: mọi admin/staff thấy mọi hội thoại |
 | Tin nhắn liên hệ | Xem, đánh dấu đã xử lý | ✅ | ✅ | ❌ | ❌ | Route (làm ở S5/S7) | |
 | Tài khoản (khách + nhân viên) | Xem danh sách, chi tiết | ✅ | ❌ | ❌ | ❌ | Route `role:admin` + `UserPolicy::viewAny/view` | Một màn chung cho mọi vai trò |
 | Tài khoản | Đổi vai trò | ⚠️ | ❌ | ❌ | ❌ | `UserPolicy::changeRole` | Không hạ quyền **admin đang hoạt động cuối cùng** (quy tắc 9) |
@@ -49,7 +49,7 @@ Route dự kiến: `dashboard`, `products`, `categories`, `orders`, `users`, `re
 |---|:-:|:-:|:-:|:-:|---|---|
 | Xem sản phẩm, tìm kiếm, FAQ | ✅ | ✅ | ✅ | ✅ | Công khai | Chỉ hiện dữ liệu đang bật |
 | Giỏ hàng, đặt hàng | ✅ | ✅ | ✅ | ✅ | Công khai | Khách vãng lai được đặt hàng (quy tắc 7) |
-| Gửi liên hệ, chat với cửa hàng | ✅ | ✅ | ✅ | ✅ | Công khai | |
+| Gửi liên hệ, chat với cửa hàng | ✅ | ✅ | ✅ | ✅ | Công khai (`/chat/tin-nhan`, throttle 20/phút) | Chỉ đọc/ghi hội thoại của chính mình (user_id hoặc guest_token trong session); chat tắt (`chat_enabled = 0`) → 404 |
 | Xem đơn của mình (`/tai-khoan/don-hang`) | ✅ | ✅ | ⚠️ | ❌ | `OrderPolicy::view` + kiểm `user_id` | Khu tài khoản chỉ liệt kê/hiện đơn của chính người đăng nhập (kể cả admin/staff); đơn người khác → **404** (không lộ mã đơn) |
 | Huỷ đơn của mình | ⚠️ | ⚠️ | ⚠️ | ❌ | Kiểm `user_id` + `OrderService::cancel` (luồng trạng thái) | Chỉ đơn của mình (khác → 404), khi đang `pending`/`confirmed` (khác → báo lỗi). Huỷ đơn người khác làm ở khu quản trị |
 | Hồ sơ, đổi mật khẩu | ✅ | ✅ | ✅ | ❌ | Middleware `auth` | Chỉ tài khoản của chính mình |

@@ -29,6 +29,7 @@
     </main>
 
     <x-footer />
+    <x-chat-widget />
 
     @stack('scripts')
 </body>

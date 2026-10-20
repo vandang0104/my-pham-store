@@ -4,6 +4,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 uses(RefreshDatabase::class);
@@ -171,7 +172,9 @@ describe('trang danh mục và thương hiệu', function () {
 
 describe('hiệu năng', function () {
     it('không lazy load và số truy vấn không tăng theo số sản phẩm', function () {
+        // Cache lạnh ở cả hai lần đo (menu, settings) để chênh lệch chỉ có thể do số sản phẩm tăng
         $count = function (string $uri) {
+            Cache::flush();
             DB::flushQueryLog();
             DB::enableQueryLog();
             $this->get($uri)->assertOk();

@@ -26,6 +26,8 @@ class Setting extends Model
         'store_email' => 'lienhe@moclam.test',
         'store_address' => '12 Lê Lợi, Phường Bến Thành, TP. Hồ Chí Minh (địa chỉ mẫu)',
         'store_hours' => '8:00–21:00, cả cuối tuần',
+        // '1' bật / '0' tắt nút chat trực tuyến
+        'chat_enabled' => '1',
     ];
 
     protected static function booted(): void

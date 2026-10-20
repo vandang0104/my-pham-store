@@ -372,3 +372,33 @@ Cài đặt cửa hàng dạng khoá – giá trị (thông tin cửa hàng, ph�
 | `value` | `text` | có |  |  | Giá trị (chuỗi/JSON). |
 | `created_at` | `timestamp` | có |  |  | Thời điểm tạo bản ghi. |
 | `updated_at` | `timestamp` | có |  |  | Thời điểm cập nhật gần nhất. |
+
+## `chat_conversations`
+
+Hội thoại chat trực tuyến (thêm 20/10/2026, migration `2026_10_20_100000_create_chat_tables`). User đăng nhập: theo `user_id`; khách vãng lai: theo `guest_token` lưu trong session.
+
+| Cột | Kiểu | NULL | Mặc định | Ràng buộc | Mô tả |
+|---|---|---|---|---|---|
+| `id` | `bigint unsigned` | không |  | PK | Khoá chính tự tăng. |
+| `user_id` | `bigint unsigned` | có |  | FK → `users.id`, xoá user → SET NULL | Chủ hội thoại (user đăng nhập). |
+| `guest_token` | `varchar(64)` | có |  | UNIQUE | Mã ngẫu nhiên lưu trong session của khách vãng lai. |
+| `guest_name` | `varchar(100)` | có |  |  | Tên khách vãng lai nhập trước tin đầu. |
+| `status` | `enum('open','closed')` | không | `open` | INDEX | Đang mở / đã đóng (khách nhắn tiếp thì mở lại). |
+| `last_message_at` | `timestamp` | có |  | INDEX | Thời điểm tin cuối (sắp xếp danh sách quản trị). |
+| `created_at` | `timestamp` | có |  |  | Thời điểm tạo bản ghi. |
+| `updated_at` | `timestamp` | có |  |  | Thời điểm cập nhật gần nhất. |
+
+## `chat_messages`
+
+Tin nhắn trong hội thoại chat.
+
+| Cột | Kiểu | NULL | Mặc định | Ràng buộc | Mô tả |
+|---|---|---|---|---|---|
+| `id` | `bigint unsigned` | không |  | PK | Khoá chính tự tăng (polling lấy tin có id lớn hơn id cuối). |
+| `conversation_id` | `bigint unsigned` | không |  | FK → `chat_conversations.id`, CASCADE; INDEX (`conversation_id`, `id`) | Hội thoại chứa tin. |
+| `sender_type` | `enum('customer','staff')` | không |  |  | Phía gửi: khách / nhân viên. |
+| `sender_id` | `bigint unsigned` | có |  | FK → `users.id`, xoá user → SET NULL | Người gửi (null với khách vãng lai). |
+| `body` | `text` | không |  |  | Nội dung (≤ 1000 ký tự, kiểm ở FormRequest; hiển thị bằng textContent / escape). |
+| `read_at` | `timestamp` | có |  |  | Phía bên kia đã đọc lúc nào. |
+| `created_at` | `timestamp` | có |  |  | Thời điểm tạo bản ghi. |
+| `updated_at` | `timestamp` | có |  |  | Thời điểm cập nhật gần nhất. |

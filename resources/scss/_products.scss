@@ -61,3 +61,31 @@
         }
     }
 }
+
+// ---- Chat trực tuyến (nút nổi + khung tin) ----
+.chat-launcher {
+    position: fixed;
+    right: var(--sp-4);
+    bottom: var(--sp-4);
+    z-index: 1030;
+}
+
+.chat-messages {
+    min-height: 200px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.chat-message {
+    max-width: 85%;
+    margin-bottom: var(--sp-3);
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--c-surface);
+    word-wrap: break-word;
+    white-space: pre-line;
+
+    &--mine {
+        margin-left: auto;
+        background: var(--c-field);
+    }
+}

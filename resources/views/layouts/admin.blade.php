@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') · Quản trị {{ config('app.name') }}</title>
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <x-fonts />
@@ -13,7 +14,8 @@
     {{-- Layout quản trị TẠM ở mức chức năng; layout admin thật (Bootstrap mặc định, menu bên) làm ở S7 --}}
     <main class="container py-9">
         <div class="row justify-content-center">
-            <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+            {{-- Trang cần rộng hơn (vd chat) đặt @section('admin_col', 'col-lg-10') --}}
+            <div class="col-12 @yield('admin_col', 'col-sm-10 col-md-7 col-lg-5')">
                 <p class="text-center mb-6">
                     <a href="{{ route('home') }}" class="link-nav t-title"><x-wordmark /></a>
                 </p>

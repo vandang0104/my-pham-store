@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FaqController;
@@ -32,6 +33,10 @@ Route::delete('/gio-hang/{product:id}', [CartController::class, 'destroy'])->nam
 Route::get('/cau-hoi-thuong-gap', FaqController::class)->name('faq.index');
 Route::get('/lien-he', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/lien-he', [ContactController::class, 'store'])->name('contact.store');
+
+// Chat trực tuyến (JSON, polling). Gửi tin giới hạn 20 lượt/phút
+Route::get('/chat/tin-nhan', [ChatController::class, 'index'])->name('chat.messages');
+Route::post('/chat/tin-nhan', [ChatController::class, 'store'])->name('chat.send')->middleware('throttle:20,1');
 
 // Thanh toán (khách vãng lai được đặt hàng — quy tắc 7) và trang xác nhận đơn (bind theo mã đơn)
 Route::get('/thanh-toan', [CheckoutController::class, 'create'])->name('checkout.create');

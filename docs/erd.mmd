@@ -1,4 +1,4 @@
-%% ERD theo schema hiện tại (sau migrations đến 2026_10_19_120300). Chi tiết cột: docs/data-dictionary.md
+%% ERD theo schema hiện tại (sau migrations đến 2026_10_20_100000). Chi tiết cột: docs/data-dictionary.md
 %% Cardinality phía cha: || khi FK NOT NULL, |o khi FK cho phép NULL. Nhãn quan hệ ghi hành vi khi xoá bản ghi cha.
 %% Không vẽ bảng hạ tầng Laravel: cache, cache_locks, jobs, job_batches, failed_jobs, sessions, password_reset_tokens, migrations.
 erDiagram
@@ -8,6 +8,9 @@ erDiagram
     users ||--o{ reviews : "viết (cascade)"
     users |o--o{ posts : "là tác giả (set null)"
     users |o--o{ order_status_histories : "thao tác (set null)"
+    users |o--o{ chat_conversations : "chat (set null)"
+    users |o--o{ chat_messages : "gửi (set null)"
+    chat_conversations ||--o{ chat_messages : "gồm (cascade)"
     categories |o--o{ categories : "cha - con (restrict)"
     categories ||--o{ products : "chứa (restrict)"
     brands ||--o{ products : "sản xuất (restrict)"
@@ -263,6 +266,28 @@ erDiagram
         bigint id PK
         varchar key UK
         text value "nullable"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    chat_conversations {
+        bigint id PK
+        bigint user_id FK "nullable"
+        varchar guest_token UK "nullable, khách vãng lai"
+        varchar guest_name "nullable"
+        enum status "open|closed, index"
+        timestamp last_message_at "nullable, index"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    chat_messages {
+        bigint id PK
+        bigint conversation_id FK "index cùng id"
+        enum sender_type "customer|staff"
+        bigint sender_id FK "nullable"
+        text body
+        timestamp read_at "nullable"
         timestamp created_at
         timestamp updated_at
     }
