@@ -23,6 +23,9 @@ class Setting extends Model
         'bank_account_number' => '0000 1234 5678',
         'bank_account_name' => 'CONG TY TNHH MOC LAM (MAU)',
         'store_hotline' => '1800 0000',
+        'store_email' => 'lienhe@moclam.test',
+        'store_address' => '12 Lê Lợi, Phường Bến Thành, TP. Hồ Chí Minh (địa chỉ mẫu)',
+        'store_hours' => '8:00–21:00, cả cuối tuần',
     ];
 
     protected static function booted(): void

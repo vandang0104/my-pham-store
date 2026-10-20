@@ -33,8 +33,8 @@
             <nav class="site-footer__col" aria-labelledby="footer-help">
                 <h2 id="footer-help" class="site-footer__heading">Hỗ trợ</h2>
                 <ul class="site-footer__links">
-                    <li><a href="{{ url('/cau-hoi-thuong-gap') }}" class="link-nav">Câu hỏi thường gặp</a></li>
-                    <li><a href="{{ url('/lien-he') }}" class="link-nav">Liên hệ</a></li>
+                    <li><a href="{{ route('faq.index') }}" class="link-nav">Câu hỏi thường gặp</a></li>
+                    <li><a href="{{ route('contact.create') }}" class="link-nav">Liên hệ</a></li>
                     <li><a href="{{ route('account.orders.index') }}" class="link-nav">Đơn hàng của tôi</a></li>
                 </ul>
             </nav>

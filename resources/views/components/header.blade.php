@@ -147,8 +147,8 @@
                     <li><a href="{{ route('login') }}">Đăng nhập</a></li>
                     <li><a href="{{ route('register') }}">Đăng ký</a></li>
                 @endauth
-                <li><a href="{{ url('/cau-hoi-thuong-gap') }}">Câu hỏi thường gặp</a></li>
-                <li><a href="{{ url('/lien-he') }}">Liên hệ</a></li>
+                <li><a href="{{ route('faq.index') }}">Câu hỏi thường gặp</a></li>
+                <li><a href="{{ route('contact.create') }}">Liên hệ</a></li>
             </ul>
         </div>
     </div>

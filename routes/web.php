@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StyleguideController;
@@ -25,6 +27,11 @@ Route::get('/gio-hang', [CartController::class, 'index'])->name('cart.index');
 Route::post('/gio-hang', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/gio-hang/{product:id}', [CartController::class, 'update'])->name('cart.update')->withTrashed();
 Route::delete('/gio-hang/{product:id}', [CartController::class, 'destroy'])->name('cart.destroy')->withTrashed();
+
+// Hỗ trợ: FAQ chỉ hiển thị từ seed; liên hệ lưu contact_messages (giới hạn 3 lượt / 10 phút theo IP trong ContactRequest)
+Route::get('/cau-hoi-thuong-gap', FaqController::class)->name('faq.index');
+Route::get('/lien-he', [ContactController::class, 'create'])->name('contact.create');
+Route::post('/lien-he', [ContactController::class, 'store'])->name('contact.store');
 
 // Thanh toán (khách vãng lai được đặt hàng — quy tắc 7) và trang xác nhận đơn (bind theo mã đơn)
 Route::get('/thanh-toan', [CheckoutController::class, 'create'])->name('checkout.create');
