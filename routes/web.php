@@ -48,6 +48,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/dang-nhap', [LoginController::class, 'create'])->name('login');
     Route::post('/dang-nhap', [LoginController::class, 'store']);
 
+    // Đăng nhập quản trị riêng (ngoài nhóm role của /admin); chỉ admin/staff qua được
+    Route::get('/admin/login', [LoginController::class, 'createAdmin'])->name('admin.login');
+    Route::post('/admin/login', [LoginController::class, 'storeAdmin'])->name('admin.login.store');
+
     Route::get('/dang-ky', [RegisterController::class, 'create'])->name('register');
     Route::post('/dang-ky', [RegisterController::class, 'store']);
 

@@ -6,8 +6,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 describe('middleware khu quản trị', function () {
-    it('chuyển khách vãng lai về trang đăng nhập', function () {
-        $this->get('/admin')->assertRedirect(route('login'));
+    it('chuyển khách vãng lai về trang đăng nhập quản trị', function () {
+        $this->get('/admin')->assertRedirect(route('admin.login'));
     });
 
     it('trả 403 cho khách hàng', function () {
@@ -38,7 +38,7 @@ describe('middleware khu quản trị', function () {
         $response = $this->get($uri);
 
         match ($expected) {
-            'đăng nhập' => $response->assertRedirect(route('login')),
+            'đăng nhập' => $response->assertRedirect(route('admin.login')),
             '403' => $response->assertForbidden(),
             '200' => $response->assertOk(),
         };

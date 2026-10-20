@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\View\Composers\AdminMenuComposer;
 use App\View\Composers\CartComposer;
 use App\View\Composers\NavigationComposer;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
         // Header: menu chính (cache) và số lượng giỏ hàng
         View::composer('components.header', NavigationComposer::class);
         View::composer('components.header', CartComposer::class);
+        View::composer('layouts.admin', AdminMenuComposer::class);
 
         // Phân trang theo DESIGN.md §9; controller nhớ gọi ->withQueryString() để giữ bộ lọc
         Paginator::defaultView('pagination.default');

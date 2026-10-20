@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('title', 'Chat với khách')
-@section('admin_col', 'col-lg-10')
 
 @section('content')
     @if ($conversations->isEmpty())

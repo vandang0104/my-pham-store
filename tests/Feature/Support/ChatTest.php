@@ -76,7 +76,7 @@ describe('chat phía quản trị', function () {
     it('khách và khách hàng không vào được khu chat quản trị', function () {
         $conversation = ChatConversation::query()->create(['guest_token' => 'abc', 'guest_name' => 'X']);
 
-        $this->get(route('admin.chats.index'))->assertRedirect(route('login'));
+        $this->get(route('admin.chats.index'))->assertRedirect(route('admin.login'));
         $this->actingAs(User::factory()->customer()->create())->get(route('admin.chats.show', $conversation))->assertForbidden();
     });
 });

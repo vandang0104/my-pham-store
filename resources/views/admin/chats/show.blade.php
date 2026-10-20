@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('title', 'Chat: '.$conversation->displayName())
-@section('admin_col', 'col-lg-10')
 
 @section('content')
     <div data-admin-chat data-url="{{ route('admin.chats.messages', $conversation) }}" data-send-url="{{ route('admin.chats.reply', $conversation) }}"

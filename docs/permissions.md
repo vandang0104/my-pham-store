@@ -14,7 +14,7 @@ Vai trò: **Admin** (quản trị), **Staff** (nhân viên), **Customer** (khác
 | 2. Đối tượng | Policy trong `app/Policies` (gọi qua `Gate`/`authorize()` trong FormRequest) | Chặn theo từng bản ghi và điều kiện nghiệp vụ |
 | Toàn cục | Middleware `EnsureAccountIsActive` (nhóm `web`) | Tài khoản bị khoá đang đăng nhập bị đăng xuất ở request kế tiếp; tài khoản bị khoá không đăng nhập được |
 
-Sau khi đăng nhập: Admin/Staff → `/admin`; Customer → trang chủ. Trang đăng nhập quản trị riêng `/admin/login` làm ở S7.
+Sau khi đăng nhập: Admin/Staff → `/admin`; Customer → trang chủ. Đăng nhập quản trị riêng `/admin/login`: chỉ admin/staff qua được (customer → "Email hoặc mật khẩu không đúng.", không giữ phiên); khách chưa đăng nhập vào `/admin/*` được chuyển tới `/admin/login`.
 
 ## Khu quản trị (`/admin`)
 
@@ -26,8 +26,8 @@ Route dự kiến: `dashboard`, `products`, `categories`, `orders`, `users`, `re
 | Sản phẩm | Xem, tạo, sửa | ✅ | ✅ | ❌ | ❌ | `ProductPolicy` | 1 ảnh/sản phẩm |
 | Sản phẩm | Xoá mềm, khôi phục | ✅ | ❌ | ❌ | ❌ | `ProductPolicy` | Staff không xoá dữ liệu |
 | Sản phẩm | Xoá cứng | ⚠️ | ❌ | ❌ | ❌ | `ProductPolicy::forceDelete` | Chỉ khi sản phẩm chưa có trong đơn nào (quy tắc 10) |
-| Danh mục | Xem, tạo, sửa | ✅ | ✅ | ❌ | ❌ | Route (Policy làm ở S7) | Thương hiệu chỉ lấy từ seed, không có CRUD |
-| Danh mục | Xoá | ⚠️ | ❌ | ❌ | ❌ | Route + FK restrict | Không xoá khi còn sản phẩm / danh mục con |
+| Danh mục | Xem, tạo, sửa | ✅ | ✅ | ❌ | ❌ | `CategoryPolicy` | Thương hiệu chỉ lấy từ seed, không có CRUD |
+| Danh mục | Xoá | ⚠️ | ❌ | ❌ | ❌ | `CategoryPolicy::delete` + kiểm dữ liệu | Không xoá khi còn danh mục con hoặc sản phẩm (kể cả đã xoá mềm) — báo lý do |
 | Đơn hàng | Xem danh sách, chi tiết | ✅ | ✅ | ❌ | ❌ | `OrderPolicy::viewAny/view` | |
 | Đơn hàng | Đổi trạng thái theo luồng | ✅ | ✅ | ❌ | ❌ | `OrderPolicy::updateStatus` | Luồng hợp lệ do `OrderStatus::canTransitionTo()` + OrderService kiểm tra |
 | Đơn hàng | Đánh dấu đã thanh toán | ✅ | ✅ | ❌ | ❌ | `OrderPolicy::updatePayment` | Chuyển khoản |

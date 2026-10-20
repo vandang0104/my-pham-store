@@ -33,6 +33,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectUsersTo(fn (Request $request) => $request->user()?->role->isBackOffice()
             ? route('admin.dashboard')
             : route('home'));
+
+        // Chưa đăng nhập: khu quản trị → /admin/login, còn lại → /dang-nhap
+        $middleware->redirectGuestsTo(fn (Request $request) => $request->is('admin', 'admin/*')
+            ? route('admin.login')
+            : route('login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

@@ -105,9 +105,10 @@ Các endpoint giỏ hàng dùng chung cho form thường và AJAX: controller tr
 
 ### routes/admin.php
 Đăng ký trong `bootstrap/app.php` (`withRouting(then: …)`) với `prefix('admin')`, `name('admin.')`, middleware `['web','auth','role:admin,staff']`. **URL admin dùng tiếng Anh** (không công khai, khớp tên route `admin.products.index`).
-- `/admin/login` (khách chưa đăng nhập, ngoài nhóm `auth`) — trang đăng nhập quản trị (S7).
+- `/admin/login` (`admin.login` / `admin.login.store`, middleware `guest`, khai báo trong web.php) — đăng nhập quản trị dùng chung `LoginRequest`; tài khoản customer bị từ chối bằng thông báo chung. Khách chưa đăng nhập vào `/admin/*` → `/admin/login` (`redirectGuestsTo` trong bootstrap/app.php); khu khách vẫn → `/dang-nhap`.
+- Layout `layouts/admin`: topbar + sidebar theo quyền (`AdminMenuComposer`), flash dùng `<x-flash>`.
 - `dashboard`: `/admin` (staff chỉ thấy số liệu vận hành).
-- `Route::resource`: `products` (1 ảnh/SP), `categories`.
+- `categories` (index, create, store, edit, update, destroy) và `products` (như trên + `PATCH products/{id}/restore`), bind theo `{model:id}` (URL khách theo slug); slug tự sinh duy nhất (`App\Support\Slug`); sản phẩm 1 ảnh chính (upload thay ảnh chính).
 - `orders`: index, show, `PATCH orders/{order}/status` → `admin.orders.status`.
 - `chats` (hội thoại + trả lời), `contacts` (tin nhắn liên hệ, đánh dấu đã xử lý).
 - Nhóm thêm `role:admin`: `users` (tài khoản khách + nhân viên gộp một màn: đổi vai trò, khoá/mở khoá), `reports` (doanh thu theo ngày/tháng + top SP bán chạy, không CSV) — staff không vào được (quy tắc 9). Ma trận chi tiết: `docs/permissions.md`.
