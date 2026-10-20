@@ -6,6 +6,7 @@ use App\Models\Product;
 use Database\Seeders\CatalogSeeder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,9 +17,13 @@ beforeEach(function () {
     $this->seed(CatalogSeeder::class);
 });
 
-/** Số truy vấn của một lần GET / */
+/**
+ * Số truy vấn của một lần GET / với cache LẠNH (menu, settings): hai lần đo cùng trạng thái cache,
+ * nên chênh lệch chỉ có thể do số sản phẩm tăng (N+1), không do lần đầu phải dựng cache.
+ */
 function homeQueryCount($test): int
 {
+    Cache::flush();
     DB::flushQueryLog();
     DB::enableQueryLog();
     $test->get('/')->assertOk();

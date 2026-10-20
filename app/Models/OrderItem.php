@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Support\Money;
 use Database\Factories\OrderItemFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +24,16 @@ class OrderItem extends Model
             'quantity' => 'integer',
             'line_total' => 'integer',
         ];
+    }
+
+    protected function formattedPrice(): Attribute
+    {
+        return Attribute::get(fn (): string => Money::format($this->price));
+    }
+
+    protected function formattedLineTotal(): Attribute
+    {
+        return Attribute::get(fn (): string => Money::format($this->line_total));
     }
 
     /** @return BelongsTo<Order, $this> */

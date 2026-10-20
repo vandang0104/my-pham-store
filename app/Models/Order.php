@@ -8,6 +8,7 @@ use App\Enums\PaymentStatus;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\RouteKey;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,6 +41,12 @@ class Order extends Model
             'delivered_at' => 'datetime',
             'cancelled_at' => 'datetime',
         ];
+    }
+
+    /** Địa chỉ một dòng: chi tiết, phường/xã, (quận/huyện), tỉnh/thành — quận/huyện bỏ trống thì bỏ qua */
+    protected function fullAddress(): Attribute
+    {
+        return Attribute::get(fn (): string => collect([$this->detail, $this->ward, $this->district, $this->province])->filter()->implode(', '));
     }
 
     /** @return BelongsTo<User, $this> */

@@ -198,6 +198,14 @@ return [
         'current_password' => 'mật khẩu hiện tại',
         'remember' => 'ghi nhớ đăng nhập',
         'token' => 'mã đặt lại mật khẩu',
+        // Thanh toán
+        'receiver_name' => 'họ tên người nhận',
+        'province' => 'tỉnh / thành phố',
+        'district' => 'quận / huyện',
+        'ward' => 'phường / xã',
+        'detail' => 'địa chỉ chi tiết',
+        'note' => 'ghi chú',
+        'payment_method' => 'phương thức thanh toán',
     ],
 
 ];

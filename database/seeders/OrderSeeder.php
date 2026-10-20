@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
+use App\Support\Shipping;
 use Database\Factories\Support\Vn;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -23,11 +24,6 @@ use LogicException;
  */
 class OrderSeeder extends Seeder
 {
-    /** Quy tắc phí ship dùng cho dữ liệu mẫu (sau này đọc từ settings) */
-    public const SHIPPING_FEE = 30000;
-
-    public const FREE_SHIPPING_FROM = 500000;
-
     /** khach: thứ tự khách hàng (null = khách vãng lai), ngay: số ngày trước, so_sp: số sản phẩm khác nhau, huy_tu: trạng thái lúc huỷ */
     private const PLAN = [
         ['status' => OrderStatus::Delivered, 'khach' => 1, 'tt' => 'cod', 'ngay' => 50, 'so_sp' => 5],
@@ -96,7 +92,8 @@ class OrderSeeder extends Seeder
         });
 
         $subtotal = $items->sum('line_total');
-        $shippingFee = $subtotal >= self::FREE_SHIPPING_FROM ? 0 : self::SHIPPING_FEE;
+        // Phí ship theo settings (SettingSeeder chạy trước), cùng quy tắc với OrderService
+        $shippingFee = Shipping::fee($subtotal);
 
         $cancelledFrom = $row['huy_tu'] ?? null;
         $confirmedAt = in_array($status, [OrderStatus::Confirmed, OrderStatus::Shipping, OrderStatus::Delivered], true) || $cancelledFrom === OrderStatus::Confirmed

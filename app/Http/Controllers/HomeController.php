@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
+use App\Support\Money;
+use App\Support\Shipping;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\View;
@@ -25,6 +27,7 @@ class HomeController extends Controller
             'featured' => $this->featured(),
             'categories' => $this->categories(),
             'onSale' => $this->onSale(),
+            'freeShippingFrom' => Money::format(Shipping::freeFrom()),
         ]);
     }
 

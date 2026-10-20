@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         fake()->seed(20261019);
 
         $this->call([
+            SettingSeeder::class,
             UserSeeder::class,
             CatalogSeeder::class,
             ContentSeeder::class,

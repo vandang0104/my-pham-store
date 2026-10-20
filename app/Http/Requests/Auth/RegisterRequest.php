@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Support\Phone;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -27,7 +28,7 @@ class RegisterRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')],
             // Đã chuẩn hoá về dạng 0xxxxxxxxx: 10 số, đầu số di động 03/05/07/08/09
-            'phone' => ['required', 'string', 'regex:/^0[35789]\d{8}$/'],
+            'phone' => Phone::rules(),
             'password' => ['required', 'string', 'confirmed', Password::min(8)],
         ];
     }
@@ -37,12 +38,10 @@ class RegisterRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        $phone = preg_replace('/[\s.\-()]/', '', (string) $this->input('phone'));
-
         $this->merge([
             'name' => trim((string) $this->input('name')),
             'email' => Str::lower(trim((string) $this->input('email'))),
-            'phone' => Str::startsWith($phone, '+84') ? '0'.substr($phone, 3) : $phone,
+            'phone' => Phone::normalize($this->input('phone')),
         ]);
     }
 }

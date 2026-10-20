@@ -7,6 +7,7 @@ use App\Http\Requests\Cart\UpdateCartRequest;
 use App\Models\Product;
 use App\Services\CartService;
 use App\Support\Money;
+use App\Support\Shipping;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -27,9 +28,13 @@ class CartController extends Controller
             session()->now('info', implode(' ', $notices));
         }
 
+        $subtotal = $this->cart->subtotal($items);
+        $remaining = Shipping::remainingForFree($subtotal);
+
         return view('pages.cart', [
             'items' => $items,
-            'formattedSubtotal' => Money::format($this->cart->subtotal($items)),
+            'formattedSubtotal' => Money::format($subtotal),
+            'freeShippingRemaining' => $remaining > 0 ? Money::format($remaining) : null,
         ]);
     }
 

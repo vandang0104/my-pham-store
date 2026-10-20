@@ -7,6 +7,7 @@ use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Models\Order;
 use App\Models\User;
+use App\Support\Shipping;
 use Database\Factories\Support\Vn;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -22,7 +23,7 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         $subtotal = fake()->numberBetween(2, 30) * 50000;
-        $shippingFee = $subtotal >= 500000 ? 0 : 30000;
+        $shippingFee = Shipping::fee($subtotal);
 
         return [
             'code' => 'DH'.now()->format('ymd').Str::upper(Str::random(6)),

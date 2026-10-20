@@ -69,9 +69,13 @@
                             <span>Tạm tính</span>
                             <strong class="tnum" data-cart-subtotal>{{ $formattedSubtotal }}</strong>
                         </div>
+                        @if ($freeShippingRemaining)
+                            <p class="small mb-2" data-free-shipping>Còn {{ $freeShippingRemaining }} để được miễn phí giao hàng.</p>
+                        @else
+                            <p class="small mb-2" data-free-shipping>Đơn của bạn được miễn phí giao hàng.</p>
+                        @endif
                         <p class="small text-muted mb-4">Phí giao hàng tính ở bước đặt hàng.</p>
-                        {{-- Trang thanh toán làm ở S3 --}}
-                        <a href="{{ url('/thanh-toan') }}" class="btn btn-primary w-100 mb-3">Tiến hành đặt hàng</a>
+                        <a href="{{ route('checkout.create') }}" class="btn btn-primary w-100 mb-3">Tiến hành đặt hàng</a>
                         <a href="{{ route('products.index') }}" class="text-center">Tiếp tục mua sắm</a>
                     </div>
                 </div>

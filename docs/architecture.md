@@ -17,9 +17,10 @@ app/
 │  ├─ ReviewStatus.php        # (đã cắt) pending | approved | rejected
 │  ├─ PostStatus.php          # (đã cắt) draft | published
 │  └─ SkinType.php            # oily | dry | combination | sensitive | all (chỉ hiển thị, không lọc)
-├─ Exceptions/                # lỗi nghiệp vụ, render tập trung ở bootstrap/app.php
-│  ├─ OutOfStockException.php
-│  └─ InvalidOrderTransitionException.php
+├─ Exceptions/                # lỗi nghiệp vụ tự render (method render(): flash lỗi + redirect; JSON → 422)
+│  ├─ CartException.php       # giỏ: hết hàng, vượt kho, SP ngừng bán → quay lại trang trước
+│  ├─ OrderException.php      # đặt hàng: giỏ trống/đã thay đổi, thiếu hàng lúc khoá dòng → về giỏ
+│  └─ InvalidOrderTransitionException.php   # (S9) đổi trạng thái sai luồng
 ├─ Http/
 │  ├─ Controllers/
 │  │  ├─ Controller.php
@@ -45,7 +46,8 @@ app/
 │  ├─ OrderService.php
 │  ├─ ReportService.php
 │  └─ ChatService.php
-├─ Support/Money.php          # format VND (number_format, không phụ thuộc ext-intl)
+├─ Support/                   # Money (format VND), Phone (chuẩn hoá + rule SĐT VN), Shipping (phí ship theo settings)
+├─ Mail/OrderPlaced.php       # mail xác nhận đơn (Markdown, driver log)
 └─ View/Components/           # component có logic: ProductCard, Price, Breadcrumb, Flash, Icon
 resources/
 ├─ views/
@@ -84,8 +86,8 @@ Ghi chú:
 | GET | `/gio-hang` | `cart.index` |
 | POST | `/gio-hang` (`product_id`, `quantity`) | `cart.store` |
 | PATCH / DELETE | `/gio-hang/{product:id}` (`withTrashed`) | `cart.update` / `cart.destroy` |
-| GET / POST | `/thanh-toan` | `checkout.index` / `checkout.store` |
-| GET | `/thanh-toan/thanh-cong/{order:code}` (signed URL cho khách vãng lai) | `checkout.success` |
+| GET / POST | `/thanh-toan` (giỏ trống → về giỏ; token một lần chống gửi trùng) | `checkout.create` / `checkout.store` |
+| GET | `/dat-hang-thanh-cong/{order:code}` (chỉ chủ đơn hoặc phiên vừa đặt; còn lại 404) | `checkout.success` |
 | GET | `/cau-hoi-thuong-gap` | `faq.index` |
 | GET / POST | `/lien-he` | `contact.create` / `contact.store` |
 | GET / POST | `/chat/tin-nhan` (polling, JSON) | `chat.messages` / `chat.send` |
@@ -127,7 +129,8 @@ Exception nghiệp vụ được render tập trung trong `bootstrap/app.php`: r
 
 **Trách nhiệm từng Service:**
 - **CartService** (đã làm ở S2) — `add()`, `updateQuantity()`, `remove()`, `clear()`, `items()` (trả `CartLine`: sản phẩm + số lượng + giá hiện hành + thành tiền; tự bỏ dòng SP ẩn/xoá/hết hàng, hạ số lượng vượt kho và ghi `notices()`), `count()`, `subtotal()`, `mergeGuestCart(User)`. Khách: session `cart` = `[product_id => số lượng]`; user: `carts`/`cart_items`; nhánh nằm trong private method. Kiểm tra tồn kho “mềm” (không khoá — khoá dòng ở OrderService khi đặt). Lỗi nghiệp vụ ném `CartException` (tự render: flash lỗi + quay lại). Gộp giỏ qua listener `MergeGuestCart` nghe event `Login` — event này bắn cả khi đăng ký (`Auth::login`), cộng dồn số lượng, cắt theo tồn kho, bỏ SP ngừng bán.
-- **OrderService** — `place(CheckoutData, ?User)`: trong `DB::transaction` → `lockForUpdate` các product **sắp theo id** (tránh deadlock) → kiểm & trừ kho → tạo `orders` (`coupon_id` null, `discount` 0) + `order_items` **snapshot** tên/sku/giá → sinh mã đơn → xoá giỏ → gửi mail `afterCommit` (driver log). `transition(order, OrderStatus)` dùng bảng chuyển trạng thái trong enum; `cancel(order)` chỉ từ pending/confirmed, hoàn kho trong cùng transaction.
+- **OrderService** (đã làm ở S3) — `placeOrder(array $data, ?User)`: đọc giỏ (giỏ vừa bị chuẩn hoá → `OrderException` để khách xem lại; trống → lỗi) → `DB::transaction` → `lockForUpdate` các product **sắp theo id** (tránh deadlock) → kiểm lại active/tồn kho (thiếu → ném lỗi liệt kê SP thiếu, rollback) → tạo `orders` (mã `MP-YYYYMMDD-XXXX`, pending, unpaid, `coupon_id` null, `discount` 0, `total = subtotal + shipping_fee` theo settings) + `order_items` **snapshot** tên/sku/giá hiện hành + `order_status_histories` (null → pending) → trừ `stock`, tăng `sold_count` → commit → xoá giỏ → gửi mail `OrderPlaced` (lỗi gửi mail chỉ `report`, không hỏng đơn). Chống gửi trùng ở `CheckoutController`: token một lần trong session + `Cache::add(token)` nguyên tử.
+- **Setting** — `Setting::get(key)` / `Setting::integer(key)`: cả bảng cache một khoá (`settings.all`), xoá khi lưu/xoá; thiếu khoá dùng `Setting::DEFAULTS`. Khoá: `shipping_fee`, `free_shipping_from`, `bank_name`, `bank_account_number`, `bank_account_name`, `store_hotline` (SettingSeeder). `transition(order, OrderStatus)` dùng bảng chuyển trạng thái trong enum; `cancel(order)` chỉ từ pending/confirmed, hoàn kho trong cùng transaction.
 - **ReportService** — doanh thu theo ngày/tháng (chỉ đơn delivered), top sản phẩm bán chạy; số liệu vận hành cho dashboard (đơn mới, đơn chờ xử lý, sắp hết hàng); trả mảng `labels/datasets` sẵn cho Chart.js.
 - **ChatService** — tạo/lấy hội thoại của khách (user hoặc session khách vãng lai), gửi tin, lấy tin mới sau một id (polling); nhân viên trả lời từ admin. Schema 2 bảng mới chốt ở S6.
 - ~~CouponService~~ — đã cắt (mã giảm giá).

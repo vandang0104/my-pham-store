@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StyleguideController;
@@ -23,6 +24,11 @@ Route::get('/gio-hang', [CartController::class, 'index'])->name('cart.index');
 Route::post('/gio-hang', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/gio-hang/{product:id}', [CartController::class, 'update'])->name('cart.update')->withTrashed();
 Route::delete('/gio-hang/{product:id}', [CartController::class, 'destroy'])->name('cart.destroy')->withTrashed();
+
+// Thanh toán (khách vãng lai được đặt hàng — quy tắc 7) và trang xác nhận đơn (bind theo mã đơn)
+Route::get('/thanh-toan', [CheckoutController::class, 'create'])->name('checkout.create');
+Route::post('/thanh-toan', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/dat-hang-thanh-cong/{order:code}', [CheckoutController::class, 'success'])->name('checkout.success');
 
 // Xác thực — URL tiếng Việt, giữ tên route chuẩn của Laravel
 Route::middleware('guest')->group(function () {
