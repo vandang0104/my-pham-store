@@ -2,12 +2,13 @@
 
 return [
     // position: home_hero (slider trang chủ), category_top (đầu trang danh mục)
+    // 'anh': tên ảnh thật trong database/seeders/images/banner/ (<anh>-desktop, <anh>-mobile); thiếu thì dùng placeholder
     // 'mau': [nền, màu khối] của ảnh placeholder — bảng màu DESIGN.md §3 (lụa, giấy dó, ngọc nhạt, champagne, sơn mài, men ngọc)
     'banners' => [
-        ['title' => 'Dưỡng da mùa thu – êm dịu từ thảo mộc', 'subtitle' => 'Toner, serum và kem dưỡng cấp ẩm cho làn da chuyển mùa', 'link' => '/danh-muc/duong-da', 'position' => 'home_hero', 'mau' => ['#D3DDD4', '#2E5A4C']],
-        ['title' => 'Chống nắng mỗi ngày – ưu đãi đến 15%', 'subtitle' => 'Màng lọc phổ rộng, mỏng nhẹ cho da mặt trong khí hậu nhiệt đới', 'link' => '/danh-muc/chong-nang', 'position' => 'home_hero', 'mau' => ['#EBE5DA', '#C2A878']],
-        ['title' => 'Làm sạch dịu nhẹ – nền tảng của làn da khoẻ', 'subtitle' => 'Sữa rửa mặt, tẩy trang và tẩy tế bào chết cho từng loại da', 'link' => '/danh-muc/lam-sach', 'position' => 'home_hero', 'mau' => ['#D3DDD4', '#C2A878']],
-        ['title' => 'Mặt nạ cho buổi tối thư giãn', 'subtitle' => 'Đất sét làm sạch sâu và mặt nạ giấy cấp ẩm tức thì', 'link' => '/danh-muc/mat-na', 'position' => 'category_top', 'mau' => ['#EBE5DA', '#1E1B18']],
+        ['title' => 'Dưỡng da mùa thu – êm dịu từ thảo mộc', 'subtitle' => 'Toner, serum và kem dưỡng cấp ẩm cho làn da chuyển mùa', 'link' => '/danh-muc/duong-da', 'anh' => 'home-1', 'position' => 'home_hero', 'mau' => ['#D3DDD4', '#2E5A4C']],
+        ['title' => 'Chống nắng mỗi ngày – ưu đãi đến 15%', 'subtitle' => 'Màng lọc phổ rộng, mỏng nhẹ cho da mặt trong khí hậu nhiệt đới', 'link' => '/danh-muc/chong-nang', 'anh' => 'home-2', 'position' => 'home_hero', 'mau' => ['#EBE5DA', '#C2A878']],
+        ['title' => 'Làm sạch dịu nhẹ – nền tảng của làn da khoẻ', 'subtitle' => 'Sữa rửa mặt, tẩy trang và tẩy tế bào chết cho từng loại da', 'link' => '/danh-muc/lam-sach', 'anh' => 'home-3', 'position' => 'home_hero', 'mau' => ['#D3DDD4', '#C2A878']],
+        ['title' => 'Mặt nạ cho buổi tối thư giãn', 'subtitle' => 'Đất sét làm sạch sâu và mặt nạ giấy cấp ẩm tức thì', 'link' => '/danh-muc/mat-na', 'anh' => 'category-top', 'position' => 'category_top', 'mau' => ['#EBE5DA', '#1E1B18']],
     ],
 
     'faqs' => [

@@ -7,12 +7,14 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use Database\Seeders\Support\PlaceholderImage;
+use Database\Seeders\Support\RealImages;
 use Database\Seeders\Support\SeedImages;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 /**
- * Catalog chăm sóc da mặt: 4 danh mục cha + 9 danh mục con, 5 thương hiệu hư cấu, 21 sản phẩm kèm 3–4 ảnh mỗi sản phẩm.
+ * Catalog chăm sóc da mặt: 4 danh mục cha + 9 danh mục con, 5 thương hiệu hư cấu, 21 sản phẩm.
+ * Ảnh thật lấy từ database/seeders/images/ theo slug (RealImages); thiếu thì dùng placeholder SVG.
  */
 class CatalogSeeder extends Seeder
 {
@@ -22,6 +24,7 @@ class CatalogSeeder extends Seeder
     public function run(): void
     {
         PlaceholderImage::reset();
+        RealImages::reset();
 
         $categoryColors = $this->seedCategories();
         $brands = $this->seedBrands();
@@ -38,7 +41,8 @@ class CatalogSeeder extends Seeder
             $parent = Category::factory()->create([
                 'name' => $parentData['ten'],
                 'slug' => $parentData['slug'],
-                'image' => PlaceholderImage::cover("categories/{$parentData['slug']}.svg", $parentData['mau'], 600, 600),
+                'image' => RealImages::find('danh-muc', $parentData['slug'])
+                    ?? PlaceholderImage::cover("categories/{$parentData['slug']}.svg", $parentData['mau'], 600, 600),
                 'sort_order' => $i + 1,
             ]);
 
@@ -67,7 +71,8 @@ class CatalogSeeder extends Seeder
                 'model' => Brand::factory()->create([
                     'name' => $data['ten'],
                     'slug' => $data['slug'],
-                    'logo' => PlaceholderImage::logo("brands/{$data['slug']}.svg", $data['ten']),
+                    'logo' => RealImages::find('thuong-hieu', $data['slug'])
+                        ?? PlaceholderImage::logo("brands/{$data['slug']}.svg", $data['ten']),
                     'description' => $data['mo_ta'],
                 ]),
                 'sku' => $data['sku'],
@@ -112,13 +117,17 @@ class CatalogSeeder extends Seeder
                 'is_featured' => $data['nb'],
             ]);
 
-            // 3–4 ảnh/sản phẩm, ảnh đầu là ảnh chính
-            $imageCount = $i % 2 === 0 ? 4 : 3;
+            // Ưu tiên: ảnh thả vào storage/app/public/seed (gán luân phiên) → ảnh thật theo slug trong repo
+            // → 3–4 ảnh placeholder. Ảnh đầu là ảnh chính.
+            $realImages = $seedImages->available() ? [] : RealImages::product($product->slug);
+            $imageCount = $realImages !== [] ? count($realImages) : ($i % 2 === 0 ? 4 : 3);
             for ($k = 0; $k < $imageCount; $k++) {
                 $product->images()->create([
-                    'path' => $seedImages->available()
-                        ? $seedImages->next()
-                        : PlaceholderImage::product("products/{$product->slug}-".($k + 1).'.svg', $categoryColors[$data['dm']], $k),
+                    'path' => match (true) {
+                        $seedImages->available() => $seedImages->next(),
+                        $realImages !== [] => $realImages[$k],
+                        default => PlaceholderImage::product("products/{$product->slug}-".($k + 1).'.svg', $categoryColors[$data['dm']], $k),
+                    },
                     'is_primary' => $k === 0,
                     'sort_order' => $k,
                 ]);

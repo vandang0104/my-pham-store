@@ -9,6 +9,7 @@ use App\Models\Faq;
 use App\Models\Post;
 use App\Models\User;
 use Database\Seeders\Support\PlaceholderImage;
+use Database\Seeders\Support\RealImages;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -32,8 +33,11 @@ class ContentSeeder extends Seeder
             $slug = Str::slug($data['title']);
             Banner::factory()->create([
                 'title' => $data['title'],
-                'image_desktop' => PlaceholderImage::banner("banners/{$slug}-desktop.svg", $data['mau']),
-                'image_mobile' => PlaceholderImage::banner("banners/{$slug}-mobile.svg", $data['mau'], mobile: true),
+                // Ảnh thật nếu có; banner có ảnh desktop thật mà thiếu bản mobile thì để null (trang dùng ảnh desktop)
+                'image_desktop' => ($desktop = RealImages::find('banner', "{$data['anh']}-desktop"))
+                    ?? PlaceholderImage::banner("banners/{$slug}-desktop.svg", $data['mau']),
+                'image_mobile' => RealImages::find('banner', "{$data['anh']}-mobile")
+                    ?? ($desktop ? null : PlaceholderImage::banner("banners/{$slug}-mobile.svg", $data['mau'], mobile: true)),
                 'link' => $data['link'],
                 'position' => $data['position'],
                 'sort_order' => $i + 1,
