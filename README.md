@@ -54,7 +54,7 @@ Mở http://localhost:8000 (cửa hàng) và http://localhost:8000/admin/login (
 | Nhân viên (staff) | `nhanvien1@mypham.test`, `nhanvien2@mypham.test` | `/admin/login` |
 | Khách hàng | `khachhang01@mypham.test` … `khachhang20@mypham.test` (01–07 có đơn đã giao) | `/dang-nhap` |
 
-Dữ liệu mẫu (`php artisan migrate:fresh --seed`): chỉ chăm sóc da mặt — 4 danh mục cha (Làm sạch, Dưỡng da, Mặt nạ, Chống nắng) + 9 danh mục con, 5 thương hiệu **hư cấu**, 21 sản phẩm, 4 banner, 8 FAQ, 15 đơn đủ trạng thái, cài đặt cửa hàng (phí ship 30.000 ₫, miễn phí từ 500.000 ₫, tài khoản ngân hàng **mẫu**). Ảnh là placeholder SVG sinh tự động; muốn dùng ảnh thật cho sản phẩm thì chép ảnh vào `storage/app/public/seed/` rồi seed lại (gán luân phiên theo tên file), hoặc tải ảnh từng sản phẩm trong trang quản trị.
+Dữ liệu mẫu (`php artisan migrate:fresh --seed`): chỉ chăm sóc da mặt — 4 danh mục cha (Làm sạch, Dưỡng da, Mặt nạ, Chống nắng) + 9 danh mục con, 5 thương hiệu **hư cấu**, 21 sản phẩm, 4 banner, 8 FAQ, 15 đơn đủ trạng thái, cài đặt cửa hàng (phí ship 30.000 ₫, miễn phí từ 500.000 ₫, tài khoản ngân hàng **mẫu**). Ảnh thật (sản phẩm, danh mục, logo thương hiệu, banner) nằm sẵn trong repo ở `database/seeders/images/`, đặt tên theo slug; khi seed được chép sang `storage/app/public/anh-that/` nên máy nào clone về chạy `migrate --seed` + `storage:link` cũng có đủ ảnh. Thiếu ảnh nào thì seeder tự dùng placeholder SVG. Muốn đổi ảnh: thay file cùng tên trong `database/seeders/images/` rồi seed lại, hoặc tải ảnh từng sản phẩm trong trang quản trị.
 
 ## Kiểm thử
 
